@@ -1,0 +1,4 @@
+###
+curl --location 'https://aipt-api.local/graphql' \
+--header 'Content-Type: application/json' \
+--data '{"query":"query MyQuery {\r\n  user(id: \"1\") {\r\n    created_at\r\n    email\r\n    id\r\n    name\r\n    updated_at\r\n  }\r\n \r\n}","variables":{}}'

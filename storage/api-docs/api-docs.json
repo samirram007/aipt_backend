@@ -1,0 +1,880 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "AIPT API",
+        "description": "This is the Swagger UI documentation for AIPT API",
+        "contact": {
+            "email": "samirram007@gmail.com"
+        },
+        "license": {
+            "name": "MIT",
+            "url": "https://opensource.org/licenses/MIT"
+        },
+        "version": "1.0.0"
+    },
+    "servers": [
+        {
+            "url": "https://aipt-api.local",
+            "description": "Main API server"
+        },
+        {
+            "url": "https://aipt-api.local",
+            "description": "Main API server"
+        }
+    ],
+    "paths": {
+        "/api/account_groups": {
+            "get": {
+                "tags": [
+                    "Account Group"
+                ],
+                "summary": "Get a list of account groups",
+                "operationId": "3eb15e55da32543002969adfb9772e9c",
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/components/schemas/AccountGroupResource"
+                                            }
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "Account Group"
+                ],
+                "summary": "Create a new account group",
+                "operationId": "ac17ec873f38c1ca54d4a822ae6e866f",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/AccountGroupRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/components/schemas/AccountGroupResource"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/account_groups/{id}": {
+            "get": {
+                "tags": [
+                    "Account Group"
+                ],
+                "summary": "Get a specific account group",
+                "operationId": "7441517bd3fa90c533f72a5b682f1b69",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID of the account group",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/components/schemas/AccountGroupResource"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/account_natures": {
+            "get": {
+                "tags": [
+                    "Account Nature"
+                ],
+                "summary": "Get a list of account natures",
+                "operationId": "96f3995dfe61ea81a91ad73c84138656",
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/components/schemas/AccountNatureResource"
+                                            }
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/swagger_generate": {
+            "post": {
+                "tags": [
+                    "AppMaintenance"
+                ],
+                "summary": "Generate Swagger Documentation",
+                "operationId": "640c1a8c8e43ac966d9da2dfb6034de5",
+                "responses": {
+                    "201": {
+                        "description": "Swagger generated successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Swagger generated successfully"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Validation error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "The given data was invalid."
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/app_maintenance": {
+            "get": {
+                "tags": [
+                    "AppMaintenance"
+                ],
+                "summary": "Get all AppMaintenance",
+                "operationId": "5370d003bbab4c4a2301b33f0d1d7ed1",
+                "responses": {
+                    "200": {
+                        "description": "AppMaintenance retrieved successfully"
+                    }
+                }
+            }
+        },
+        "/api/auth/login": {
+            "post": {
+                "tags": [
+                    "Auth"
+                ],
+                "summary": "Login user",
+                "operationId": "d2271903254856126e417dadc6b79bc8",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "email",
+                                    "password"
+                                ],
+                                "properties": {
+                                    "email": {
+                                        "type": "string",
+                                        "format": "email",
+                                        "example": "admin@admin.com"
+                                    },
+                                    "password": {
+                                        "type": "string",
+                                        "format": "password",
+                                        "example": "password"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "User Login successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "User registered successfully"
+                                        },
+                                        "data": {
+                                            "properties": {
+                                                "token": {
+                                                    "type": "string",
+                                                    "example": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vMTI3LjAuMC4xOjgwMDAvYXV0aC9sb2dpbiIsImlhdCI6MTY4NjQ2NjQwNSwiZXhwIjoxNjg2NDY2NDY1LCJuYmYiOjE2ODY0NjY0MDUsImp0aSI6IjZqZ0NlQ052Zk1nN294QyIsInN1YiI6IjEiLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3In0.Qq1540d3x-2410q4aH29S7d7oWq8J34730j4"
+                                                },
+                                                "user": {
+                                                    "$ref": "#/components/schemas/UserResource"
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Unauthorized"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/auth/logout": {
+            "post": {
+                "tags": [
+                    "Auth"
+                ],
+                "summary": "Logout user",
+                "operationId": "dfcb07f81253c404c2c4340d5d639c15",
+                "responses": {
+                    "200": {
+                        "description": "User logged out successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "User logged out successfully"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Unauthorized"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/auth/profile": {
+            "get": {
+                "tags": [
+                    "Auth"
+                ],
+                "summary": "Get user profile",
+                "operationId": "51ec10163fa562a423202e1c753e73c8",
+                "responses": {
+                    "200": {
+                        "description": "User profile fetched successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "success"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "User profile fetched successfully."
+                                        },
+                                        "data": {
+                                            "$ref": "#/components/schemas/UserResource"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Unauthorized"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/auth/refresh": {
+            "post": {
+                "tags": [
+                    "Auth"
+                ],
+                "summary": "Refresh user token",
+                "operationId": "283b9c64c327c05ee8e360ebed1feb4b",
+                "responses": {
+                    "200": {
+                        "description": "User token refreshed successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "success"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Token refreshed successfully!"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+            "AccountGroupRequest": {
+                "properties": {
+                    "name": {
+                        "description": "The name of the account group",
+                        "type": "string"
+                    },
+                    "code": {
+                        "description": "The code of the account group",
+                        "type": "string"
+                    },
+                    "account_nature_id": {
+                        "description": "The ID of the account nature associated with the account group",
+                        "type": "integer"
+                    },
+                    "description": {
+                        "description": "The description of the account group",
+                        "type": "string"
+                    },
+                    "status": {
+                        "description": "The status of the account group",
+                        "type": "boolean"
+                    },
+                    "icon": {
+                        "description": "The icon of the account group",
+                        "type": "string"
+                    }
+                },
+                "type": "object"
+            },
+            "AccountGroupResource": {
+                "title": "AccountGroupResource",
+                "description": "AccountGroupResource",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "name": {
+                        "type": "string",
+                        "example": "Account Group Name"
+                    },
+                    "code": {
+                        "type": "string",
+                        "example": "AG001"
+                    },
+                    "accountNatureId": {
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "accountNature": {
+                        "$ref": "#/components/schemas/AccountNatureResource"
+                    },
+                    "accountLedgers": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/AccountLedgerResource"
+                        }
+                    },
+                    "description": {
+                        "type": "string",
+                        "example": "Account Group Description"
+                    },
+                    "status": {
+                        "type": "string",
+                        "example": "Active"
+                    },
+                    "icon": {
+                        "type": "string",
+                        "example": "fa fa-user"
+                    }
+                },
+                "type": "object"
+            },
+            "AccountLedgerResource": {
+                "title": "Account Ledger Resource",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "name": {
+                        "type": "string",
+                        "example": "Example Account Ledger"
+                    },
+                    "created_at": {
+                        "type": "string",
+                        "format": "date-time",
+                        "example": "2023-08-23T10:00:00Z"
+                    },
+                    "updated_at": {
+                        "type": "string",
+                        "format": "date-time",
+                        "example": "2023-08-23T12:00:00Z"
+                    }
+                },
+                "type": "object"
+            },
+            "AccountNatureResource": {
+                "title": "Account Nature Resource",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "name": {
+                        "type": "string",
+                        "example": "Example Account Nature"
+                    },
+                    "code": {
+                        "type": "string",
+                        "example": "EXAMPLE"
+                    },
+                    "description": {
+                        "type": "string",
+                        "example": "This is an example account nature."
+                    },
+                    "account_groups": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/AccountGroupResource"
+                        }
+                    },
+                    "account_ledgers": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/AccountLedgerResource"
+                        }
+                    }
+                },
+                "type": "object"
+            },
+            "CompanyTypeResource": {
+                "title": "Account Nature Resource",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "name": {
+                        "type": "string",
+                        "example": "Example Account Nature"
+                    },
+                    "code": {
+                        "type": "string",
+                        "example": "EXAMPLE"
+                    },
+                    "description": {
+                        "type": "string",
+                        "example": "This is an example account nature."
+                    },
+                    "companies": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/CompanyResource"
+                        }
+                    }
+                },
+                "type": "object"
+            },
+            "CompanyRequest": {
+                "title": "Company Request",
+                "properties": {
+                    "name": {
+                        "type": "string",
+                        "example": "Example Company"
+                    },
+                    "code": {
+                        "type": "string",
+                        "example": "EXAMPLE"
+                    },
+                    "address": {
+                        "type": "string",
+                        "example": "123 Main St"
+                    },
+                    "phone": {
+                        "type": "string",
+                        "example": "1234567890"
+                    },
+                    "email": {
+                        "type": "string",
+                        "example": "info@example.com"
+                    },
+                    "website": {
+                        "type": "string",
+                        "example": "www.example.com"
+                    },
+                    "company_type_id": {
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "fiscal_year_id": {
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "tin": {
+                        "type": "string",
+                        "example": "1234567890"
+                    },
+                    "vat": {
+                        "type": "string",
+                        "example": "1234567890"
+                    },
+                    "logo": {
+                        "type": "string",
+                        "example": "logo.png"
+                    },
+                    "currency": {
+                        "type": "string",
+                        "example": "INR"
+                    },
+                    "country": {
+                        "type": "string",
+                        "example": "IN"
+                    },
+                    "state": {
+                        "type": "string",
+                        "example": "Maharashtra"
+                    },
+                    "city": {
+                        "type": "string",
+                        "example": "Mumbai"
+                    },
+                    "zip": {
+                        "type": "string",
+                        "example": "400001"
+                    },
+                    "status": {
+                        "type": "string",
+                        "example": "active"
+                    }
+                },
+                "type": "object"
+            },
+            "CompanyResource": {
+                "title": "Company Resource",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "name": {
+                        "type": "string",
+                        "example": "Example Account Nature"
+                    },
+                    "code": {
+                        "type": "string",
+                        "example": "EXAMPLE"
+                    },
+                    "address": {
+                        "type": "string",
+                        "example": "123 Main St"
+                    },
+                    "phone": {
+                        "type": "string",
+                        "example": "1234567890"
+                    },
+                    "email": {
+                        "type": "string",
+                        "example": "info@example.com"
+                    },
+                    "website": {
+                        "type": "string",
+                        "example": "www.example.com"
+                    },
+                    "companyTypeId": {
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "fiscalYearId": {
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "tin": {
+                        "type": "string",
+                        "example": "1234567890"
+                    },
+                    "vat": {
+                        "type": "string",
+                        "example": "1234567890"
+                    },
+                    "logo": {
+                        "type": "string",
+                        "example": "logo.png"
+                    },
+                    "currency": {
+                        "type": "string",
+                        "example": "INR"
+                    },
+                    "country": {
+                        "type": "string",
+                        "example": "IN"
+                    },
+                    "state": {
+                        "type": "string",
+                        "example": "Maharashtra"
+                    },
+                    "city": {
+                        "type": "string",
+                        "example": "Mumbai"
+                    },
+                    "zip": {
+                        "type": "string",
+                        "example": "400001"
+                    },
+                    "status": {
+                        "type": "string",
+                        "example": "active"
+                    }
+                },
+                "type": "object"
+            },
+            "FiscalYearRequest": {
+                "title": "FiscalYear Request",
+                "properties": {
+                    "name": {
+                        "type": "string",
+                        "example": "Fiscal Year 2025-26"
+                    },
+                    "start_date": {
+                        "type": "string",
+                        "example": "2025-04-01"
+                    },
+                    "end_date": {
+                        "type": "string",
+                        "example": "2026-03-31"
+                    }
+                },
+                "type": "object"
+            },
+            "FiscalYearResource": {
+                "title": "FiscalYear Resource",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "name": {
+                        "type": "string",
+                        "example": "Fiscal Year 2025-26"
+                    },
+                    "start_date": {
+                        "type": "string",
+                        "example": "2025-04-01"
+                    },
+                    "end_date": {
+                        "type": "string",
+                        "example": "2026-03-31"
+                    }
+                },
+                "type": "object"
+            },
+            "UserResource": {
+                "title": "UserResource",
+                "description": "User resource",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "name": {
+                        "type": "string",
+                        "example": "John Doe"
+                    },
+                    "email": {
+                        "type": "string",
+                        "format": "email",
+                        "example": "john@example.com"
+                    },
+                    "username": {
+                        "type": "string",
+                        "example": "johndoe"
+                    },
+                    "userType": {
+                        "type": "string",
+                        "example": "user"
+                    },
+                    "role": {
+                        "type": "string",
+                        "example": "admin"
+                    },
+                    "contactNo": {
+                        "type": "string",
+                        "example": "1234567890"
+                    }
+                },
+                "type": "object"
+            }
+        },
+        "responses": {
+            "404": {
+                "description": "AppMaintenance not found",
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "properties": {
+                                "message": {
+                                    "type": "string",
+                                    "example": "AppMaintenance not found"
+                                }
+                            },
+                            "type": "object"
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "tags": [
+        {
+            "name": "Account Group",
+            "description": "Account Group"
+        },
+        {
+            "name": "Account Nature",
+            "description": "Account Nature"
+        },
+        {
+            "name": "AppMaintenance",
+            "description": "AppMaintenance"
+        },
+        {
+            "name": "Auth",
+            "description": "Auth"
+        }
+    ]
+}

@@ -1,0 +1,6 @@
+###
+curl -X POST -H "Content-Type: application/json" -d '{"email":"test@example.com","password":"password"}' http://aipt-api.local/api/auth/login
+
+
+###
+curl -X GET -H https://aipt-api.local/api/auth/profile
