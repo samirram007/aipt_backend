@@ -8,6 +8,16 @@ use App\Modules\Company\Database\Seeders\CompanySeeder;
 use App\Modules\CompanyType\Database\Seeders\CompanyTypeSeeder;
 use App\Modules\CompanyType\Models\CompanyType;
 use App\Modules\FiscalYear\Database\Seeders\FiscalYearSeeder;
+use App\Modules\StockCategory\Database\Seeders\StockCategorySeeder;
+use App\Modules\StockCategory\Models\StockCategory;
+use App\Modules\StockGroup\Database\Seeders\StockGroupSeeder;
+use App\Modules\StockGroup\Models\StockGroup;
+use App\Modules\StockItem\Database\Seeders\StockItemSeeder;
+use App\Modules\StockItem\Models\StockItem;
+use App\Modules\Unit\Database\Seeders\UnitSeeder;
+use App\Modules\Unit\Models\Unit;
+use App\Modules\Uqc\Database\Seeders\UqcSeeder;
+use App\Modules\Uqc\Models\Uqc;
 use App\Modules\VoucherCategory\Database\Seeders\VoucherCategorySeeder;
 use App\Modules\VoucherClassification\Database\Seeders\VoucherClassificationSeeder;
 use App\Modules\VoucherClassification\Models\VoucherClassification;
@@ -41,6 +51,13 @@ class DatabaseSeeder extends Seeder
             VoucherCategorySeeder::class,
             VoucherTypeSeeder::class,
             VoucherClassificationSeeder::class,
+
+            UqcSeeder::class,
+            UnitSeeder::class,
+            StockGroupSeeder::class,
+            StockCategorySeeder::class,
+            StockItemSeeder::class
+
         ]);
         // User::factory(10)->create();
 
