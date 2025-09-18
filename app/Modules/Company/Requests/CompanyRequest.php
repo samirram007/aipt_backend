@@ -37,7 +37,7 @@ class CompanyRequest extends FormRequest
     public function rules(): array
     {
         $rules = [
-            'name' => ['required', 'string', 'max:255', 'unique:companies'],
+            'name' => ['required', 'string', 'max:255', 'unique:companies,name'],
             'address' => ['nullable', 'string', 'max:255'],
             'phone' => ['nullable', 'string', 'max:255'],
             'email' => ['nullable', 'email', 'max:255'],
@@ -53,6 +53,8 @@ class CompanyRequest extends FormRequest
             'city' => ['nullable', 'string', 'max:255'],
             'zip' => ['nullable', 'string', 'max:255'],
             'status' => ['nullable', 'string', 'max:255'],
+            'is_group_company' => ['nullable', 'boolean'],
+            'children' => ['nullable', 'string']
         ];
 
         // For update requests, make validation more flexible

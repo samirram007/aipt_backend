@@ -11,7 +11,7 @@ return new class extends Migration {
             $table->id();
             $table->string('name')->unique();
             $table->string('code')->unique()->nullable();
-            $table->foreignId('parent_category_id')->nullable()->constrained('stock_categories')->onDelete('set null');
+            $table->foreignId('parent_id')->nullable()->constrained('stock_categories')->onDelete('set null');
 
             $table->string('description')->nullable();
             $table->string('status')->default('active');

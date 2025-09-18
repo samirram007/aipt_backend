@@ -14,16 +14,17 @@ class StockCategoryRequest extends FormRequest
     public function rules(): array
     {
         $rules = [
-            'name' => ['required', 'string', 'max:255','unique:StockCategory,name'],
-            'code' => ['sometimes','required', 'string', 'max:255','unique:StockCategory,code'],
-            'description' => ['sometimes','required', 'string', 'max:255'],
-            'status' => ['sometimes','required', 'string', 'max:255'],
+            'name' => ['required', 'string', 'max:255', 'unique:stock_categories,name'],
+            'code' => ['sometimes', 'required', 'string', 'max:255', 'unique:stock_categories,code'],
+            'description' => ['sometimes', 'required', 'string', 'max:255'],
+            'status' => ['sometimes', 'required', 'string', 'max:255'],
         ];
 
         // For update requests, make validation more flexible
         if ($this->isMethod('PUT') || $this->isMethod('PATCH')) {
-            $rules['name'] = ['sometimes', 'required', 'string', 'max:255', 'unique:StockCategory,name,' . $this->route('StockCategory'),];
-            $rules['code'] = ['sometimes', 'required', 'string', 'max:255', 'unique:StockCategory,code,' . $this->route('StockCategory'),];
+            $id = $this->route('stock_category');
+            $rules['name'] = ['sometimes', 'required', 'string', 'max:255', 'unique:stock_categories,name,' . $id,];
+            $rules['code'] = ['sometimes', 'required', 'string', 'max:255', 'unique:stock_categories,code,' . $id,];
 
         }
 

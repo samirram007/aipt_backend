@@ -12,8 +12,13 @@ class StockCategoryResource extends SuccessResource
         return [
             'id' => $this->id,
             'name' => $this->name,
-            'created_at' => $this->created_at?->toISOString(),
-            'updated_at' => $this->updated_at?->toISOString(),
+            'code' => $this->code,
+            'status' => $this->status,
+            'description' => $this->description,
+            'parentId' => $this->parent_id,
+            'parent' => new StockCategoryResource($this->whenLoaded('parent')),
+
+
         ];
     }
 }

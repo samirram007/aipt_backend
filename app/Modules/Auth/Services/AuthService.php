@@ -8,15 +8,22 @@ use App\Modules\User\Models\User;
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Validation\ValidationException;
 use PHPOpenSourceSaver\JWTAuth\Exceptions\TokenInvalidException;
 use PHPOpenSourceSaver\JWTAuth\Facades\JWTAuth;
 
 class AuthService implements AuthServiceInterface
 {
-    public function login($data):string
+    public function login($data): string
     {
 
         $token = Auth::attempt($data);
+        // dd($token);
+        if (!$token) {
+            throw ValidationException::withMessages([
+                'email' => ['The provided credentials are incorrect.'],
+            ]);
+        }
 
         if (!$token) {
             return response()->json([
@@ -30,17 +37,8 @@ class AuthService implements AuthServiceInterface
 
     }
 
-    public function logout():void
-    {
-        $token = JWTAuth::getToken();
 
-        if ($token) {
-            JWTAuth::invalidate(true); // pass boolean true instead of token
-        }
-
-
-    }
-    public function register($data):string
+    public function register($data): string
     {
 
 
@@ -55,8 +53,26 @@ class AuthService implements AuthServiceInterface
 
         return $token;
     }
+    public function logout(): void
+    {
+        try {
 
-    public function refresh():string
+
+            $token = JWTAuth::getToken();
+
+            if ($token) {
+                JWTAuth::invalidate(true); // pass boolean true instead of token
+            }
+        } catch (\Exception $e) {
+            //return response()->json(['error' => 'Failed to logout, token not found or already invalid'], 400);
+            throw new \Exception("Error Processing Request", 1);
+
+
+        }
+
+
+    }
+    public function refresh(): string
     {
         try {
             $token = Auth::refresh(); // Will auto-parse token from cookie

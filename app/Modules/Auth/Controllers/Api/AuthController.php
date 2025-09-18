@@ -18,9 +18,11 @@ class AuthController extends Controller
 {
 
     protected $domain;
+    protected $token_expire_duration;
     public function __construct(protected AuthServiceInterface $authService)
     {
         $this->domain = env('DOMAIN');
+        $this->token_expire_duration = env('TOKEN_EXPIRE_DURATION', 30000);
     }
     /**
      * @OA\Post(
@@ -164,7 +166,17 @@ class AuthController extends Controller
 
     protected function respondWithToken(string $token, string $message = 'Authenticated successfully!')
     {
-        $cookie = cookie('token', $token, 600, '/', $this->domain, true, true, true, 'None');
+        $cookie = cookie(
+            'token',
+            $token,
+            $this->token_expire_duration,
+            '/',
+            $this->domain,
+            true,
+            true,
+            true,
+            'None'
+        );
 
         return response()->json([
             // 'token' => $token,

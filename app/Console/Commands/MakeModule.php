@@ -45,7 +45,7 @@ class MakeModule extends Command
         $this->createModel($modulePath, $name, $plural);
         $this->createResource($modulePath, $name);
         $this->createCollection($modulePath, $name);
-        $this->createRequest($modulePath, $name);
+        $this->createRequest($modulePath, $name, $plural, $lower);
         $this->createTest($modulePath, $name, $plural);
         $this->createMigration($modulePath, $plural);
         $this->createSeeder($modulePath, $name);
@@ -282,7 +282,7 @@ class {$name}Collection extends SuccessCollection
         File::put("{$modulePath}/Resources/{$name}Collection.php", $content);
     }
 
-    private function createRequest(string $modulePath, string $name): void
+    private function createRequest(string $modulePath, string $name, string $plural, string $lower): void
     {
         $content = "<?php
 
@@ -300,16 +300,17 @@ class {$name}Request extends FormRequest
     public function rules(): array
     {
         \$rules = [
-            'name' => ['required', 'string', 'max:255','unique:{$name},name'],
-            'code' => ['sometimes','required', 'string', 'max:255','unique:{$name},code'],
+            'name' => ['required', 'string', 'max:255','unique:{$plural},name'],
+            'code' => ['sometimes','required', 'string', 'max:255','unique:{$plural},code'],
             'description' => ['sometimes','required', 'string', 'max:255'],
             'status' => ['sometimes','required', 'string', 'max:255'],
         ];
 
         // For update requests, make validation more flexible
         if (\$this->isMethod('PUT') || \$this->isMethod('PATCH')) {
-            \$rules['name'] = ['sometimes', 'required', 'string', 'max:255', 'unique:{$name},name,' . \$this->route('{$name}'),];
-            \$rules['code'] = ['sometimes', 'required', 'string', 'max:255', 'unique:{$name},code,' . \$this->route('{$name}'),];
+            \$id=\$this->route('$lower');
+            \$rules['name'] = ['sometimes', 'required', 'string', 'max:255', 'unique:{$plural},name,' . \$id,];
+            \$rules['code'] = ['sometimes', 'required', 'string', 'max:255', 'unique:{$plural},code,' . \$id,];
 
         }
 

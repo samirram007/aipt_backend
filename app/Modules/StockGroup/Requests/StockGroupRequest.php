@@ -13,20 +13,27 @@ class StockGroupRequest extends FormRequest
 
     public function rules(): array
     {
+
+
         $rules = [
-            'name' => ['required', 'string', 'max:255','unique:StockGroup,name'],
-            'code' => ['sometimes','required', 'string', 'max:255','unique:StockGroup,code'],
-            'description' => ['sometimes','required', 'string', 'max:255'],
-            'status' => ['sometimes','required', 'string', 'max:255'],
+
+            'name' => ['required', 'string', 'max:255', 'unique:stock_groups,name'],
+            'code' => ['sometimes', 'required', 'string', 'max:255', 'unique:stock_groups,code'],
+            'description' => ['sometimes', 'required', 'string', 'max:255'],
+            'status' => ['sometimes', 'required', 'string', 'max:255'],
+            'parent_id' => ['sometimes', 'nullable', 'numeric', 'exists:stock_groups,id'],
+            'should_quantities_of_items_be_added' => ['sometimes', 'boolean']
+
         ];
 
         // For update requests, make validation more flexible
         if ($this->isMethod('PUT') || $this->isMethod('PATCH')) {
-            $rules['name'] = ['sometimes', 'required', 'string', 'max:255', 'unique:StockGroup,name,' . $this->route('StockGroup'),];
-            $rules['code'] = ['sometimes', 'required', 'string', 'max:255', 'unique:StockGroup,code,' . $this->route('StockGroup'),];
+            $id = $this->route('stock_group');
+            $rules['name'] = ['sometimes', 'required', 'string', 'max:255', 'unique:stock_groups,name,' . $id,];
+            $rules['code'] = ['sometimes', 'required', 'string', 'max:255', 'unique:stock_groups,code,' . $id,];
 
         }
-
+        // dd($rules, "rules");
         return $rules;
     }
 

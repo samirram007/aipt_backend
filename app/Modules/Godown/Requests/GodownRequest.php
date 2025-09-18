@@ -14,16 +14,18 @@ class GodownRequest extends FormRequest
     public function rules(): array
     {
         $rules = [
-            'name' => ['required', 'string', 'max:255','unique:Godown,name'],
-            'code' => ['sometimes','required', 'string', 'max:255','unique:Godown,code'],
-            'description' => ['sometimes','required', 'string', 'max:255'],
-            'status' => ['sometimes','required', 'string', 'max:255'],
+            'name' => ['required', 'string', 'max:255', 'unique:godowns,name'],
+            'code' => ['sometimes', 'required', 'string', 'max:255', 'unique:godowns,code'],
+            'description' => ['sometimes', 'required', 'string', 'max:255'],
+            'status' => ['sometimes', 'required', 'string', 'max:255'],
+            'parent_id' => ['sometimes', 'nullable', 'numeric', 'exists:godowns,id'],
         ];
 
         // For update requests, make validation more flexible
         if ($this->isMethod('PUT') || $this->isMethod('PATCH')) {
-            $rules['name'] = ['sometimes', 'required', 'string', 'max:255', 'unique:Godown,name,' . $this->route('Godown'),];
-            $rules['code'] = ['sometimes', 'required', 'string', 'max:255', 'unique:Godown,code,' . $this->route('Godown'),];
+            $id = $this->route('godown');
+            $rules['name'] = ['sometimes', 'required', 'string', 'max:255', "unique:godowns,name,{$id}"];
+            $rules['code'] = ['sometimes', 'required', 'string', 'max:255', "unique:godowns,code,{$id}"];
 
         }
 
@@ -41,7 +43,7 @@ class GodownRequest extends FormRequest
             'code.string' => 'The code must be a string.',
             'code.max' => 'The code may not be greater than 255 characters.',
             'code.unique' => 'The code has already been taken.',
-            'description.required   ' => 'The description field is required.',
+            'description.required' => 'The description field is required.',
             'description.string' => 'The description must be a string.',
             'description.max' => 'The description may not be greater than 255 characters.',
             'status.required' => 'The status field is required.',

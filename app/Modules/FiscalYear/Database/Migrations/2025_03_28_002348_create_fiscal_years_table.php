@@ -1,11 +1,11 @@
 <?php
 
+use App\Enums\ActiveInactive;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration
-{
+return new class extends Migration {
     /**
      * Run the migrations.
      */
@@ -13,10 +13,14 @@ return new class extends Migration
     {
         Schema::create('fiscal_years', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            $table->date('start_date');
-            $table->date('end_date')->nullable();
-            $table->enum('status', ['active', 'inactive'])->default('active');
+            $table->foreignId('company_id')->constrained()->onDelete('cascade');
+            $table->string('name'); // e.g. "FY 2025-26"
+            $table->date('start_date'); // e.g. 2025-04-01
+            $table->date('end_date');   // e.g. 2026-03-31
+            $table->string('assessment_year')->nullable(); // e.g. "AY 2026-27"
+
+            $table->enum('status', [ActiveInactive::cases(), 'value'])
+                ->default(ActiveInactive::Active->value);
             $table->timestamps();
         });
     }
@@ -28,4 +32,5 @@ return new class extends Migration
     {
         Schema::dropIfExists('fiscal_years');
     }
+
 };

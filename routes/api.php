@@ -7,6 +7,7 @@ use App\Http\Controllers\APi\AuthController;
 use App\Http\Controllers\Api\CompanyController;
 use App\Http\Controllers\Api\CompanyTypeController;
 use App\Http\Controllers\Api\CountryController;
+use App\Http\Controllers\Api\EnumController;
 use App\Http\Controllers\Api\FiscalYearController;
 use App\Http\Controllers\Api\JournalController;
 use App\Http\Controllers\Api\StateController;
@@ -67,6 +68,7 @@ Route::middleware(['jwt.cookies'])->group(function () {
     // Route::apiResource('tax_groups', TaxGroupController::class);
     // Route::apiResource('tax_rates', TaxRateController::class);
     // Route::apiResource('tax_types', TaxTypeController::class);
+    Route::get('enums/{enum}', [EnumController::class, 'index']);
 
     Route::get('/cookie-test', function () {
         return response()->json(['cookie' => request()->cookie('token')]);

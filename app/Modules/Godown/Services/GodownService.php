@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Collection;
 
 class GodownService implements GodownServiceInterface
 {
-    protected $resource=[];
+    protected $resource = ['parent'];
 
     public function getAll(): Collection
     {

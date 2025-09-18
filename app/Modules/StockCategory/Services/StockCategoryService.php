@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Collection;
 
 class StockCategoryService implements StockCategoryServiceInterface
 {
-    protected $resource=[];
+    protected $resource = ['parent'];
 
     public function getAll(): Collection
     {
