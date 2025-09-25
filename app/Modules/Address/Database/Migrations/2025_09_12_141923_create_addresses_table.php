@@ -10,8 +10,8 @@ return new class extends Migration {
     {
         Schema::create('addresses', function (Blueprint $table) {
             $table->id();
-            $table->string('address_line1');
-            $table->string('address_line2')->nullable();
+            $table->string('line1');
+            $table->string('line2')->nullable();
             $table->string('landmark')->nullable();
             $table->string('city');
 
@@ -29,9 +29,16 @@ return new class extends Migration {
 
             $table->boolean('is_primary')->default(false);
 
+            // Polymorphic relation using short type
+            $table->unsignedBigInteger('addressable_id');
+            $table->string('addressable_type'); // 'customer', 'employee', 'vendor', 'agent'
+
+
+
             // Polymorphic relation
-            $table->morphs('addressable'); // creates addressable_id + addressable_type
+            // $table->morphs('addressable'); // creates addressable_id + addressable_type
             $table->timestamps();
+            $table->index(['addressable_id', 'addressable_type']);
         });
     }
 

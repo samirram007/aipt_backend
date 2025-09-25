@@ -8,14 +8,16 @@ use Illuminate\Database\Eloquent\Collection;
 
 class CountryService implements CountryServiceInterface
 {
+    protected $resource = ['states'];
+
     public function getAll(): Collection
     {
-        return Country::all();
+        return Country::with($this->resource)->get();
     }
 
-    public function getById(int $id): Country
+    public function getById(int $id): ?Country
     {
-        return Country::findOrFail($id);
+        return Country::with($this->resource)->findOrFail($id);
     }
 
     public function store(array $data): Country

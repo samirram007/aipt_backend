@@ -1,11 +1,11 @@
 <?php
 
+use App\Enums\ActiveInactive;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration
-{
+return new class extends Migration {
     /**
      * Run the migrations.
      */
@@ -15,21 +15,28 @@ return new class extends Migration
             $table->id();
             $table->string('name')->unique();
             $table->string('code')->unique();
+            $table->string('mailing_name')->unique();
             $table->string('address')->nullable();
-            $table->string('phone')->nullable();
+            $table->string('phone_no')->nullable();
+            $table->string('mobile_no')->nullable();
             $table->string('email')->nullable();
             $table->string('website')->nullable();
             $table->foreignId('company_type_id');
-            $table->foreignId('fiscal_year_id');
-            $table->string('tin')->nullable();
-            $table->string('vat')->nullable();
+            $table->string('cin_no')->nullable();
+            $table->string('tin_no')->nullable();
+            $table->string('tan_no')->nullable();
+            $table->string('gst_no')->nullable();
+            $table->string('pan_no')->nullable();
             $table->string('logo')->nullable();
-            $table->string('currency')->default('INR');
-            $table->string('country')->default('IN');
-            $table->string('state')->nullable();
+            $table->foreignId('currency_id')->default(1);
+            $table->foreignId('country_id')->default(76);
+            $table->foreignId('state_id')->nullable();
             $table->string('city')->nullable();
-            $table->string('zip')->nullable();
-            $table->string('status')->default('active');
+            $table->string('zip_code')->nullable();
+            $table->boolean('is_group_company')->default(false);
+            $table->enum('status', array_column(ActiveInactive::cases(), 'value'))
+                ->default(ActiveInactive::Active->value);
+
             $table->timestamps();
         });
     }

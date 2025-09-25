@@ -9,7 +9,7 @@ class StockItemSeeder extends Seeder
 {
     public function run(): void
     {
-        StockItem::create(['name' => 'Sample StockItem']);
+        // StockItem::create(['name' => 'Sample StockItem']);
 
         // Uncomment to use factory if available
         // StockItem::factory()->count(10)->create();

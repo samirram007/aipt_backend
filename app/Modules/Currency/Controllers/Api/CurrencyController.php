@@ -15,7 +15,9 @@ class CurrencyController extends Controller
 {
     use ApiResponseTrait;
 
-    public function __construct(protected CurrencyServiceInterface $service) {}
+    public function __construct(protected CurrencyServiceInterface $service)
+    {
+    }
 
     public function index(): JsonResponse
     {
@@ -23,40 +25,37 @@ class CurrencyController extends Controller
         return (new CurrencyCollection($data))->response();
     }
 
-    public function show(int $id): JsonResponse
+    public function show(int $id): SuccessResource
     {
         $data = $this->service->getById($id);
-        return $this->resourceResponse(
-            new CurrencyResource($data),
-            'Currency retrieved successfully'
-        );
+        return new CurrencyResource($data, $messages = 'Currency retrieved successfully');
+
+
     }
 
-    public function store(CurrencyRequest $request): JsonResponse
+    public function store(CurrencyRequest $request): SuccessResource
     {
         $data = $this->service->store($request->validated());
-        return $this->resourceResponse(
-            new CurrencyResource($data),
-            'Currency created successfully',
-            201
-        );
+        return new CurrencyResource($data, $messages = 'Currency created successfully');
+
     }
 
-    public function update(CurrencyRequest $request, int $id): JsonResponse
+    public function update(CurrencyRequest $request, int $id): SuccessResource
     {
         $data = $this->service->update($request->validated(), $id);
-        return $this->resourceResponse(
-            new CurrencyResource($data),
-            'Currency updated successfully'
-        );
+        return new CurrencyResource($data, $messages = 'Currency updated successfully');
+
     }
 
     public function destroy(int $id): JsonResponse
     {
-        $this->service->delete($id);
-        return $this->successResponse(
-            null,
-            'Currency deleted successfully'
-        );
+
+        $result = $this->service->delete($id);
+        return new JsonResponse([
+            'status' => $result,
+            'code' => 204,
+            'message' => $result ? 'Currency deleted successfully' : 'Currency not found',
+        ]);
+
     }
 }

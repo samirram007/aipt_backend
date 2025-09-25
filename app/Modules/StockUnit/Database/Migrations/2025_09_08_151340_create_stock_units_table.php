@@ -27,7 +27,7 @@ return new class extends Migration {
             $table->foreignId('secondary_stock_unit_id')->nullable();
             $table->decimal('conversion_factor', 15, 6)->nullable()->comment('Conversion from primary unit to secondary unit');
             $table->integer('no_of_decimal_places')->default(0);
-
+            $table->boolean('is_base')->default(false)->comment('Mark this as base unit for the item');
             $table->timestamps();
         });
     }

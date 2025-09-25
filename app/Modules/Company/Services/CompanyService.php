@@ -8,14 +8,17 @@ use Illuminate\Database\Eloquent\Collection;
 
 class CompanyService implements CompanyServiceInterface
 {
+    protected $resource = ['company_type', 'fiscal_years', 'state', 'country', 'currency'];
+
     public function getAll(): Collection
     {
-        return Company::all();
+        return Company::with($this->resource)->get();
     }
 
-    public function getById(int $id): Company
+    public function getById(int $id): ?Company
     {
-        return Company::findOrFail($id);
+
+        return Company::with($this->resource)->findOrFail($id);
     }
 
     public function store(array $data): Company

@@ -15,7 +15,9 @@ class CompanyController extends Controller
 {
     use ApiResponseTrait;
 
-    public function __construct(protected CompanyServiceInterface $service) {}
+    public function __construct(protected CompanyServiceInterface $service)
+    {
+    }
 
     public function index(): JsonResponse
     {
@@ -23,42 +25,36 @@ class CompanyController extends Controller
         return (new CompanyCollection($data))->response();
     }
 
-    public function show(int $id): JsonResponse
+    public function show(int $id): SuccessResource
     {
         $data = $this->service->getById($id);
-        return $this->resourceResponse(
-            new CompanyResource($data),
-            'Company retrieved successfully'
-        );
+        return new CompanyResource($data, $messages = 'Company retrieved successfully');
+
+
     }
 
-    public function store(CompanyRequest $request): JsonResponse
+    public function store(CompanyRequest $request): SuccessResource
     {
         $data = $this->service->store($request->validated());
-        return $this->resourceResponse(
-            new CompanyResource($data),
-            'Company created successfully',
-            201
-        );
+        return new CompanyResource($data, $messages = 'Company created successfully');
+
     }
 
-    public function update(CompanyRequest $request, int $id): JsonResponse
+    public function update(CompanyRequest $request, int $id): SuccessResource
     {
         $data = $this->service->update($request->validated(), $id);
-        return $this->resourceResponse(
-            new CompanyResource($data),
-            'Company updated successfully'
-        );
+        return new CompanyResource($data, $messages = 'Company updated successfully');
+
     }
 
     public function destroy(int $id): JsonResponse
     {
 
-          $result=$this->service->delete($id);
+        $result = $this->service->delete($id);
         return new JsonResponse([
             'status' => $result,
             'code' => 204,
-            'message' => $result?'Company deleted successfully':'Company not found',
+            'message' => $result ? 'Company deleted successfully' : 'Company not found',
         ]);
 
     }

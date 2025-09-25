@@ -13,10 +13,21 @@ class Currency extends Model
 
     protected $fillable = [
         'name',
+        'code',
+        'symbol',
+        'country',
+        'exchange_rate',
+        'decimal_places',
+        'status',
+        'format',
+        'thousands_separator',
+        'decimal_separator',
+        'symbol_position',
     ];
 
     protected $casts = [
         'created_at' => 'datetime',
         'updated_at' => 'datetime',
+
     ];
 }

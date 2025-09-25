@@ -11,4 +11,10 @@ enum AddressableType: string
     case Employee = 'employee';
     case Other = 'other';
 
+    public static function getValues(): array
+    {
+        return array_map(fn($case) => $case->value, self::cases());
+    }
+
+
 }

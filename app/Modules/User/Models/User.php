@@ -47,6 +47,10 @@ class User extends Authenticatable implements JWTSubject
         ];
     }
 
+    public function userable()
+    {
+        return $this->morphTo();
+    }
     /**
 
         Get the identifier that will be stored in the subject claim of the JWT.

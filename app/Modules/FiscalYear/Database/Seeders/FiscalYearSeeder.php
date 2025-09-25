@@ -14,6 +14,7 @@ class FiscalYearSeeder extends Seeder
             'start_date' => '2025-04-01',
             'end_date' => '2026-03-31',
             'status' => 'active',
+            'company_id' => 1
         ]);
 
         // Uncomment to use factory if available

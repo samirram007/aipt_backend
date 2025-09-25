@@ -2,10 +2,15 @@
 
 namespace App\Providers;
 
+use App\Modules\Agent\Models\Agent;
+use App\Modules\Customer\Models\Customer;
+use App\Modules\Employee\Models\Employee;
+use App\Modules\Vendor\Models\Vendor;
 use App\Services\IAccountGroupService;
 use App\Services\IAuthService;
 use App\Services\impl\AccountGroupService;
 use App\Services\impl\AuthService;
+use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -23,6 +28,11 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        //
+         Relation::enforceMorphMap([
+            'customer' => Customer::class,
+            'employee' => Employee::class,
+            'vendor'   => Vendor::class,
+            'agent'    => Agent::class,
+        ]);
     }
 }

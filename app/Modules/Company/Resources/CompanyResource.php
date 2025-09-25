@@ -4,7 +4,11 @@ namespace App\Modules\Company\Resources;
 
 use App\Http\Resources\SuccessResource;
 use App\Modules\CompanyType\Resources\CompanyTypeResource;
+use App\Modules\Country\Resources\CountryResource;
+use App\Modules\Currency\Resources\CurrencyResource;
+use App\Modules\FiscalYear\Resources\FiscalYearCollection;
 use App\Modules\FiscalYear\Resources\FiscalYearResource;
+use App\Modules\State\Resources\StateResource;
 use Illuminate\Http\Request;
 
 
@@ -20,7 +24,6 @@ use Illuminate\Http\Request;
  * @OA\Property(property="email", type="string", example="info@example.com"),
  * @OA\Property(property="website", type="string", example="www.example.com"),
  * @OA\Property(property="companyTypeId", type="integer", example=1),
- * @OA\Property(property="fiscalYearId", type="integer", example=1),
  * @OA\Property(property="tin", type="string", example="1234567890"),
  * @OA\Property(property="vat", type="string", example="1234567890"),
  * @OA\Property(property="logo", type="string", example="logo.png"),
@@ -40,24 +43,34 @@ class CompanyResource extends SuccessResource
         return [
             'id' => $this->id,
             'name' => $this->name,
+            'mailingName' => $this->mailing_name,
             'code' => $this->code,
             'address' => $this->address,
-            'phone' => $this->phone,
+            'phoneNo' => $this->phone_no,
+            'mobileNo' => $this->phone_no,
             'email' => $this->email,
             'website' => $this->website,
-            'companyTypeId' => $this->company_type_id,
-            'fiscalYearId' => $this->fiscal_year_id,
-            'tin' => $this->tin,
-            'vat' => $this->vat,
+            'cinNo' => $this->cin_no,
+            'tinNo' => $this->tin_no,
+            'tanNo' => $this->tan_no,
+            'gstNo' => $this->tin_no,
+            'panNo' => $this->vat,
             'logo' => $this->logo,
-            'currency' => $this->currency,
-            'country' => $this->country,
-            'state' => $this->state,
+            'currencyId' => $this->currency_id,
+            'currency' => new CurrencyResource($this->whenLoaded('currency')),
+
+            'countryId' => $this->country_id,
+            'country' => new CountryResource($this->whenLoaded('country')),
+
+            'stateId' => $this->state_id,
+            'state' => new StateResource($this->whenLoaded('state')),
             'city' => $this->city,
-            'zip' => $this->zip,
+            'zipCode' => $this->zip_code,
             'status' => $this->status,
-            'companyType' => new CompanyTypeResource($this->whenLoaded('companyType')),
-            'fiscalYear' => new FiscalYearResource($this->whenLoaded('fiscalYear')),
+            'isGroupCompany' => $this->is_group_company,
+            'companyTypeId' => $this->company_type_id,
+            'companyType' => new CompanyTypeResource($this->whenLoaded('company_type')),
+            'fiscalYears' => new FiscalYearCollection($this->whenLoaded('fiscal_years')),
 
         ];
     }

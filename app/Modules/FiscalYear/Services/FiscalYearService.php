@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Collection;
 
 class FiscalYearService implements FiscalYearServiceInterface
 {
-    protected $resource=[];
+    protected $resource = ['company'];
 
     public function getAll(): Collection
     {

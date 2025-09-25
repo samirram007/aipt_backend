@@ -2,6 +2,7 @@
 
 namespace App\Modules\FiscalYear\Resources;
 
+use App\Modules\Company\Resources\CompanyResource;
 use Illuminate\Http\Request;
 
 use App\Http\Resources\SuccessResource;
@@ -22,8 +23,12 @@ class FiscalYearResource extends SuccessResource
         return [
             'id' => $this->id,
             'name' => $this->name,
-            'start_date' => $this->start_date,
-            'end_date' => $this->end_date,
+            'startDate' => $this->start_date,
+            'endDate' => $this->end_date,
+            'companyId' => $this->company_id,
+            'company' => new CompanyResource($this->whenLoaded('company')),
+            'status' => $this->status
+
         ];
     }
 }

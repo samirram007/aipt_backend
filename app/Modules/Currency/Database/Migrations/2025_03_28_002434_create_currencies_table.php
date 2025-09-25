@@ -4,8 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration
-{
+return new class extends Migration {
     /**
      * Run the migrations.
      */
@@ -23,8 +22,7 @@ return new class extends Migration
             $table->string('format')->default('1,234.56'); // Format for displaying the currency (e.g., 1,234.56 or 1.234,56)
             $table->string('thousands_separator')->default(','); // Thousands separator (e.g., , or .)
             $table->string('decimal_separator')->default('.'); // Decimal separator (e.g., . or ,)
-            $table->enum('symbol_position',['before','after'])->default('before'); // Position of the symbol (e.g., before or after the amount)
-
+            $table->enum('symbol_position', ['before', 'after'])->default('before'); // Position of the symbol (e.g., before or after the amount)
             $table->timestamps();
         });
     }

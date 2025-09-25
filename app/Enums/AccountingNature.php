@@ -9,4 +9,10 @@ enum AccountingNature: string
     case Expenses = 'Expenses';
     case Income = 'Income';
     case Liabilities = 'Liabilities';
+
+    public static function getValues(): array
+    {
+        return array_map(fn($case) => $case->value, self::cases());
+    }
+
 }

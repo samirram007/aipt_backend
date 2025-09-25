@@ -10,5 +10,9 @@ enum QuantityType: string
     case Area = "area";
     case Others = "others";
 
+    public static function getValues(): array
+    {
+        return array_map(fn($case) => $case->value, self::cases());
+    }
 
 }

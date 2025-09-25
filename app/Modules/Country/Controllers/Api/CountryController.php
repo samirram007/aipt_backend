@@ -15,7 +15,9 @@ class CountryController extends Controller
 {
     use ApiResponseTrait;
 
-    public function __construct(protected CountryServiceInterface $service) {}
+    public function __construct(protected CountryServiceInterface $service)
+    {
+    }
 
     public function index(): JsonResponse
     {
@@ -23,40 +25,37 @@ class CountryController extends Controller
         return (new CountryCollection($data))->response();
     }
 
-    public function show(int $id): JsonResponse
+    public function show(int $id): SuccessResource
     {
         $data = $this->service->getById($id);
-        return $this->resourceResponse(
-            new CountryResource($data),
-            'Country retrieved successfully'
-        );
+        return new CountryResource($data, $messages = 'Country retrieved successfully');
+
+
     }
 
-    public function store(CountryRequest $request): JsonResponse
+    public function store(CountryRequest $request): SuccessResource
     {
         $data = $this->service->store($request->validated());
-        return $this->resourceResponse(
-            new CountryResource($data),
-            'Country created successfully',
-            201
-        );
+        return new CountryResource($data, $messages = 'Country created successfully');
+
     }
 
-    public function update(CountryRequest $request, int $id): JsonResponse
+    public function update(CountryRequest $request, int $id): SuccessResource
     {
         $data = $this->service->update($request->validated(), $id);
-        return $this->resourceResponse(
-            new CountryResource($data),
-            'Country updated successfully'
-        );
+        return new CountryResource($data, $messages = 'Country updated successfully');
+
     }
 
     public function destroy(int $id): JsonResponse
     {
-        $this->service->delete($id);
-        return $this->successResponse(
-            null,
-            'Country deleted successfully'
-        );
+
+        $result = $this->service->delete($id);
+        return new JsonResponse([
+            'status' => $result,
+            'code' => 204,
+            'message' => $result ? 'Country deleted successfully' : 'Country not found',
+        ]);
+
     }
 }

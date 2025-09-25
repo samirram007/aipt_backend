@@ -38,28 +38,34 @@ class CompanyRequest extends FormRequest
     {
         $rules = [
             'name' => ['required', 'string', 'max:255', 'unique:companies,name'],
-            'address' => ['nullable', 'string', 'max:255'],
-            'phone' => ['nullable', 'string', 'max:255'],
-            'email' => ['nullable', 'email', 'max:255'],
-            'website' => ['nullable', 'string', 'max:255'],
+            'address' => ['sometimes', 'nullable', 'string', 'max:255'],
+            'mailing_name' => ['sometimes', 'nullable', 'string', 'max:255'],
+            'phone_no' => ['sometimes', 'nullable', 'string', 'max:255'],
+            'mobile_no' => ['sometimes', 'nullable', 'string', 'max:255'],
+            'email' => ['sometimes', 'nullable', 'email', 'max:255'],
+            'website' => ['sometimes', 'nullable', 'string', 'max:255'],
             'company_type_id' => ['required', 'integer', 'exists:company_types,id'],
-            'fiscal_year_id' => ['required', 'integer', 'exists:fiscal_years,id'],
-            'tin' => ['nullable', 'string', 'max:255'],
-            'vat' => ['nullable', 'string', 'max:255'],
-            'logo' => ['nullable', 'string', 'max:255'],
-            'currency' => ['nullable', 'string', 'max:255'],
-            'country' => ['nullable', 'string', 'max:255'],
-            'state' => ['nullable', 'string', 'max:255'],
-            'city' => ['nullable', 'string', 'max:255'],
-            'zip' => ['nullable', 'string', 'max:255'],
+            'cin_no' => ['sometimes', 'nullable', 'string', 'max:255'],
+            'tin_no' => ['sometimes', 'nullable', 'string', 'max:255'],
+            'tan_no' => ['sometimes', 'nullable', 'string', 'max:255'],
+            'gst_no' => ['sometimes', 'nullable', 'string', 'max:255'],
+            'pan_no' => ['sometimes', 'nullable', 'string', 'max:255'],
+            'logo' => ['sometimes', 'nullable', 'string', 'max:255'],
+            'currency_id' => ['sometimes', 'nullable', 'number', 'exists:currencies,id'],
+            'country_id' => ['sometimes', 'nullable', 'number', 'exists:countries,id'],
+            'state_id' => ['sometimes', 'nullable', 'number', 'exists:states,id'],
+            'city' => ['sometimes', 'nullable', 'string', 'max:255'],
+            'zip_code' => ['sometimes', 'nullable', 'string', 'max:255'],
             'status' => ['nullable', 'string', 'max:255'],
-            'is_group_company' => ['nullable', 'boolean'],
+            'is_group_company' => ['sometimes', 'nullable', 'boolean'],
             'children' => ['nullable', 'string']
         ];
 
         // For update requests, make validation more flexible
         if ($this->isMethod('PUT') || $this->isMethod('PATCH')) {
-            $rules['name'] = ['sometimes', 'required', 'string', 'max:255'];
+            $id = $this->route('companies');
+            $rules['name'] = ['sometimes', 'required', 'string', 'max:255', 'unique:companies,name,' . $id];
+
         }
 
         return $rules;

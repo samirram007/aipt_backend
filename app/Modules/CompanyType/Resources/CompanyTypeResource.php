@@ -27,6 +27,7 @@ class CompanyTypeResource extends SuccessResource
             'name' => $this->name,
             'code' => $this->code,
             'description' => $this->description,
+            'status' => $this->status,
             'companies' => new CompanyCollection($this->whenLoaded('companies')),
         ];
     }

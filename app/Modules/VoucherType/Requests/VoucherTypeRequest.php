@@ -14,7 +14,7 @@ class VoucherTypeRequest extends FormRequest
     public function rules(): array
     {
         $rules = [
-            'name' => ['required', 'string', 'max:255', 'unique:voucher_types'],
+            'name' => ['required', 'string', 'max:255', 'unique:voucher_types,name'],
             'code' => ['sometimes'],
             'voucher_category_id' => ['sometimes', 'nullable', 'numeric', 'exists:voucher_categories,id'],
             'description' => ['sometimes'],
@@ -24,7 +24,8 @@ class VoucherTypeRequest extends FormRequest
 
         // For update requests, make validation more flexible
         if ($this->isMethod('PUT') || $this->isMethod('PATCH')) {
-            $rules['name'] = ['sometimes', 'required', 'string', 'max:255', 'unique:voucher_types,name,' . $this->route('voucher_type')];
+            $id = $this->route('voucher_type');
+            $rules['name'] = ['sometimes', 'required', 'string', 'max:255', 'unique:voucher_types,name,' . $id];
         }
 
         return $rules;

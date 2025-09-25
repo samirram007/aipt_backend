@@ -14,12 +14,17 @@ class CountryRequest extends FormRequest
     public function rules(): array
     {
         $rules = [
-            'name' => ['required', 'string', 'max:255'],
+            'name' => ['required', 'string', 'max:255', 'unique:countries,name'],
+            'phone_code' => ['required', 'string', 'max:255'],
+            'iso_code' => ['required', 'string', 'max:255'],
         ];
 
         // For update requests, make validation more flexible
         if ($this->isMethod('PUT') || $this->isMethod('PATCH')) {
-            $rules['name'] = ['sometimes', 'required', 'string', 'max:255'];
+            $id = $this->route('country');
+            $rules['name'] = ['sometimes', 'required', 'string', 'max:255', 'unique:countries,name,' . $id];
+            // $rules['code'] = ['sometimes', 'required', 'string', 'max:255', 'unique:countries,code,' . $id];
+
         }
 
         return $rules;

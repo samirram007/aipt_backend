@@ -2,7 +2,9 @@
 
 namespace App\Modules\FiscalYear\Requests;
 
+use App\Enums\ActiveInactive;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 /**
  * @OA\Schema(
  *     schema="FiscalYearRequest",
@@ -27,6 +29,8 @@ class FiscalYearRequest extends FormRequest
             'start_date' => ['required', 'date'],
             'end_date' => ['sometimes', 'required', 'date', 'after:start_date'],
             'company_id' => ['sometimes', 'nullable', 'numeric', 'exists:companies,id'],
+            'status' => ['required', Rule::enum(ActiveInactive::class)],
+            'assessment_year' => ['sometimes', 'string']
         ];
 
         // For update requests, make validation more flexible

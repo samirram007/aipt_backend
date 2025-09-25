@@ -10,9 +10,10 @@ class CompanyTypeSeeder extends Seeder
     public function run(): void
     {
         CompanyType::create([
-            'name' => 'Manufacturing',
-            'code' => 'MAN',
-            'description' => 'Manufacturing industry',
+            'name' => 'Transport',
+            'code' => 'TRAN',
+            'description' => 'Transport industry',
+            'status' => 'active'
         ]);
 
         // Uncomment to use factory if available

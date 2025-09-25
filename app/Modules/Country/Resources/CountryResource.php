@@ -3,6 +3,7 @@
 namespace App\Modules\Country\Resources;
 
 use App\Http\Resources\SuccessResource;
+use App\Modules\State\Resources\StateCollection;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -13,8 +14,10 @@ class CountryResource extends SuccessResource
         return [
             'id' => $this->id,
             'name' => $this->name,
-            'created_at' => $this->created_at?->toISOString(),
-            'updated_at' => $this->updated_at?->toISOString(),
+            'phoneCode' => $this->phone_code,
+            'isoCode' => $this->iso_code,
+            // 'states' => new StateCollection($this->whenLoaded('states')),
+
         ];
     }
 }
