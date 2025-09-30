@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Collection;
 
 class ItemPriceService implements StockItemServiceInterface
 {
-    protected $resource = [];
+    protected $resource = ['stock_item_prices'];
 
     public function getAll(): Collection
     {

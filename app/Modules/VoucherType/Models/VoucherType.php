@@ -15,10 +15,15 @@ class VoucherType extends Model
 
     protected $fillable = [
         'name',
+        'parent_id',
         'code',
+        'print_name',
         'description',
         'voucher_category_id',
         'is_financial',
+        'is_effecting',
+        'is_hidden',
+        'is_system',
         'status',
         'icon',
 
@@ -28,6 +33,11 @@ class VoucherType extends Model
         'created_at' => 'datetime',
         'updated_at' => 'datetime',
     ];
+
+    public function parent(): BelongsTo
+    {
+        return $this->BelongsTo(VoucherType::class);
+    }
     public function voucher_category(): BelongsTo
     {
         return $this->BelongsTo(VoucherCategory::class);

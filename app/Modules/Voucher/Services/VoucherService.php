@@ -8,14 +8,16 @@ use Illuminate\Database\Eloquent\Collection;
 
 class VoucherService implements VoucherServiceInterface
 {
+    protected $resource = ['voucher_entries.account_ledger'];
+
     public function getAll(): Collection
     {
-        return Voucher::all();
+        return Voucher::with($this->resource)->get();
     }
 
-    public function getById(int $id): Voucher
+    public function getById(int $id): ?Voucher
     {
-        return Voucher::findOrFail($id);
+        return Voucher::with($this->resource)->findOrFail($id);
     }
 
     public function store(array $data): Voucher

@@ -2,6 +2,8 @@
 
 namespace App\Modules\VoucherCategory\Resources;
 
+use App\Modules\VoucherType\Resources\VoucherTypeCollection;
+use App\Modules\VoucherType\Resources\VoucherTypeResource;
 use Illuminate\Http\Request;
 
 use App\Http\Resources\SuccessResource;
@@ -15,7 +17,8 @@ class VoucherCategoryResource extends SuccessResource
             'code' => $this->code,
             'description' => $this->description,
             'moduleLink' => $this->module_link,
-            'status' => $this->status
+            'status' => $this->status,
+            'voucherTypes' => VoucherTypeResource::collection($this->whenLoaded('voucher_types')),
         ];
     }
 }

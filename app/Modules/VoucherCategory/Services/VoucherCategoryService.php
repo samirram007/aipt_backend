@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Collection;
 
 class VoucherCategoryService implements VoucherCategoryServiceInterface
 {
-    protected $resource=[];
+    protected $resource = ['voucher_types'];
 
     public function getAll(): Collection
     {

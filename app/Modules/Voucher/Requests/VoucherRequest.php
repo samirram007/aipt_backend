@@ -14,12 +14,19 @@ class VoucherRequest extends FormRequest
     public function rules(): array
     {
         $rules = [
-            'name' => ['required', 'string', 'max:255'],
+            'voucher_no' => ['sometimes', 'required', 'string', 'max:255'],
+            'voucher_date' => ['sometimes', 'required', 'string', 'max:255'],
+            'voucher_type_id' => ['sometimes', 'required', 'numeric', 'exists:voucher_types,id'],
+            'remarks' => ['sometimes', 'required', 'string', 'max:255'],
+            'status' => ['sometimes', 'required', 'string', 'max:255'],
+            'fiscal_year_id' => ['sometimes', 'required', 'numeric', 'exists:fiscal_years,id'],
+            'company_id' => ['sometimes', 'required', 'numeric', 'exists:companies,id'],
+            'stock_journal_id' => ['sometimes', 'required', 'numeric', 'exists:stock_journals,id'],
         ];
 
         // For update requests, make validation more flexible
         if ($this->isMethod('PUT') || $this->isMethod('PATCH')) {
-            $rules['name'] = ['sometimes', 'required', 'string', 'max:255'];
+            // $rules['name'] = ['sometimes', 'required', 'string', 'max:255'];
         }
 
         return $rules;

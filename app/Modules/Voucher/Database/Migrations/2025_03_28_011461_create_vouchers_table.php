@@ -15,12 +15,15 @@ return new class extends Migration {
             $table->string('voucher_no');
             $table->date('voucher_date');
             // $table->foreignIdFor('account_types');
-            $table->foreignId('voucher_type_id')
-                ->constrained('voucher_types')
-                ->onDelete('cascade');
+            $table->foreignId('voucher_type_id');
+            $table->boolean('is_effecting')->default(true);
+            $table->boolean('is_optional')->default(false);
 
-            $table->string('narration')->nullable();
+            $table->text('remarks')->nullable();
             $table->string('status')->default('active');
+            $table->unsignedBigInteger('fiscal_year_id')->default(2025);
+            $table->unsignedBigInteger('company_id')->default(1);
+            $table->unsignedBigInteger('stock_journal_id')->nullable();
 
             $table->timestamps();
         });

@@ -4,8 +4,10 @@ namespace App\Modules\StockItem\Models;
 
 use App\Enums\CostingMethod;
 use App\Enums\TypeOfSupply;
+use App\Modules\StockItemPrice\Models\StockItemPrice;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class StockItem extends Model
 {
@@ -50,7 +52,7 @@ class StockItem extends Model
         'hsn_sac_code',
         'is_gst_inclusive',
         'gst_type',
-        'brand_id',
+        'stock_item_brand_id',
         'mrp',
         'standard_cost',
         'icon',
@@ -73,6 +75,7 @@ class StockItem extends Model
         'costing_method' => CostingMethod::class,
         'pricing_method' => CostingMethod::class,
         'has_bom' => 'boolean',
+
         'is_gst_applicable' => 'boolean',
         'is_gst_inclusive' => 'boolean',
         'is_sales_as_new_manufacture' => 'boolean',
@@ -81,4 +84,9 @@ class StockItem extends Model
 
 
     ];
+
+    public function stock_item_prices(): HasMany
+    {
+        return $this->hasMany(StockItemPrice::class);
+    }
 }

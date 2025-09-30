@@ -31,9 +31,9 @@ return new class extends Migration {
             $table->string('currency', 10)->default('INR');
 
             // Multi-level context
-            $table->foreignId('customer_id')->nullable()->constrained('customers');
-            $table->foreignId('customer_group_id')->nullable()->constrained('customer_groups');
-            $table->foreignId('region_id')->nullable()->constrained('regions');
+            $table->foreignId('customer_id')->nullable();
+            $table->foreignId('customer_group_id')->nullable();
+            $table->foreignId('region_id')->nullable();
             $table->enum('channel', ['retail', 'wholesale', 'online', 'export'])->nullable();
 
             // Effective dates

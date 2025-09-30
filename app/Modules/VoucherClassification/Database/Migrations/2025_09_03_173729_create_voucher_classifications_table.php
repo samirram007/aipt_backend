@@ -16,7 +16,7 @@ return new class extends Migration {
             $table->string('status')->default('active');
             $table->string('icon')->nullable();
 
-            $table->foreignId('voucher_type_id')->constrained()->onDelete('cascade')->comment("Link to voucher types");
+            $table->foreignId('voucher_type_id')->comment("Link to voucher types");
             $table->json('rules')->nullable()->comment('JSON for automation (e.g., {"tax_rate": 18})');
 
 

@@ -63,7 +63,7 @@ return new class extends Migration {
             $table->enum('gst_type', ['cgst_sgst', 'igst'])->nullable();
 
             // Classification / categories
-            $table->unsignedBigInteger('brand_id')->nullable();
+            $table->unsignedBigInteger('stock_item_brand_id')->nullable();
             $table->unsignedBigInteger('stock_category_id')->nullable();
             $table->unsignedBigInteger('stock_group_id')->nullable();
 
