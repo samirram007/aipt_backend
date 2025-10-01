@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Collection;
 
 class StockUnitService implements StockUnitServiceInterface
 {
-    protected $resource=[];
+    protected $resource = ['primary_stock_unit', 'secondary_stock_unit', 'unique_quantity_code'];
 
     public function getAll(): Collection
     {

@@ -22,7 +22,7 @@ return new class extends Migration {
             $table->string('status')->default('active');
             $table->string('icon')->nullable();
 
-            $table->foreignId('uqc_id')->nullable();
+            $table->foreignId('unique_quantity_code_id')->nullable();
             $table->foreignId('primary_stock_unit_id')->nullable();
             $table->foreignId('secondary_stock_unit_id')->nullable();
             $table->decimal('conversion_factor', 15, 6)->nullable()->comment('Conversion from primary unit to secondary unit');

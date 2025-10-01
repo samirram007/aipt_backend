@@ -2,25 +2,11 @@
 
 namespace App\Modules\Uqc\Models;
 
+use App\Modules\UniqueQuantityCode\Models\UniqueQuantityCode;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
-class Uqc extends Model
+class Uqc extends UniqueQuantityCode
 {
-    use HasFactory;
 
-    protected $table = 'uqcs';
-
-    protected $fillable = [
-        'name',
-        'code',
-        'description',
-        'status',
-
-    ];
-
-    protected $casts = [
-        'created_at' => 'datetime',
-        'updated_at' => 'datetime',
-    ];
 }

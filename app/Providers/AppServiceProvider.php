@@ -4,6 +4,7 @@ namespace App\Providers;
 
 use App\Modules\Agent\Models\Agent;
 use App\Modules\Customer\Models\Customer;
+use App\Modules\Distributor\Models\Distributor;
 use App\Modules\Employee\Models\Employee;
 use App\Modules\Vendor\Models\Vendor;
 use App\Services\IAccountGroupService;
@@ -28,11 +29,12 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-         Relation::enforceMorphMap([
+        Relation::enforceMorphMap([
             'customer' => Customer::class,
+            'distributor' => Distributor::class,
             'employee' => Employee::class,
-            'vendor'   => Vendor::class,
-            'agent'    => Agent::class,
+            'vendor' => Vendor::class,
+            'agent' => Agent::class,
         ]);
     }
 }
