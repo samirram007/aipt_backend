@@ -3,10 +3,16 @@
 namespace App\Modules\StockItem\Models;
 
 use App\Enums\CostingMethod;
+use App\Enums\MarketValuationMethod;
 use App\Enums\TypeOfSupply;
+use App\Modules\StockCategory\Models\StockCategory;
+use App\Modules\StockGroup\Models\StockGroup;
 use App\Modules\StockItemPrice\Models\StockItemPrice;
+use App\Modules\StockUnit\Models\StockUnit;
+use App\Modules\UniqueQuantityCode\Models\UniqueQuantityCode;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class StockItem extends Model
@@ -34,12 +40,13 @@ class StockItem extends Model
         'is_negative_sales_allow',
         'is_maintain_batch',
         'is_maintain_serial',
-        'is_expiry_item',
+        'use_expiry_date',
+        'track_manufacturing_date',
         'is_finish_goods',
         'is_raw_material',
         'is_unfinished_goods',
         'costing_method',
-        'pricing_method',
+        'market_valuation_method',
         'reorder_level',
         'minimum_stock',
         'maximum_stock',
@@ -55,6 +62,7 @@ class StockItem extends Model
         'stock_item_brand_id',
         'mrp',
         'standard_cost',
+        'standard_selling_price',
         'icon',
         'status',
 
@@ -67,13 +75,14 @@ class StockItem extends Model
         'is_negative_sales_allow' => 'boolean',
         'is_maintain_batch' => 'boolean',
         'is_maintain_serial' => 'boolean',
-        'is_expiry_item' => 'boolean',
+        'use_expiry_date' => 'boolean',
+        'track_manufacturing_date' => 'boolean',
         'is_finish_goods' => 'boolean',
         'is_raw_material' => 'boolean',
         'is_unfinished_goods' => 'boolean',
         'type_of_supply' => TypeOfSupply::class,
         'costing_method' => CostingMethod::class,
-        'pricing_method' => CostingMethod::class,
+        'market_valuation_method' => MarketValuationMethod::class,
         'has_bom' => 'boolean',
         'reorder_level' => 'float',
         'minimumStock' => 'float',
@@ -90,5 +99,25 @@ class StockItem extends Model
     public function stock_item_prices(): HasMany
     {
         return $this->hasMany(StockItemPrice::class);
+    }
+    public function stock_item_category(): BelongsTo
+    {
+        return $this->belongsTo(StockCategory::class);
+    }
+    public function stock_item_group(): BelongsTo
+    {
+        return $this->belongsTo(StockGroup::class);
+    }
+    public function stock_unit(): BelongsTo
+    {
+        return $this->belongsTo(StockUnit::class);
+    }
+    public function alternate_stock_unit(): BelongsTo
+    {
+        return $this->belongsTo(StockUnit::class);
+    }
+    public function unique_quantity_code(): BelongsTo
+    {
+        return $this->belongsTo(UniqueQuantityCode::class);
     }
 }

@@ -1,6 +1,7 @@
 <?php
 
 use App\Enums\CostingMethod;
+use App\Enums\MarketValuationMethod;
 use App\Enums\PricingMethod;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
@@ -29,14 +30,15 @@ return new class extends Migration {
             $table->decimal('base_unit_value', 15, 6)->nullable()->comment('Base quantity of primary unit (e.g., 1 KG or 1000 GM) in the conversion pair');
             $table->decimal('alternate_unit_value', 15, 6)->nullable()->comment('Corresponding quantity of alternate unit (e.g., 200 PC or 10 Pack) in the conversion pair');
 
-            $table->unsignedBigInteger('uqc_id')->nullable();
+            $table->unsignedBigInteger('unique_quantity_code_id')->nullable();
 
             // Inventory / stock behavior
             $table->enum('type_of_supply', ['capital_goods', 'goods', 'services'])->default('goods');
             $table->boolean('is_negative_sales_allow')->default(false);
             $table->boolean('is_maintain_batch')->default(false);
             $table->boolean('is_maintain_serial')->default(false);
-            $table->boolean('is_expiry_item')->default(false);
+            $table->boolean('use_expiry_date')->default(false);
+            $table->boolean('track_manufacturing_date')->default(false);
 
             // Manufacturing / type
             $table->boolean('is_finish_goods')->default(true);
@@ -45,7 +47,7 @@ return new class extends Migration {
 
             // Costing & pricing
             $table->enum('costing_method', CostingMethod::getValues())->nullable();
-            $table->enum('pricing_method', PricingMethod::getValues())->nullable();
+            $table->enum('market_valuation_method', MarketValuationMethod::getValues())->nullable();
             $table->decimal('reorder_level', 15, 6)->default(0);
             $table->decimal('minimum_stock', 15, 6)->default(0);
             $table->decimal('maximum_stock', 15, 6)->default(0);
@@ -54,6 +56,7 @@ return new class extends Migration {
             $table->boolean('is_sales_as_new_manufacture')->default(false);
             $table->boolean('is_purchase_as_consumed')->default(false);
             $table->boolean('is_rejection_as_scrap')->default(false);
+            $table->boolean('has_bom')->default(false);
 
             // GST / tax
             $table->boolean('is_gst_applicable')->nullable();
@@ -70,7 +73,8 @@ return new class extends Migration {
 
             // E-commerce readiness
             $table->decimal('mrp', 15, 2)->nullable();
-            $table->decimal('item_cost', 15, 2)->nullable();
+            $table->decimal('standard_cost', 15, 2)->nullable();
+            $table->decimal('standard_selling_price', 15, 2)->nullable();
 
             // Metadata
             $table->string('icon')->nullable();
@@ -95,16 +99,16 @@ return new class extends Migration {
 
     public function down(): void
     {
-        Schema::table('stock_items', function (Blueprint $table) {
-            $table->dropForeign(['primary_stock_unit_id']);
-            $table->dropForeign(['secondary_stock_unit_id']);
-            $table->dropForeign(['invoice_stock_unit_id']);
-            $table->dropForeign(['uqc_id']);
-            $table->dropForeign(['costing_method_id']);
-            $table->dropForeign(['pricing_method_id']);
-            $table->dropForeign(['brand_id']);
-            $table->dropForeign(['category_id']);
-        });
+        // Schema::table('stock_items', function (Blueprint $table) {
+        //     $table->dropForeign(['primary_stock_unit_id']);
+        //     $table->dropForeign(['secondary_stock_unit_id']);
+        //     $table->dropForeign(['invoice_stock_unit_id']);
+        //     $table->dropForeign(['uqc_id']);
+        //     $table->dropForeign(['costing_method_id']);
+        //     $table->dropForeign(['pricing_method_id']);
+        //     $table->dropForeign(['brand_id']);
+        //     $table->dropForeign(['category_id']);
+        // });
 
         Schema::dropIfExists('stock_items');
     }

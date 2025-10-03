@@ -16,8 +16,8 @@ return new class extends Migration {
             $table->string('city');
 
             // Foreign keys
-            $table->foreignId('state_id')->constrained('states')->cascadeOnDelete();
-            $table->foreignId('country_id')->constrained('countries')->cascadeOnDelete();
+            $table->foreignId('state_id');
+            $table->foreignId('country_id');
 
             $table->string('postal_code')->nullable();
             $table->decimal('latitude', 10, 8)->nullable();

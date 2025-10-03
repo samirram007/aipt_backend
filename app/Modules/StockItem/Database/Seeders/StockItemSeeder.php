@@ -45,17 +45,19 @@ class StockItemSeeder extends Seeder
             'alternate_stock_unit_id' => $alternateStockUnit->id,
             'base_unit_value' => 1.0, // 1 MT
             'alternate_unit_value' => 20.0, // 20 Bags per MT (assuming 50 KG per bag)
-            'uqc_id' => $uqc->id,
+            'unique_quantity_code_id' => $uqc->id,
             'type_of_supply' => 'goods',
             'is_negative_sales_allow' => false,
             'is_maintain_batch' => true,
             'is_maintain_serial' => false,
-            'is_expiry_item' => false,
+            'use_expiry_date' => false,
+            'track_manufacturing_date' => false,
+            'has_bom' => false,
             'is_finish_goods' => true,
             'is_raw_material' => false,
             'is_unfinished_goods' => false,
-            'costing_method' => null,
-            'pricing_method' => null,
+            'costing_method' => 'avg_cost',
+            'market_valuation_method' => 'avg_price',
             'reorder_level' => 10.0,
             'minimum_stock' => 5.0,
             'maximum_stock' => 50.0,
@@ -71,7 +73,8 @@ class StockItemSeeder extends Seeder
             'stock_category_id' => $stockCategory->id,
             'stock_group_id' => $stockGroup->id,
             'mrp' => 550.00, // Estimated MRP per MT
-            'item_cost' => 5083.05, // As per document rate per MT
+            'standard_cost' => 5083.05, // As per document rate per MT
+            'standard_selling_price' => 5083.05, // As per document rate per MT
             'icon' => null,
             'status' => 'active',
         ]);

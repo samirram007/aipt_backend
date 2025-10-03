@@ -24,12 +24,15 @@ class Address extends Model
         'latitude',
         'longitude',
         'address_type',
-        'is_primary'
+        'is_primary',
+        'addressable_id',
+        'addressable_type',
     ];
 
     protected $casts = [
         'created_at' => 'datetime',
         'updated_at' => 'datetime',
+        'is_primary' => 'boolean',
         'address_type' => AddressType::class,
     ];
 

@@ -12,7 +12,10 @@ class StockUnitService implements StockUnitServiceInterface
 
     public function getAll(): Collection
     {
-        return StockUnit::with($this->resource)->get();
+        return StockUnit::with($this->resource)
+            ->orderBy('code')
+            ->orderBy('name')
+            ->get();
     }
 
     public function getById(int $id): ?StockUnit
