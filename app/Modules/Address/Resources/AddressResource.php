@@ -12,8 +12,8 @@ class AddressResource extends SuccessResource
     {
         return [
             'id' => $this->id,
-            'line1' => $this->address_line1,
-            'line2' => $this->address_line2,
+            'line1' => $this->line1,
+            'line2' => $this->line2,
             'landmark' => $this->landmark,
             'city' => $this->city,
             'state' => $this->whenLoaded('state', fn() => [
@@ -30,12 +30,12 @@ class AddressResource extends SuccessResource
             'postal_code' => $this->postal_code,
             'latitude' => $this->latitude,
             'longitude' => $this->longitude,
-            'address_type' => AddressType::from($this->address_type)->value,
+            // 'address_type' => AddressType::from($this->address_type)->value,
             'is_primary' => (bool) $this->is_primary,
-            'addressable' => [
-                'id' => $this->addressable_id,
-                'type' => class_basename($this->addressable_type),
-            ],
+            // 'addressable' => [
+            //     'id' => $this->addressable_id,
+            //     'type' => class_basename($this->addressable_type),
+            // ],
         ];
     }
 }

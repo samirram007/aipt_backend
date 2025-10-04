@@ -9,11 +9,16 @@ class AgentResource extends SuccessResource
 {
     public function toArray(Request $request): array
     {
-        return [
+        $data =  [
             'id' => $this->id,
             'name' => $this->name,
-            'created_at' => $this->created_at?->toISOString(),
-            'updated_at' => $this->updated_at?->toISOString(),
+            'email' => $this->email,
+            'contactNo' => $this->contact_no,
+            'commissionPercent'=> $this->commission_percent,
+            'createdAt' => $this->created_at?->toISOString(),
+            'updatedAt' => $this->updated_at?->toISOString(),
         ];
+
+        return array_filter($data, fn($value) => !is_null($value));
     }
 }

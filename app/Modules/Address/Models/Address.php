@@ -14,8 +14,8 @@ class Address extends Model
     protected $table = 'addresses';
 
     protected $fillable = [
-        'address_line1',
-        'address_line2',
+        'line1',
+        'line2',
         'landmark',
         'city',
         'state_id',
@@ -23,6 +23,8 @@ class Address extends Model
         'postal_code',
         'latitude',
         'longitude',
+        'addressable_id',
+        'addressable_type',
         'address_type',
         'is_primary'
     ];

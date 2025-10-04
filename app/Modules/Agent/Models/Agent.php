@@ -15,10 +15,11 @@ class Agent extends Model
 
     protected $fillable = [
         'name',
-        'code',
-        'description',
-        'status',
-
+        'email',
+        'contact_no',
+        'account_ledger_id',
+        'commission_percent',
+        'is_active'
     ];
 
     protected $casts = [

@@ -3,6 +3,7 @@
 namespace App\Modules\Agent\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class AgentRequest extends FormRequest
 {
@@ -14,18 +15,19 @@ class AgentRequest extends FormRequest
     public function rules(): array
     {
         $rules = [
-            'name' => ['required', 'string', 'max:255','unique:agents,name'],
-            'code' => ['sometimes','required', 'string', 'max:255','unique:agents,code'],
-            'description' => ['sometimes','required', 'string', 'max:255'],
-            'status' => ['sometimes','required', 'string', 'max:255'],
+            'name' => ['required', 'string', 'max:255'],
+            'email' => ['sometimes','nullable', 'string', 'max:255','unique:agents,email'],
+            'contact_no' => ['sometimes','nullable', 'string', 'max:255'],
+            'commission_percent'=>['sometimes','decimal:0,5'],
+            'account_ledger_id'=>['sometimes','nullable','numeric'],
+            'is_active' => ['sometimes','nullable','boolean'],
         ];
 
         // For update requests, make validation more flexible
         if ($this->isMethod('PUT') || $this->isMethod('PATCH')) {
-            $id=$this->route('agent');
-            $rules['name'] = ['sometimes', 'required', 'string', 'max:255', 'unique:agents,name,' . $id,];
-            $rules['code'] = ['sometimes', 'required', 'string', 'max:255', 'unique:agents,code,' . $id,];
-
+            $id = $this->route('agent');
+            $rules['name'] = ['sometimes', 'required', 'string', 'max:255', "unique:agents,name,{$id}"];
+            $rules['email'] = ['sometimes', 'required', 'string', 'max:255', "unique:agents,email,{$id}"];
         }
 
         return $rules;

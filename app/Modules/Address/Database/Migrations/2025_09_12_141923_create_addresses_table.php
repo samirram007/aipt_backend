@@ -10,14 +10,14 @@ return new class extends Migration {
     {
         Schema::create('addresses', function (Blueprint $table) {
             $table->id();
-            $table->string('line1');
+            $table->string('line1')->nullable();
             $table->string('line2')->nullable();
             $table->string('landmark')->nullable();
-            $table->string('city');
+            $table->string('city')->nullable();
 
             // Foreign keys
-            $table->foreignId('state_id')->constrained('states')->cascadeOnDelete();
-            $table->foreignId('country_id')->constrained('countries')->cascadeOnDelete();
+            $table->foreignId('state_id')->nullable();
+            $table->foreignId('country_id')->nullable();
 
             $table->string('postal_code')->nullable();
             $table->decimal('latitude', 10, 8)->nullable();

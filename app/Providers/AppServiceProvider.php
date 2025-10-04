@@ -5,6 +5,7 @@ namespace App\Providers;
 use App\Modules\Agent\Models\Agent;
 use App\Modules\Customer\Models\Customer;
 use App\Modules\Employee\Models\Employee;
+use App\Modules\Patient\Models\Patient;
 use App\Modules\Vendor\Models\Vendor;
 use App\Services\IAccountGroupService;
 use App\Services\IAuthService;
@@ -33,6 +34,7 @@ class AppServiceProvider extends ServiceProvider
             'employee' => Employee::class,
             'vendor'   => Vendor::class,
             'agent'    => Agent::class,
+            'patient' => Patient::class
         ]);
     }
 }

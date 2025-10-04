@@ -3,6 +3,7 @@
 namespace App\Modules\StockItem\Models;
 
 use App\Enums\CostingMethod;
+use App\Enums\PricingMethod;
 use App\Enums\TypeOfSupply;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -71,7 +72,7 @@ class StockItem extends Model
         'is_unfinished_goods' => 'boolean',
         'type_of_supply' => TypeOfSupply::class,
         'costing_method' => CostingMethod::class,
-        'pricing_method' => CostingMethod::class,
+        'pricing_method' => PricingMethod::class,
         'has_bom' => 'boolean',
         'is_gst_applicable' => 'boolean',
         'is_gst_inclusive' => 'boolean',
