@@ -4,6 +4,7 @@ namespace App\Modules\StockUnit\Models;
 
 use App\Enums\QuantityType;
 use App\Enums\UnitType;
+use App\Modules\UniqueQuantityCode\Models\UniqueQuantityCode;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -22,7 +23,7 @@ class StockUnit extends Model
         'unit_type',
         'quantity_type',
         'icon',
-        'uqc_id',
+        'unique_quantity_code_id',
         'primary_stock_unit_id', // assuming 'Pieces' is id 11
         'secondary_stock_unit_id',
         'conversion_factor',
@@ -44,5 +45,9 @@ class StockUnit extends Model
     function secondary_stock_unit(): BelongsTo
     {
         return $this->belongsTo(StockUnit::class);
+    }
+    function unique_quantity_code(): BelongsTo
+    {
+        return $this->belongsTo(UniqueQuantityCode::class);
     }
 }

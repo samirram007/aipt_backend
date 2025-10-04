@@ -7,6 +7,7 @@ use App\Modules\AccountGroup\Models\AccountGroup;
 use App\Modules\AccountNature\Models\AccountNature;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasOneThrough;
+use Illuminate\Database\Eloquent\Relations\MorphTo;
 
 class AccountLedger extends Model
 {
@@ -19,7 +20,9 @@ class AccountLedger extends Model
         'account_group_id',
         'description',
         'status',
-        'icon'
+        'icon',
+        'ledgerable_id',
+        'ledgerable_type'
     ];
 
     public function account_group()
@@ -27,9 +30,10 @@ class AccountLedger extends Model
         return $this->belongsTo(AccountGroup::class);
     }
 
-    // public function account_type(){
-    //     return $this->account_group?->account_type;
-    // }
+    public function ledgerable(): MorphTo
+    {
+        return $this->morphTo();
+    }
     public function account_nature(): HasOneThrough
     {
         return $this->hasOneThrough(

@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Collection;
 
 class StockItemService implements StockItemServiceInterface
 {
-    protected $resource=[];
+    protected $resource = ['stock_unit', 'alternate_stock_unit'];
 
     public function getAll(): Collection
     {
@@ -22,6 +22,7 @@ class StockItemService implements StockItemServiceInterface
 
     public function store(array $data): StockItem
     {
+        //dd($data);
         return StockItem::create($data);
     }
 

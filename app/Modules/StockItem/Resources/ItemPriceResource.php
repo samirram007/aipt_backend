@@ -27,7 +27,7 @@ class ItemPriceResource extends SuccessResource
             'invoiceStockUnitId' => $this->invoice_stock_unit_id,
             'invoiceConversionFactor' => $this->invoice_conversion_factor,
             'noOfDecimalPlaces' => $this->no_of_decimal_places,
-            'uqcId' => $this->uqc_id,
+            'uniqueQuantityCodeId' => $this->unique_quantity_code_id,
             'typeOfSupply' => $this->type_of_supply,
             'isNegativeSalesAllow' => $this->is_negative_sales_allow,
             'isMaintainBatch' => $this->is_maintain_batch,

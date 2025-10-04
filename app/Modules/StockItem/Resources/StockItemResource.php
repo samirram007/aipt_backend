@@ -2,6 +2,7 @@
 
 namespace App\Modules\StockItem\Resources;
 
+use App\Modules\StockUnit\Resources\StockUnitResource;
 use Illuminate\Http\Request;
 
 use App\Http\Resources\SuccessResource;
@@ -22,22 +23,22 @@ class StockItemResource extends SuccessResource
             'stockCategoryId' => $this->stock_category_id,
             'stockGroupId' => $this->stock_group_id,
             'stockUnitId' => $this->stock_unit_id,
-            'alternativeStockUnitId' => $this->alternative_stock_unit_id,
-            'alternateUnitRatio' => $this->alternate_unit_ratio,
-            'invoiceStockUnitId' => $this->invoice_stock_unit_id,
-            'invoiceConversionFactor' => $this->invoice_conversion_factor,
-            'noOfDecimalPlaces' => $this->no_of_decimal_places,
-            'uqcId' => $this->uqc_id,
+            'alternateStockUnitId' => $this->alternate_stock_unit_id,
+            'baseUnitValue' => $this->base_unit_value,
+            'alternateUnitValue' => $this->alternate_unit_value,
+            'uniqueQuantityId' => $this->unique_quantity_id,
             'typeOfSupply' => $this->type_of_supply,
             'isNegativeSalesAllow' => $this->is_negative_sales_allow,
             'isMaintainBatch' => $this->is_maintain_batch,
             'isMaintainSerial' => $this->is_maintain_serial,
-            'isExpiryItem' => $this->is_expiry_item,
+            'useExpiryDate' => $this->use_expiry_date,
+            'trackManufacturingDate' => $this->track_manufacturing_date,
+
             'isFinishGoods' => $this->is_finish_goods,
             'isRawMaterial' => $this->is_raw_material,
             'isUnfinishedGoods' => $this->is_unfinished_goods,
             'costingMethod' => $this->costing_method,
-            'pricingMethod' => $this->pricing_method,
+            'marketValuationMethod' => $this->market_valuation_method,
             'reorderLevel' => $this->reorder_level,
             'minimumStock' => $this->minimum_stock,
             'maximumStock' => $this->maximum_stock,
@@ -53,55 +54,18 @@ class StockItemResource extends SuccessResource
             'brandId' => $this->brand_id,
             'mrp' => $this->mrp,
             'standardCost' => $this->standard_cost,
+            'standardSellingPrice' => $this->standard_selling_price,
             'icon' => $this->icon,
             'status' => $this->status,
             'createdAt' => $this->created_at,
             'updatedAt' => $this->updated_at,
 
 
+            'stockUnit' => StockUnitResource::make($this->whenLoaded('stock_unit')),
+            'alternateStockUnit' => StockUnitResource::make($this->whenLoaded('alternate_stock_unit'))
+
+
         ];
     }
-    // 'name',
-    //     'code',
-    //     'print_name',
-    //     'sku',
-    //     'article_no',
-    //     'part_no',
-    //     'description',
-    //     'stock_category_id',
-    //     'stock_group_id',
-    //     'stock_unit_id',
-    //     'alternative_stock_unit_id',
-    //     'alternate_unit_ratio',
-    //     'invoice_stock_unit_id',
-    //     'invoice_conversion_factor',
-    //     'no_of_decimal_places',
-    //     'uqc_id',
-    //     'type_of_supply',
-    //     'is_negative_sales_allow',
-    //     'is_maintain_batch',
-    //     'is_maintain_serial',
-    //     'is_expiry_item',
-    //     'is_finish_goods',
-    //     'is_raw_material',
-    //     'is_unfinished_goods',
-    //     'costing_method',
-    //     'pricing_method',
-    //     'reorder_level',
-    //     'minimum_stock',
-    //     'maximum_stock',
-    //     'has_bom',
-    //     'is_sales_as_new_manufacture',
-    //     'is_purchase_as_consumed',
-    //     'is_rejection_as_scrap',
-    //     'is_gst_applicable',
-    //     'rate_of_duty',
-    //     'hsn_sac_code',
-    //     'is_gst_inclusive',
-    //     'gst_type',
-    //     'brand_id',
-    //     'mrp',
-    //     'standard_cost',
-    //     'icon',
-    //     'status',
+
 }

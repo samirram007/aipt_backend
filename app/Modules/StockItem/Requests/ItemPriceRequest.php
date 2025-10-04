@@ -29,7 +29,7 @@ class ItemPriceRequest extends FormRequest
             'invoice_stock_unit_id' => ['sometimes', 'required', 'integer', 'exists:stock_units,id'],
             'invoice_conversion_factor' => ['sometimes', 'required', 'numeric'],
             'no_of_decimal_places' => ['sometimes', 'required', 'integer'],
-            'uqc_id' => ['sometimes', 'required', 'integer', 'exists:uqcs,id'],
+            'unique_quantity_codes_id' => ['sometimes', 'required', 'integer', 'exists:unique_quantity_codes,id'],
             'type_of_supply' => ['sometimes', 'required', 'in:' . implode(',', array_column(\App\Enums\TypeOfSupply::cases(), 'value'))],
             'is_negative_sales_allow' => ['sometimes', 'required', 'boolean'],
             'is_maintain_batch' => ['sometimes', 'required', 'boolean'],

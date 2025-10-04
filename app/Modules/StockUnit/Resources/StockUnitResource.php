@@ -18,7 +18,7 @@ class StockUnitResource extends SuccessResource
             'unitType' => $this->unit_type,
             'quantityType' => $this->quantity_type,
             'icon' => $this->icon,
-            'uniqueQuantityCodeId' => $this->uqc_id,
+            'uniqueQuantityCodeId' => $this->unique_quantity_code_id,
             'primaryStockUnitId' => $this->primary_stock_unit_id, // assuming 'Pieces' is id 11
             'primaryStockUnit' => new StockUnitResource($this->whenLoaded('primary_stock_unit')),
             'secondaryStockUnitId' => $this->secondary_stock_unit_id,

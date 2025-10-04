@@ -29,7 +29,7 @@ class ItemPrice extends Model
         'invoice_stock_unit_id',
         'invoice_conversion_factor',
         'no_of_decimal_places',
-        'uqc_id',
+        'unique_quantity_code_id',
         'type_of_supply',
         'is_negative_sales_allow',
         'is_maintain_batch',

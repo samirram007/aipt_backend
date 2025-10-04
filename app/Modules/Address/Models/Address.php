@@ -26,12 +26,15 @@ class Address extends Model
         'addressable_id',
         'addressable_type',
         'address_type',
-        'is_primary'
+        'is_primary',
+        'addressable_id',
+        'addressable_type',
     ];
 
     protected $casts = [
         'created_at' => 'datetime',
         'updated_at' => 'datetime',
+        'is_primary' => 'boolean',
         'address_type' => AddressType::class,
     ];
 

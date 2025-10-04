@@ -5,6 +5,8 @@ namespace Database\Seeders;
 use App\Models\User;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use App\Modules\Currency\Database\Seeders\CurrencySeeder;
+use App\Modules\Voucher\Database\Seeders\VoucherSeeder;
+use App\Modules\VoucherEntry\Database\Seeders\VoucherEntrySeeder;
 use Illuminate\Support\Str;
 use App\Modules\Uqc\Models\Uqc;
 use Illuminate\Database\Seeder;
@@ -71,9 +73,13 @@ class DatabaseSeeder extends Seeder
             StockUnitSeeder::class,
             StockGroupSeeder::class,
             StockCategorySeeder::class,
+
             StockItemSeeder::class,
                 // PurchaseSeeder::class
-            GodownSeeder::class
+            GodownSeeder::class,
+
+            VoucherSeeder::class,
+            VoucherEntrySeeder::class,
 
         ]);
         // User::factory(10)->create();

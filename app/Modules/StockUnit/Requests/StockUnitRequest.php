@@ -14,16 +14,23 @@ class StockUnitRequest extends FormRequest
     public function rules(): array
     {
         $rules = [
-            'name' => ['required', 'string', 'max:255','unique:StockUnit,name'],
-            'code' => ['sometimes','required', 'string', 'max:255','unique:StockUnit,code'],
-            'description' => ['sometimes','required', 'string', 'max:255'],
-            'status' => ['sometimes','required', 'string', 'max:255'],
+            'name' => ['required', 'string', 'max:255', 'unique:stock_units,name'],
+            'code' => ['sometimes', 'required', 'string', 'max:255', 'unique:stock_units,code'],
+            'unit_type' => ['sometimes', 'required', 'string', 'max:255',],
+            'quantity_type' => ['sometimes', 'required', 'string', 'max:255',],
+            'unique_quantity_code_id' => ['sometimes', 'nullable', 'numeric', 'exists:unique_quantity_code,id',],
+            'primary_stock_unit_id' => ['sometimes', 'nullable', 'numeric', 'exists:stock_units,id',],
+            'secondary_stock_unit_id' => ['sometimes', 'nullable', 'numeric', 'exists:stock_units,id',],
+            'conversion_factor' => ['sometimes', 'nullable', 'numeric',],
+            'no_of_decimal_places' => ['sometimes', 'nullable', 'numeric',],
+
+
         ];
 
         // For update requests, make validation more flexible
         if ($this->isMethod('PUT') || $this->isMethod('PATCH')) {
-            $rules['name'] = ['sometimes', 'required', 'string', 'max:255', 'unique:StockUnit,name,' . $this->route('StockUnit'),];
-            $rules['code'] = ['sometimes', 'required', 'string', 'max:255', 'unique:StockUnit,code,' . $this->route('StockUnit'),];
+            $rules['name'] = ['sometimes', 'required', 'string', 'max:255', 'unique:stock_units,name,' . $this->route('stock_unit'),];
+            $rules['code'] = ['sometimes', 'required', 'string', 'max:255', 'unique:stock_units,code,' . $this->route('stock_unit'),];
 
         }
 

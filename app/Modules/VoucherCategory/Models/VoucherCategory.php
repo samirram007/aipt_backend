@@ -2,9 +2,11 @@
 
 namespace App\Modules\VoucherCategory\Models;
 
+use App\Modules\VoucherType\Models\VoucherType;
 use Illuminate\Database\Eloquent\Model;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 class VoucherCategory extends Model
 {
     use HasFactory;
@@ -22,5 +24,10 @@ class VoucherCategory extends Model
     protected $casts = [
 
     ];
+
+    public function voucher_types(): HasMany
+    {
+        return $this->hasMany(VoucherType::class);
+    }
 
 }
