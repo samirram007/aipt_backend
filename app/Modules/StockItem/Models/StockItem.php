@@ -3,11 +3,7 @@
 namespace App\Modules\StockItem\Models;
 
 use App\Enums\CostingMethod;
-<<<<<<< HEAD
-use App\Enums\PricingMethod;
-=======
 use App\Enums\MarketValuationMethod;
->>>>>>> d45c33df38caf7eec8f2977201c0d60d55c888b7
 use App\Enums\TypeOfSupply;
 use App\Modules\StockCategory\Models\StockCategory;
 use App\Modules\StockGroup\Models\StockGroup;
