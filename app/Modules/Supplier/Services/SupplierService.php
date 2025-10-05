@@ -2,6 +2,7 @@
 
 namespace App\Modules\Supplier\Services;
 
+use App\Enums\AddressType;
 use App\Modules\Supplier\Contracts\SupplierServiceInterface;
 use App\Modules\Supplier\Models\Supplier;
 use Illuminate\Database\Eloquent\Collection;
@@ -22,6 +23,17 @@ class SupplierService implements SupplierServiceInterface
 
     public function store(array $data): Supplier
     {
+
+        $supplier = Supplier::create($data);
+
+        if ($data['address']) {
+
+            // $data['address']['address_type'] = AddressType::Office->value;
+            $data['address']['addressable_type'] = 'supplier';
+            $data['address']['addressable_id'] = $supplier->id;
+            // dd($data['address']);
+            $supplier->address()->create($data['address']);
+        }
         return Supplier::create($data);
     }
 

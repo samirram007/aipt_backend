@@ -16,7 +16,9 @@ class SupplierController extends Controller
 {
     use ApiResponseTrait;
 
-    public function __construct(protected SupplierServiceInterface $service) {}
+    public function __construct(protected SupplierServiceInterface $service)
+    {
+    }
 
     public function index(): SuccessCollection
     {
@@ -27,29 +29,30 @@ class SupplierController extends Controller
     public function show(int $id): SuccessResource
     {
         $data = $this->service->getById($id);
-        return  new SupplierResource($data);
+        return new SupplierResource($data);
     }
 
     public function store(SupplierRequest $request): SuccessResource
     {
+
         $data = $this->service->store($request->validated());
-       return  new SupplierResource($data, $messages='Supplier created successfully');
+        return new SupplierResource($data, $messages = 'Supplier created successfully');
     }
 
     public function update(SupplierRequest $request, int $id): SuccessResource
     {
         $data = $this->service->update($request->validated(), $id);
-        return  new SupplierResource($data, $messages='Supplier updated successfully');
+        return new SupplierResource($data, $messages = 'Supplier updated successfully');
     }
 
-        public function destroy(int $id): JsonResponse
+    public function destroy(int $id): JsonResponse
     {
 
-        $result=$this->service->delete($id);
+        $result = $this->service->delete($id);
         return new JsonResponse([
             'status' => $result,
             'code' => 204,
-            'message' => $result?'Supplier deleted successfully':'Supplier not found',
+            'message' => $result ? 'Supplier deleted successfully' : 'Supplier not found',
         ]);
     }
 }

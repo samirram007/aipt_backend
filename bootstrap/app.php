@@ -100,10 +100,26 @@ return Application::configure(basePath: dirname(__DIR__))
 
         $exceptions->render(function (ValidationException $e) {
             if (request()->is('api/*')) {
+                $errors = collect($e->errors())->mapWithKeys(function ($messages, $key) {
+                    // Flatten key: take only the last segment
+                    $flatKey = last(explode('.', $key));
+
+                    // Clean messages: remove any prefix like 'address.' or 'billing.'
+                    $cleanMessages = array_map(function ($msg) use ($key) {
+                        // Remove everything before the field name (last segment)
+                        $fieldName = last(explode('.', $key));
+                        return preg_replace('/.*' . preg_quote($fieldName, '/') . '/', $fieldName, $msg);
+                    }, $messages);
+
+                    return [$flatKey => $cleanMessages];
+                })->toArray();
+
+
+
                 return ApiErrorResponse::respond(
                     'Validation failed.',
                     422,
-                    $e->errors(),
+                    $errors,
                     'VALIDATION_ERROR'
                 );
             }

@@ -33,7 +33,7 @@ class Address extends Model
         'created_at' => 'datetime',
         'updated_at' => 'datetime',
         'is_primary' => 'boolean',
-        'address_type' => AddressType::class,
+        // 'address_type' => AddressType::class,
     ];
 
     public function addressable()
