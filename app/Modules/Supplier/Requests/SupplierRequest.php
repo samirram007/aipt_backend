@@ -2,6 +2,8 @@
 
 namespace App\Modules\Supplier\Requests;
 
+use App\Enums\AddressType;
+use App\Modules\Address\Requests\AddressRequest;
 use Illuminate\Foundation\Http\FormRequest;
 
 class SupplierRequest extends FormRequest
@@ -13,6 +15,7 @@ class SupplierRequest extends FormRequest
 
     public function rules(): array
     {
+
         $rules = [
             'name' => ['required', 'string', 'max:255'],
             'code' => ['sometimes', 'nullable', 'string', 'max:255', 'unique:suppliers,code'],
@@ -23,18 +26,21 @@ class SupplierRequest extends FormRequest
             'phone' => ['sometimes', 'nullable', 'string', 'max:255'],
             'email' => ['sometimes', 'nullable', 'string', 'max:255'],
             'status' => ['sometimes', 'nullable', 'string', 'max:255'],
-            'account_group_id' => ['sometimes', 'required', 'exists:account_groups,id']
+            'account_group_id' => ['sometimes', 'required', 'exists:account_groups,id'],
+
         ];
+        $addressRules = collect((new AddressRequest())->rules())
+            ->mapWithKeys(fn($rule, $key) => ["address.$key" => $rule])
+            ->toArray();
 
-
-        // For update requests, make validation more flexible
+        // // For update requests, make validation more flexible
         if ($this->isMethod('PUT') || $this->isMethod('PATCH')) {
             $id = $this->route('supplier');
             $rules['code'] = ['sometimes', 'required', 'string', 'max:255', 'unique:suppliers,code,' . $id,];
 
         }
-
-        return $rules;
+        return array_merge($rules, $addressRules);
+        //  return $rules;
     }
 
     public function messages(): array

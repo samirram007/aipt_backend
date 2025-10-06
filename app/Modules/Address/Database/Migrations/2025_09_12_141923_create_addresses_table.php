@@ -24,8 +24,9 @@ return new class extends Migration {
             $table->decimal('longitude', 11, 8)->nullable();
 
             // Enum for address_type
-            $table->enum('address_type', array_column(AddressType::cases(), 'value'))
-                ->default(AddressType::Other->value)->nullable();
+            $table->string('address_type')->nullable();
+            // $table->enum('address_type', array_column(AddressType::cases(), 'value'))
+            //     ->default(AddressType::Other->value);
 
             $table->boolean('is_primary')->default(false);
 

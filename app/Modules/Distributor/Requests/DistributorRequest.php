@@ -2,6 +2,7 @@
 
 namespace App\Modules\Distributor\Requests;
 
+use App\Modules\Address\Requests\AddressRequest;
 use Illuminate\Foundation\Http\FormRequest;
 
 class DistributorRequest extends FormRequest
@@ -14,21 +15,32 @@ class DistributorRequest extends FormRequest
     public function rules(): array
     {
         $rules = [
-            'name' => ['required', 'string', 'max:255','unique:distributors,name'],
-            'code' => ['sometimes','required', 'string', 'max:255','unique:distributors,code'],
-            'description' => ['sometimes','required', 'string', 'max:255'],
-            'status' => ['sometimes','required', 'string', 'max:255'],
+            'name' => ['required', 'string', 'max:255'],
+            'code' => ['sometimes', 'nullable', 'string', 'max:255', 'unique:distributors,code'],
+            'gstin' => ['sometimes', 'nullable', 'string', 'max:25'],
+            'pan' => ['sometimes', 'nullable', 'string', 'max:20'],
+            'contact_person' => ['sometimes', 'nullable', 'string', 'max:100'],
+            'contact_no' => ['sometimes', 'nullable', 'string', 'max:20'],
+            'phone' => ['sometimes', 'nullable', 'string', 'max:255'],
+            'email' => ['sometimes', 'nullable', 'string', 'max:255'],
+            'status' => ['sometimes', 'nullable', 'string', 'max:255'],
+            'account_group_id' => ['sometimes', 'required', 'exists:account_groups,id'],
+            // 'address' => ['sometimes', 'required', new AddressRequest()]
         ];
-
-        // For update requests, make validation more flexible
+        $addressRules = collect((new AddressRequest())->rules())
+            ->mapWithKeys(fn($rule, $key) => ["address.$key" => $rule])
+            ->toArray();
+        //dd(array_merge($rules, $addressRules));
+        // // For update requests, make validation more flexible
         if ($this->isMethod('PUT') || $this->isMethod('PATCH')) {
-            $id=$this->route('distributor');
-            $rules['name'] = ['sometimes', 'required', 'string', 'max:255', 'unique:distributors,name,' . $id,];
+            $id = $this->route('distributor');
             $rules['code'] = ['sometimes', 'required', 'string', 'max:255', 'unique:distributors,code,' . $id,];
 
         }
+        // dd($rules['address']);
+        //return $rules;
+        return array_merge($rules, $addressRules);
 
-        return $rules;
     }
 
     public function messages(): array

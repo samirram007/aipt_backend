@@ -20,8 +20,6 @@ return new class extends Migration {
             $table->string('phone')->nullable();
             $table->string('email')->nullable();
 
-            // Ledger binding
-            $table->foreignId('account_ledger_id')->nullable();
 
             $table->string('status')->default('active');
 

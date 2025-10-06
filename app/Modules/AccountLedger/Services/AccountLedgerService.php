@@ -8,7 +8,23 @@ use Illuminate\Database\Eloquent\Collection;
 
 class AccountLedgerService implements AccountLedgerServiceInterface
 {
-    protected $resource = ['account_group.account_nature'];
+
+    protected $resource = [
+        'account_group.account_nature',
+        'ledgerable.address.state',
+        'ledgerable.address.country'
+    ];
+    // /**
+    //  * Define the resources and their relations to be resolved
+    //  *
+    //  * @var array<string|array<string,callable>>
+    //  */
+    // protected $resource = [
+    //     'account_group.account_nature', // Simple nested relation
+    //     'ledgerable.address' => fn($resolved) => $resolved instanceof \Illuminate\Database\Eloquent\Model
+    //         ? $resolved->load(['state', 'country'])
+    //         : $resolved, // Transform resolved resource
+    // ];
     public function getAll(): Collection
     {
         return AccountLedger::with($this->resource)->get();
@@ -16,7 +32,7 @@ class AccountLedgerService implements AccountLedgerServiceInterface
 
     public function getById(int $id): AccountLedger
     {
-        return AccountLedger::findOrFail($id);
+        return AccountLedger::with($this->resource)->findOrFail($id);
     }
 
     public function store(array $data): AccountLedger

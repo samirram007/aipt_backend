@@ -2,6 +2,7 @@
 
 namespace App\Modules\Transporter\Requests;
 
+use App\Modules\Address\Requests\AddressRequest;
 use Illuminate\Foundation\Http\FormRequest;
 
 class TransporterRequest extends FormRequest
@@ -14,21 +15,34 @@ class TransporterRequest extends FormRequest
     public function rules(): array
     {
         $rules = [
-            'name' => ['required', 'string', 'max:255','unique:transporters,name'],
-            'code' => ['sometimes','required', 'string', 'max:255','unique:transporters,code'],
-            'description' => ['sometimes','required', 'string', 'max:255'],
-            'status' => ['sometimes','required', 'string', 'max:255'],
-        ];
+            'name' => ['required', 'string', 'max:255'],
+            'code' => ['sometimes', 'nullable', 'string', 'max:255', 'unique:transporters,code'],
+            'gstin' => ['sometimes', 'nullable', 'string', 'max:25'],
+            'pan' => ['sometimes', 'nullable', 'string', 'max:20'],
 
-        // For update requests, make validation more flexible
+            'license_no' => ['sometimes', 'nullable', 'string', 'max:100'],
+            'vehicle_type' => ['sometimes', 'nullable', 'string', 'max:100'],
+
+            'contact_person' => ['sometimes', 'nullable', 'string', 'max:100'],
+            'contact_no' => ['sometimes', 'nullable', 'string', 'max:20'],
+            'phone' => ['sometimes', 'nullable', 'string', 'max:255'],
+            'email' => ['sometimes', 'nullable', 'string', 'max:255'],
+            'status' => ['sometimes', 'nullable', 'string', 'max:255'],
+            'account_group_id' => ['sometimes', 'required', 'exists:account_groups,id'],
+
+        ];
+        $addressRules = collect((new AddressRequest())->rules())
+            ->mapWithKeys(fn($rule, $key) => ["address.$key" => $rule])
+            ->toArray();
+
+        // // For update requests, make validation more flexible
         if ($this->isMethod('PUT') || $this->isMethod('PATCH')) {
-            $id=$this->route('transporter');
-            $rules['name'] = ['sometimes', 'required', 'string', 'max:255', 'unique:transporters,name,' . $id,];
+            $id = $this->route('transporter');
             $rules['code'] = ['sometimes', 'required', 'string', 'max:255', 'unique:transporters,code,' . $id,];
 
         }
-
-        return $rules;
+        return array_merge($rules, $addressRules);
+        //  return $rules;
     }
 
     public function messages(): array

@@ -14,25 +14,27 @@ class AddressRequest extends FormRequest
 
     public function rules(): array
     {
+
         $rules = [
-            'address_line1' => ['required', 'string', 'max:255'],
-            'address_line2' => ['sometimes', 'nullable', 'string', 'max:255'],
+            'id' => ['sometimes', 'nullable', 'numeric', 'exists:addresses,id'],
+            'line1' => ['required', 'string', 'max:255'],
+            'line2' => ['sometimes', 'nullable', 'string', 'max:255'],
             'landmark' => ['sometimes', 'nullable', 'string', 'max:255'],
-            'city' => ['required', 'string', 'max:100'],
-            'state_id' => ['nullable', 'exists:states,id'],
-            'country_id' => ['nullable', 'exists:countries,id'],
-            'postal_code' => ['required', 'string', 'max:20'],
+            'city' => ['sometimes', 'nullable', 'string', 'max:100'],
+            'state_id' => ['sometimes', 'nullable', 'exists:states,id'],
+            'country_id' => ['sometimes', 'nullable', 'exists:countries,id'],
+            'postal_code' => ['sometimes', 'nullable', 'string', 'max:6'],
             'latitude' => ['sometimes', 'nullable', 'numeric', 'between:-90,90'],
             'longitude' => ['sometimes', 'nullable', 'numeric', 'between:-180,180'],
-            'address_type' => ['nullable', 'in:' . implode(',', array_column(AddressType::cases(), 'value'))],
+            'address_type' => ['sometimes', 'nullable', 'string', 'max:255'],
+            // 'address_type' => ['sometimes', 'nullable', 'in:' . implode(',', array_column(AddressType::cases(), 'value'))],
             'is_primary' => ['sometimes', 'boolean'],
         ];
 
         // For update requests, allow ignoring the current address id
         if ($this->isMethod('PUT') || $this->isMethod('PATCH')) {
             $addressId = $this->route('address');
-            // Example: if name/code needed unique, handle here
-            // $rules['name'] = ['sometimes','required','string','max:255','unique:addresses,name,'.$addressId];
+            $rules['id'] = ['sometimes', 'nullable', 'numeric', 'exists:addresses,id'];
         }
 
         return $rules;
@@ -41,12 +43,12 @@ class AddressRequest extends FormRequest
     public function messages(): array
     {
         return [
-            'address_line1.required' => 'Address Line 1 is required.',
-            'address_line1.string' => 'Address Line 1 must be a string.',
-            'address_line1.max' => 'Address Line 1 may not exceed 255 characters.',
+            'line1.required' => 'Address Line 1 is required.',
+            'line1.string' => 'Address Line 1 must be a string.',
+            'line1.max' => 'Address Line 1 may not exceed 255 characters.',
 
-            'address_line2.string' => 'Address Line 2 must be a string.',
-            'address_line2.max' => 'Address Line 2 may not exceed 255 characters.',
+            'line2.string' => 'Address Line 2 must be a string.',
+            'line2.max' => 'Address Line 2 may not exceed 255 characters.',
 
             'landmark.string' => 'Landmark must be a string.',
             'landmark.max' => 'Landmark may not exceed 255 characters.',
@@ -63,7 +65,7 @@ class AddressRequest extends FormRequest
 
             'postal_code.required' => 'Postal code is required.',
             'postal_code.string' => 'Postal code must be a string.',
-            'postal_code.max' => 'Postal code may not exceed 20 characters.',
+            'postal_code.max' => 'Postal code may not exceed 6 characters.',
 
             'latitude.numeric' => 'Latitude must be a valid number.',
             'latitude.between' => 'Latitude must be between -90 and 90.',
