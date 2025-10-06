@@ -32,7 +32,7 @@ class AddressResource extends SuccessResource
             'postalCode' => $this->postal_code,
             'latitude' => $this->latitude,
             'longitude' => $this->longitude,
-            'addressType' => AddressType::from($this->address_type)->value,
+            'addressType' => $this->address_type?->value,
             'isPrimary' => $this->is_primary,
             'addressable' => [
                 'id' => $this->addressable_id,

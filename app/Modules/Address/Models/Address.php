@@ -2,6 +2,7 @@
 
 namespace App\Modules\Address\Models;
 
+use App\Enums\AddressType;
 use App\Modules\Country\Models\Country;
 use App\Modules\State\Models\State;
 use Illuminate\Database\Eloquent\Model;

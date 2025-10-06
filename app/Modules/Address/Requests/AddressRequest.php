@@ -19,12 +19,12 @@ class AddressRequest extends FormRequest
             'address_line2' => ['sometimes', 'nullable', 'string', 'max:255'],
             'landmark' => ['sometimes', 'nullable', 'string', 'max:255'],
             'city' => ['required', 'string', 'max:100'],
-            'state_id' => ['required', 'exists:states,id'],
-            'country_id' => ['required', 'exists:countries,id'],
+            'state_id' => ['nullable', 'exists:states,id'],
+            'country_id' => ['nullable', 'exists:countries,id'],
             'postal_code' => ['required', 'string', 'max:20'],
             'latitude' => ['sometimes', 'nullable', 'numeric', 'between:-90,90'],
             'longitude' => ['sometimes', 'nullable', 'numeric', 'between:-180,180'],
-            'address_type' => ['required', 'in:' . implode(',', array_column(AddressType::cases(), 'value'))],
+            'address_type' => ['nullable', 'in:' . implode(',', array_column(AddressType::cases(), 'value'))],
             'is_primary' => ['sometimes', 'boolean'],
         ];
 

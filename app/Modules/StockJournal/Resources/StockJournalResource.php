@@ -11,9 +11,10 @@ class StockJournalResource extends SuccessResource
     {
         return [
             'id' => $this->id,
-            'name' => $this->name,
-            'created_at' => $this->created_at?->toISOString(),
-            'updated_at' => $this->updated_at?->toISOString(),
+            'journalNo' => $this->journal_no,
+            'journalDate' => $this->journal_date,
+            'type'=> $this->type,
+            'remarks' => $this->remarks,
         ];
     }
 }

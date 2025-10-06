@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Modules\StockJournal\Requests;
+namespace App\Modules\TestBooking\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class StockJournalRequest extends FormRequest
+class TestBookingRequest extends FormRequest
 {
     public function authorize(): bool
     {
@@ -14,18 +14,25 @@ class StockJournalRequest extends FormRequest
     public function rules(): array
     {
         $rules = [
-            'journal_no' => ['nullable', 'string'],
-            'journal_date' => ['sometimes','required','date'],
-            'voucher_id' => ['sometimes','nullable'],
-            'type' => ['nullable', 'string', 'max:255'],
-            'remarks' => ['nullable', 'string', 'max:255'],
+            'booking_date' => ['required', 'date'],
+            'patient_id' => ['required', 'numeric','exists:patients,id'],
+            'agent_id' => ['sometimes','required','numeric','exists:agents,id'],
+            'physician_id' => ['sometimes','required','numeric','exists:physicians,id'],
+
+            'tests.*'=>['array'],
+            'tests.*.test_id'=> ['required','numeric','exists:stock_items,id'],
+            'tests.*.test_date' => ['required','date'],
+            'tests.*.report_date' => ['required','date'],
+            'tests.*.amount' => ['required','string'],
+
+            'discount_type_id'=> ['sometimes','nullable','numeric']
         ];
 
         // For update requests, make validation more flexible
         if ($this->isMethod('PUT') || $this->isMethod('PATCH')) {
-            $id=$this->route('stock_journal');
-            $rules['name'] = ['sometimes', 'required', 'string', 'max:255', 'unique:stock_journals,name,' . $id,];
-            $rules['code'] = ['sometimes', 'required', 'string', 'max:255', 'unique:stock_journals,code,' . $id,];
+            $id=$this->route('test_booking');
+            $rules['name'] = ['sometimes', 'required', 'string', 'max:255', 'unique:test_bookings,name,' . $id,];
+            $rules['code'] = ['sometimes', 'required', 'string', 'max:255', 'unique:test_bookings,code,' . $id,];
 
         }
 

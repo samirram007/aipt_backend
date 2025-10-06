@@ -53,7 +53,7 @@ class StockItemRequest extends FormRequest
             'hsn_sac_code' => ['sometimes', 'nullable', 'string', 'max:255'],
             'is_gst_inclusive' => ['sometimes', 'required', 'boolean'],
             'gst_type' => ['sometimes', 'required', 'in:' . implode(',', array_column(\App\Enums\GstType::cases(), 'value'))],
-            'brand_id' => ['sometimes', 'required', 'integer', 'exists:brands,id'],
+            'brand_id' => ['sometimes', 'nullable', 'integer', 'exists:brands,id'],
             'mrp' => ['sometimes', 'required', 'numeric'],
             'standard_cost' => ['sometimes', 'required', 'numeric'],
             'standard_selling_price' => ['sometimes', 'required', 'numeric'],

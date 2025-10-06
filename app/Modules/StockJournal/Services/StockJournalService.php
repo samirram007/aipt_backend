@@ -22,6 +22,17 @@ class StockJournalService implements StockJournalServiceInterface
 
     public function store(array $data): StockJournal
     {
+        $lastJournalId = StockJournal::orderBy('journal_no','desc')->value('id');
+        if($lastJournalId){
+            $intJournal = (int)$lastJournalId;
+            $lastJournalString = (string)$intJournal;
+            $data['journal_no'] = $lastJournalString;
+        }
+        else{
+            $lastJournalId = 1;
+            $data['journal_no'] = (string)$lastJournalId;
+        }
+        dd($data);
         return StockJournal::create($data);
     }
 
