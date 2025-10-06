@@ -14,8 +14,8 @@ class Address extends Model
     protected $table = 'addresses';
 
     protected $fillable = [
-        'address_line1',
-        'address_line2',
+        'line1',
+        'line2',
         'landmark',
         'city',
         'state_id',
@@ -34,6 +34,9 @@ class Address extends Model
         'updated_at' => 'datetime',
         'is_primary' => 'boolean',
         // 'address_type' => AddressType::class,
+    ];
+    protected $attributes = [
+        'is_primary' => false,
     ];
 
     public function addressable()

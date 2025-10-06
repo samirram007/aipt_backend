@@ -16,7 +16,9 @@ class DistributorController extends Controller
 {
     use ApiResponseTrait;
 
-    public function __construct(protected DistributorServiceInterface $service) {}
+    public function __construct(protected DistributorServiceInterface $service)
+    {
+    }
 
     public function index(): SuccessCollection
     {
@@ -27,29 +29,30 @@ class DistributorController extends Controller
     public function show(int $id): SuccessResource
     {
         $data = $this->service->getById($id);
-        return  new DistributorResource($data);
+        return new DistributorResource($data);
     }
 
     public function store(DistributorRequest $request): SuccessResource
     {
         $data = $this->service->store($request->validated());
-       return  new DistributorResource($data, $messages='Distributor created successfully');
+        return new DistributorResource($data, $messages = 'Distributor created successfully');
     }
 
     public function update(DistributorRequest $request, int $id): SuccessResource
     {
+        // dd($request->validated());
         $data = $this->service->update($request->validated(), $id);
-        return  new DistributorResource($data, $messages='Distributor updated successfully');
+        return new DistributorResource($data, $messages = 'Distributor updated successfully');
     }
 
-        public function destroy(int $id): JsonResponse
+    public function destroy(int $id): JsonResponse
     {
 
-        $result=$this->service->delete($id);
+        $result = $this->service->delete($id);
         return new JsonResponse([
             'status' => $result,
             'code' => 204,
-            'message' => $result?'Distributor deleted successfully':'Distributor not found',
+            'message' => $result ? 'Distributor deleted successfully' : 'Distributor not found',
         ]);
     }
 }

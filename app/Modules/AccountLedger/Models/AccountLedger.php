@@ -24,7 +24,13 @@ class AccountLedger extends Model
         'ledgerable_id',
         'ledgerable_type'
     ];
+    public static function ledgerNameExists(string $name): bool
+    {
+        $query = static::query()->where('name', $name);
+        //dd($query->exists());
 
+        return $query->exists();
+    }
     public function account_group()
     {
         return $this->belongsTo(AccountGroup::class);

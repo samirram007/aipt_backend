@@ -12,8 +12,8 @@ class AddressResource extends SuccessResource
     {
         return [
             'id' => $this->id,
-            'line1' => $this->address_line1,
-            'line2' => $this->address_line2,
+            'line1' => $this->line1,
+            'line2' => $this->line2,
             'landmark' => $this->landmark,
             'city' => $this->city,
             'stateId' => $this->state_id,

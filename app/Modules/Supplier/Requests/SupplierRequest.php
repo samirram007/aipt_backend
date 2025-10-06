@@ -34,11 +34,11 @@ class SupplierRequest extends FormRequest
             ->toArray();
 
         // // For update requests, make validation more flexible
-        // if ($this->isMethod('PUT') || $this->isMethod('PATCH')) {
-        //     $id = $this->route('supplier');
-        //     $rules['code'] = ['sometimes', 'required', 'string', 'max:255', 'unique:suppliers,code,' . $id,];
+        if ($this->isMethod('PUT') || $this->isMethod('PATCH')) {
+            $id = $this->route('supplier');
+            $rules['code'] = ['sometimes', 'required', 'string', 'max:255', 'unique:suppliers,code,' . $id,];
 
-        // }
+        }
         return array_merge($rules, $addressRules);
         //  return $rules;
     }

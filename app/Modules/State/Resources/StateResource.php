@@ -19,7 +19,6 @@ class StateResource extends SuccessResource
             'code' => $this->code,
             'gstCode' => $this->gst_code,
             'countryId' => $this->country_id,
-            // 'country' => $this->whenLoaded('country'),
             'country' => CountryResource::make($this->whenLoaded('country')),
 
 

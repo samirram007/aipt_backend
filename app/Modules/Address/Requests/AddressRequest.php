@@ -16,13 +16,14 @@ class AddressRequest extends FormRequest
     {
 
         $rules = [
+            'id' => ['sometimes', 'nullable', 'numeric', 'exists:addresses,id'],
             'line1' => ['required', 'string', 'max:255'],
             'line2' => ['sometimes', 'nullable', 'string', 'max:255'],
             'landmark' => ['sometimes', 'nullable', 'string', 'max:255'],
             'city' => ['sometimes', 'nullable', 'string', 'max:100'],
             'state_id' => ['sometimes', 'nullable', 'exists:states,id'],
             'country_id' => ['sometimes', 'nullable', 'exists:countries,id'],
-            'postal_code' => ['sometimes', 'nullable', 'string', 'max:20'],
+            'postal_code' => ['sometimes', 'nullable', 'string', 'max:6'],
             'latitude' => ['sometimes', 'nullable', 'numeric', 'between:-90,90'],
             'longitude' => ['sometimes', 'nullable', 'numeric', 'between:-180,180'],
             'address_type' => ['sometimes', 'nullable', 'string', 'max:255'],
@@ -33,8 +34,7 @@ class AddressRequest extends FormRequest
         // For update requests, allow ignoring the current address id
         if ($this->isMethod('PUT') || $this->isMethod('PATCH')) {
             $addressId = $this->route('address');
-            // Example: if name/code needed unique, handle here
-            // $rules['name'] = ['sometimes','required','string','max:255','unique:addresses,name,'.$addressId];
+            $rules['id'] = ['sometimes', 'nullable', 'numeric', 'exists:addresses,id'];
         }
 
         return $rules;
@@ -65,7 +65,7 @@ class AddressRequest extends FormRequest
 
             'postal_code.required' => 'Postal code is required.',
             'postal_code.string' => 'Postal code must be a string.',
-            'postal_code.max' => 'Postal code may not exceed 20 characters.',
+            'postal_code.max' => 'Postal code may not exceed 6 characters.',
 
             'latitude.numeric' => 'Latitude must be a valid number.',
             'latitude.between' => 'Latitude must be between -90 and 90.',
