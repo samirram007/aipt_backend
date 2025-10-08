@@ -20,7 +20,7 @@ class TestBookingService implements TestBookingServiceInterface
     protected $resource = [
         'voucher_entries.account_ledger',
     'stock_journal.stock_journal_entries.stock_item',
-    'stock_journal.stock_journal_entries.stock_unit','voucher_patient.patient','voucher_patient.agent',
+    'stock_journal.stock_journal_entries.stock_unit','voucher_patient.patient.address','voucher_patient.agent',
 'voucher_patient.physician'];
 
     public function getAll(): Collection
