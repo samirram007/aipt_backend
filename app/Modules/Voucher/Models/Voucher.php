@@ -7,11 +7,13 @@ use App\Modules\Company\Models\Company;
 use App\Modules\FiscalYear\Models\FiscalYear;
 use App\Modules\StockJournal\Models\StockJournal;
 use App\Modules\VoucherEntry\Models\VoucherEntry;
+use App\Modules\VoucherPatient\Models\VoucherPatient;
 use App\Modules\VoucherType\Models\VoucherType;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class Voucher extends Model
 {
@@ -56,8 +58,11 @@ class Voucher extends Model
     }
     public function voucher_entries(): HasMany
     {
-        return $this->hasMany(VoucherEntry::class);
+        return $this->hasMany(VoucherEntry::class, 'voucher_id');
     }
 
-
+    public function voucher_patient(): HasOne
+    {
+        return $this->hasOne(VoucherPatient::class, 'voucher_id', 'id');
+    }
 }

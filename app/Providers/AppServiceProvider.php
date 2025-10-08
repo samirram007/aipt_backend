@@ -7,6 +7,7 @@ use App\Modules\Customer\Models\Customer;
 use App\Modules\Distributor\Models\Distributor;
 use App\Modules\Employee\Models\Employee;
 use App\Modules\Patient\Models\Patient;
+use App\Modules\Physician\Models\Physician;
 use App\Modules\Supplier\Models\Supplier;
 use App\Modules\Transporter\Models\Transporter;
 use App\Modules\Vendor\Models\Vendor;
@@ -40,7 +41,8 @@ class AppServiceProvider extends ServiceProvider
             'employee' => Employee::class,
             'vendor' => Vendor::class,
             'agent' => Agent::class,
-            'patient' => Patient::class
+            'patient' => Patient::class,
+            'physician' => Physician::class
         ]);
     }
 }

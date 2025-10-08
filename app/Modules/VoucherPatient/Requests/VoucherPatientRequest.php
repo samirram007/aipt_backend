@@ -1,11 +1,10 @@
 <?php
 
-namespace App\Modules\Agent\Requests;
+namespace App\Modules\VoucherPatient\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Validation\Rule;
 
-class AgentRequest extends FormRequest
+class VoucherPatientRequest extends FormRequest
 {
     public function authorize(): bool
     {
@@ -15,18 +14,18 @@ class AgentRequest extends FormRequest
     public function rules(): array
     {
         $rules = [
-            'name' => ['required', 'string', 'max:255'],
-            'email' => ['sometimes','nullable', 'string', 'max:255','unique:agents,email'],
-            'contact_no' => ['sometimes','nullable', 'string', 'max:255'],
-            'commission_percent'=>['sometimes','decimal:0,5'],
-            'is_active' => ['sometimes','nullable','boolean'],
+            'name' => ['required', 'string', 'max:255','unique:voucher_patients,name'],
+            'code' => ['sometimes','required', 'string', 'max:255','unique:voucher_patients,code'],
+            'description' => ['sometimes','required', 'string', 'max:255'],
+            'status' => ['sometimes','required', 'string', 'max:255'],
         ];
 
         // For update requests, make validation more flexible
         if ($this->isMethod('PUT') || $this->isMethod('PATCH')) {
-            $id = $this->route('agent');
-            $rules['name'] = ['sometimes', 'required', 'string', 'max:255', "unique:agents,name,{$id}"];
-            $rules['email'] = ['sometimes', 'required', 'string', 'max:255', "unique:agents,email,{$id}"];
+            $id=$this->route('voucher_patient');
+            $rules['name'] = ['sometimes', 'required', 'string', 'max:255', 'unique:voucher_patients,name,' . $id,];
+            $rules['code'] = ['sometimes', 'required', 'string', 'max:255', 'unique:voucher_patients,code,' . $id,];
+
         }
 
         return $rules;

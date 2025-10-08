@@ -33,6 +33,7 @@ class PatientController extends Controller
     public function store(PatientRequest $request): SuccessResource
     {
         $data = $this->service->store($request->validated());
+        // dd($data->toArray());
         return  new PatientResource($data, $messages='Patient created successfully');
     }
 

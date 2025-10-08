@@ -5,15 +5,28 @@ namespace App\Modules\StockJournalEntry\Resources;
 use Illuminate\Http\Request;
 
 use App\Http\Resources\SuccessResource;
+use App\Modules\StockItem\Resources\StockItemResource;
+use App\Modules\StockJournal\Resources\StockJournalResource;
+use App\Modules\StockUnit\Resources\StockUnitResource;
+
 class StockJournalEntryResource extends SuccessResource
 {
     public function toArray(Request $request): array
     {
         return [
             'id' => $this->id,
-            'name' => $this->name,
-            'created_at' => $this->created_at?->toISOString(),
-            'updated_at' => $this->updated_at?->toISOString(),
+            'stockJournalId' => $this->stock_journal_id,
+            'stockItemId' => $this->stock_item_id,
+            'stockUnitId' => $this->stock_unit_id,
+            'alternateUnitId' => $this->alternate_unit_id,
+            'unitRatio' => $this->unit_ratio,
+            'itemCost' => $this->item_cost,
+            'rate' => $this->rate,
+            'movementType' => $this->movement_type,
+            'godownId' => $this->godown_id,
+            'stockJournal'=> new StockJournalResource($this->whenLoaded('stock_journal')),
+            'stockItem'=> new StockItemResource($this->whenLoaded('stock_item')),
+            'stockUnit'=> new StockUnitResource($this->whenLoaded('stock_unit')),
         ];
     }
 }

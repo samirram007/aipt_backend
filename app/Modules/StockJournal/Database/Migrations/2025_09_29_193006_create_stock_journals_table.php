@@ -11,7 +11,7 @@ return new class extends Migration {
             $table->id();
             $table->string('journal_no');
             $table->date('journal_date');
-            $table->foreignId('voucher_id')->nullable();
+            $table->unsignedBigInteger('voucher_id')->nullable();
             $table->string('type'); // 'in', 'out', 'transfer', 'production'
             $table->text('remarks')->nullable();
 

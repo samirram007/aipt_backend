@@ -2,11 +2,13 @@
 
 namespace App\Modules\Patient\Models;
 
+use App\Modules\AccountLedger\Models\AccountLedger;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use App\Modules\Address\Models\Address;
 use App\Modules\Agent\Models\Agent;
 use App\Modules\Physician\Models\Physician;
+use Illuminate\Database\Eloquent\Relations\MorphOne;
 
 class Patient extends Model
 {
@@ -22,7 +24,6 @@ class Patient extends Model
         'age',
         'contact_no',
         'alt_contact_no',
-        'account_ledger_id',
         'agent_id',
         'physician_id',
     ];
@@ -35,6 +36,11 @@ class Patient extends Model
     public function addresses()
     {
         return $this->morphMany(Address::class, 'addressable');
+    }
+
+    public function account_ledger(): MorphOne
+    {
+        return $this->morphOne(AccountLedger::class, 'ledgerable');
     }
 
     public function address()

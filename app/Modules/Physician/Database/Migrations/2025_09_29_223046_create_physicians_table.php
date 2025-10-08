@@ -11,7 +11,6 @@ return new class extends Migration
         Schema::create('physicians', function (Blueprint $table) {
             $table->id();
             // for accounts
-            $table->string('account_ledger_id')->nullable();
 
             // core info / common info
             $table->string('name');

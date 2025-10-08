@@ -30,11 +30,11 @@ class VoucherEntry extends Model
 
     public function account_ledger(): BelongsTo
     {
-        return $this->belongsTo(AccountLedger::class);
+        return $this->belongsTo(AccountLedger::class,'account_ledger_id','id');
     }
 
     public function voucher(): BelongsTo
     {
-        return $this->belongsTo(Voucher::class);
+        return $this->belongsTo(Voucher::class,'voucher_id','id');
     }
 }

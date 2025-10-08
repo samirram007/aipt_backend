@@ -2,10 +2,12 @@
 
 namespace App\Modules\Agent\Models;
 
+use App\Modules\AccountLedger\Models\AccountLedger;
 use App\Modules\Address\Models\Address;
 use App\Modules\User\Models\User;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\MorphOne;
 
 class Agent extends Model
 {
@@ -17,7 +19,6 @@ class Agent extends Model
         'name',
         'email',
         'contact_no',
-        'account_ledger_id',
         'commission_percent',
         'is_active'
     ];
@@ -34,5 +35,10 @@ class Agent extends Model
     public function addresses()
     {
         return $this->morphMany(Address::class, 'addressable');
+    }
+
+    public function account_ledger(): MorphOne
+    {
+        return $this->morphOne(AccountLedger::class, 'ledgerable');
     }
 }

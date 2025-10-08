@@ -9,7 +9,12 @@ class PhysicianSeeder extends Seeder
 {
     public function run(): void
     {
-        Physician::create(['name' => 'Sample Physician']);
+        Physician::create([
+            "name"=>"John",
+            "degree"=>"M.B.B.S",
+            "contact_no"=>"1234567890",
+            "discipline_id"=>1,
+        ]);
 
         // Uncomment to use factory if available
         // Physician::factory()->count(10)->create();

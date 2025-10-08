@@ -9,8 +9,17 @@ use App\Modules\TestBooking\Resources\TestBookingCollection;
 use App\Modules\TestBooking\Requests\TestBookingRequest;
 use App\Http\Resources\SuccessResource;
 use App\Http\Resources\SuccessCollection;
+use App\Modules\AccountLedger\Models\AccountLedger;
+use App\Modules\Patient\Models\Patient;
+use App\Modules\StockItem\Models\StockItem;
+use App\Modules\StockJournal\Models\StockJournal;
+use App\Modules\StockJournalEntry\Models\StockJournalEntry;
+use App\Modules\Voucher\Models\Voucher;
+use App\Modules\VoucherEntry\Models\VoucherEntry;
 use App\Traits\ApiResponseTrait;
 use Illuminate\Http\JsonResponse;
+use Carbon\Carbon;
+use Illuminate\Support\Facades\DB;
 
 class TestBookingController extends Controller
 {
@@ -21,7 +30,8 @@ class TestBookingController extends Controller
     public function index(): SuccessCollection
     {
         $data = $this->service->getAll();
-        return new TestBookingCollection($data);
+        // dd($data->toArray());
+        return new TestBookingCollection($data, $messages = "Data fectched successfully");
     }
 
     public function show(int $id): SuccessResource
@@ -33,8 +43,9 @@ class TestBookingController extends Controller
     public function store(TestBookingRequest $request): SuccessResource
     {
         $data = $this->service->store($request->validated());
-       return  new TestBookingResource($data, $messages='TestBooking created successfully');
+       return  new TestBookingResource((object)$data, $messages='TestBooking created successfully');
     }
+
 
     public function update(TestBookingRequest $request, int $id): SuccessResource
     {

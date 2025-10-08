@@ -5,6 +5,8 @@ namespace App\Modules\StockJournal\Resources;
 use Illuminate\Http\Request;
 
 use App\Http\Resources\SuccessResource;
+use App\Modules\StockJournalEntry\Resources\StockJournalEntryResource;
+
 class StockJournalResource extends SuccessResource
 {
     public function toArray(Request $request): array
@@ -14,6 +16,7 @@ class StockJournalResource extends SuccessResource
             'journalNo' => $this->journal_no,
             'journalDate' => $this->journal_date,
             'type'=> $this->type,
+            'stockJournalEntries'=> StockJournalEntryResource::collection($this->whenLoaded('stock_journal_entries')),
             'remarks' => $this->remarks,
         ];
     }

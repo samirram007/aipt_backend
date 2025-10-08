@@ -10,7 +10,6 @@ return new class extends Migration
     {
         Schema::create('agents', function (Blueprint $table) {
             $table->id();
-            $table->string('account_ledger_id')->nullable();
             $table->string('name');
 
             // contact information

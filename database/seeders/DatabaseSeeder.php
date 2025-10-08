@@ -35,6 +35,9 @@ use App\Modules\VoucherType\Database\Seeders\VoucherTypeSeeder;
 use App\Modules\AccountGroup\Database\Seeders\AccountGroupSeeder;
 use App\Modules\AccountLedger\Database\Seeders\AccountLedgerSeeder;
 use App\Modules\AccountNature\Database\Seeders\AccountNatureSeeder;
+use App\Modules\Agent\Database\Seeders\AgentSeeder;
+use App\Modules\Discipline\Database\Seeders\DisciplineSeeder;
+use App\Modules\Physician\Database\Seeders\PhysicianSeeder;
 use App\Modules\StockCategory\Database\Seeders\StockCategorySeeder;
 use App\Modules\VoucherClassification\Models\VoucherClassification;
 use App\Modules\VoucherCategory\Database\Seeders\VoucherCategorySeeder;
@@ -78,8 +81,11 @@ class DatabaseSeeder extends Seeder
                 // PurchaseSeeder::class
             GodownSeeder::class,
 
-            VoucherSeeder::class,
-            VoucherEntrySeeder::class,
+            // VoucherSeeder::class,
+            // VoucherEntrySeeder::class,
+            DisciplineSeeder::class,
+            AgentSeeder::class,
+            PhysicianSeeder::class
 
         ]);
         // User::factory(10)->create();

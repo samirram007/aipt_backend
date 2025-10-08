@@ -8,7 +8,9 @@ use Illuminate\Database\Eloquent\Collection;
 
 class VoucherService implements VoucherServiceInterface
 {
-    protected $resource = ['voucher_entries.account_ledger'];
+    protected $resource = ['voucher_entries.account_ledger',
+    'stock_journal.stock_journal_entries.stock_item',
+    'stock_journal.stock_journal_entries.stock_unit'];
 
     public function getAll(): Collection
     {

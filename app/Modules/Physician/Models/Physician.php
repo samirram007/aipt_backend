@@ -16,7 +16,6 @@ class Physician extends Model
 
     protected $fillable = [
         'name',
-        'account_ledger_id',
         'degree',
         'email',
         'contact_no',

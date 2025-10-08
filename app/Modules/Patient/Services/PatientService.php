@@ -2,6 +2,7 @@
 
 namespace App\Modules\Patient\Services;
 
+use App\Modules\AccountLedger\Models\AccountLedger;
 use App\Modules\Patient\Contracts\PatientServiceInterface;
 use App\Modules\Patient\Models\Patient;
 use Illuminate\Database\Eloquent\Collection;
@@ -30,8 +31,44 @@ class PatientService implements PatientServiceInterface
             $address['addressable_type'] = 'patient';
             $patient->addresses()->create($address);
         }
+
+        $data['account_group_id'] = 2;
+        if (isset($data['account_group_id'])) {
+
+            $data['account_ledger']['name'] = $this->verifyUniqueLedgerName($patient->name, $patient->id);
+            $data['account_ledger']['code'] = $data['account_ledger']['name'];
+            $data['account_ledger']['account_group_id'] = $data['account_group_id'];
+            $data['account_ledger']['ledgerable_type'] = 'patient';
+            $data['account_ledger']['ledgerable_id'] = $patient->id;
+            $patient->account_ledger()->create($data['account_ledger']);
+        }
+
         return $patient->load($this->resource);
     }
+
+
+    private function verifyUniqueLedgerName(string $name, ?int $id = null): string
+    {
+        if (empty(trim($name))) {
+            throw new \InvalidArgumentException('Ledger name cannot be empty.');
+        }
+
+        // Normalize the name
+        $baseName = trim($name);
+        $uniqueName = $baseName;
+        $counter = 1;
+        //dd(AccountLedger::ledgerNameExists($uniqueName));
+        // Check for uniqueness
+        while (AccountLedger::ledgerNameExists($uniqueName)) {
+            // dd($uniqueName);
+            $uniqueName = sprintf('%s-%04d', $baseName, $counter);
+            $counter++;
+        }
+
+        return $uniqueName;
+
+    }
+
 
     public function update(array $data, int $id): Patient
     {
