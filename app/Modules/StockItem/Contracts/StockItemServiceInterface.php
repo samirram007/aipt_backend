@@ -12,4 +12,5 @@ interface StockItemServiceInterface
     public function store(array $data): StockItem;
     public function update(array $data, int $id): StockItem;
     public function delete(int $id): bool;
+    public function getPurchasableStockItems(): Collection;
 }

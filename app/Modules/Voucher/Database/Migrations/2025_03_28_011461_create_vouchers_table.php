@@ -14,6 +14,10 @@ return new class extends Migration {
             $table->id();
             $table->string('voucher_no');
             $table->date('voucher_date');
+
+            $table->string('reference_no')->nullable();
+            $table->date('reference_date')->nullable();
+
             // $table->foreignIdFor('account_types');
             $table->foreignId('voucher_type_id');
             $table->boolean('is_effecting')->default(true);

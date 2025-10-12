@@ -38,6 +38,8 @@ class AccountLedgerResource extends SuccessResource
             'accountGroupId' => $this->account_group_id,
             'accountGroup' => new AccountGroupResource($this->whenLoaded('account_group')),
             'accountNature' => new AccountNatureResource($this->whenLoaded('account_nature')),
+            'ledgerableId' => $this->whenNotNull($this->ledgerable_id),
+            'ledgerableType' => $this->whenNotNull($this->ledgerable_type),
 
             'ledgerable' => $this->whenLoaded(
                 'ledgerable',

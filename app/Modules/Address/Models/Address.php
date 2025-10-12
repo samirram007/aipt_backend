@@ -27,6 +27,8 @@ class Address extends Model
         'is_primary',
         'addressable_id',
         'addressable_type',
+        'post_office',
+        'district'
     ];
 
     protected $casts = [

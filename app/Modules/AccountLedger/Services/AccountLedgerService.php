@@ -11,6 +11,9 @@ class AccountLedgerService implements AccountLedgerServiceInterface
 
     protected $resource = [
         'account_group.account_nature',
+    ];
+    protected $ledgerable_resource = [
+        'account_group.account_nature',
         'ledgerable.address.state',
         'ledgerable.address.country'
     ];
@@ -53,5 +56,20 @@ class AccountLedgerService implements AccountLedgerServiceInterface
     {
         $record = AccountLedger::findOrFail($id);
         return $record->delete();
+    }
+    public function getPurchaseLedgers(): Collection
+    {
+        return AccountLedger::with($this->resource)
+            ->where('account_group_id', 40001)->orderBy('name')->get();
+    }
+    public function getSupplierLedgers(): Collection
+    {
+        return AccountLedger::with($this->ledgerable_resource)
+            ->where('account_group_id', 20003)->orderBy('name')->get();
+    }
+    public function getDistributorLedgers(): Collection
+    {
+        return AccountLedger::with($this->ledgerable_resource)
+            ->where('account_group_id', 20003)->orderBy('name')->get();
     }
 }

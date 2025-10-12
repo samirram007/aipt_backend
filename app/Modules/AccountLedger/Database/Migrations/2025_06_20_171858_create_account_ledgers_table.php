@@ -12,12 +12,13 @@ return new class extends Migration {
             $table->string('name')->unique();
             $table->string('code')->unique();
             // $table->foreignIdFor('account_types');
-            $table->foreignId('account_group_id');
+            $table->foreignId('account_group_id')->nullable();
 
             $table->string('description')->nullable();
             $table->string('status')->default('active');
             $table->string('icon')->nullable();
-
+            $table->boolean('is_system')->default(false);
+            $table->boolean('is_hidden')->default(false);
             $table->unsignedBigInteger('ledgerable_id')->nullable();
             $table->string('ledgerable_type')->nullable();
 

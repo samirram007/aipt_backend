@@ -4,17 +4,24 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration
-{
+return new class extends Migration {
     public function up(): void
     {
         Schema::create('employees', function (Blueprint $table) {
             $table->id();
-            $table->string('name')->unique();
+            $table->string('name');
             $table->string('code')->unique();
-            $table->string('description')->nullable();
+            $table->date('dob')->nullable();
+            $table->date('doj')->nullable();
+            $table->string('email')->nullable();
+            $table->string('contact_no')->nullable();
+            $table->string('education')->nullable();
+            $table->string('pan')->nullable();
+            $table->unsignedBigInteger('department_id')->nullable();
+            $table->unsignedBigInteger('designation_id')->nullable();
+
             $table->string('status')->default('active');
-            $table->string('icon')->nullable();
+            $table->string('image')->nullable();
 
             $table->timestamps();
         });
