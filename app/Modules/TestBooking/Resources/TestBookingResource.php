@@ -12,6 +12,7 @@ use App\Modules\StockJournal\Resources\StockJournalResource;
 use App\Modules\VoucherEntry\Resources\VoucherEntryResource;
 use App\Modules\VoucherPatient\Models\VoucherPatient;
 use App\Modules\VoucherPatient\Resources\VoucherPatientResource;
+use App\Modules\VoucherReference\Resources\VoucherReferenceResource;
 use App\Modules\VoucherType\Resources\VoucherTypeResource;
 
 class TestBookingResource extends SuccessResource
@@ -43,7 +44,8 @@ class TestBookingResource extends SuccessResource
             'fiscalYear' => FiscalYearResource::make($this->whenLoaded('fiscal_year')),
             'stockJournal' => StockJournalResource::make($this->whenLoaded('stock_journal')),
             'voucherEntries' => VoucherEntryResource::collection($this->whenLoaded('voucher_entries')),
-            'voucherPatient' => VoucherPatientResource::make($this->whenLoaded('voucher_patient'))
+            'voucherPatient' => VoucherPatientResource::make($this->whenLoaded('voucher_patient')),
+            'voucherReferences' => VoucherReferenceResource::collection($this->whenLoaded('voucher_references')),
         ];
     }
 }

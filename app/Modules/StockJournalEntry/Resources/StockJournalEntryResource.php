@@ -21,6 +21,8 @@ class StockJournalEntryResource extends SuccessResource
             'alternateUnitId' => $this->alternate_unit_id,
             'unitRatio' => $this->unit_ratio,
             'itemCost' => $this->item_cost,
+            'testDate' => $this->start_date,
+            'reportDate' => $this->end_date,
             'rate' => $this->rate,
             'movementType' => $this->movement_type,
             'godownId' => $this->godown_id,

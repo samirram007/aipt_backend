@@ -16,6 +16,7 @@ use App\Services\IAuthService;
 use App\Services\impl\AccountGroupService;
 use App\Services\impl\AuthService;
 use Illuminate\Database\Eloquent\Relations\Relation;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -33,6 +34,18 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+                // Set Laravel default timezone
+        config(['app.timezone' => 'Asia/Kolkata']);
+
+        // Set PHP default timezone
+        date_default_timezone_set(config('app.timezone'));
+
+        // Force all Carbon instances from database to use app timezone
+        Carbon::serializeUsing(function ($carbon) {
+            return $carbon->timezone(config('app.timezone'))->toDateTimeString();
+        });
+
+
         Relation::enforceMorphMap([
             'customer' => Customer::class,
             'distributor' => Distributor::class,

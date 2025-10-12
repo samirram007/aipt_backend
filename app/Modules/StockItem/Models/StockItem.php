@@ -65,12 +65,16 @@ class StockItem extends Model
         'standard_selling_price',
         'icon',
         'status',
-
+        'is_package',
+        'is_sample_required',
+        'sample_name',
+        'process_duration',
+        'process_type',
 
     ];
 
     protected $casts = [
-        'created_at' => 'datetime',
+ 'created_at' => 'datetime',
         'updated_at' => 'datetime',
         'is_negative_sales_allow' => 'boolean',
         'is_maintain_batch' => 'boolean',
@@ -92,32 +96,32 @@ class StockItem extends Model
         'is_sales_as_new_manufacture' => 'boolean',
         'is_purchase_as_consumed' => 'boolean',
         'is_rejection_as_scrap' => 'boolean',
-
-
+        'is_package' => 'boolean',
+        'is_sample_required' => 'boolean',
     ];
 
     public function stock_item_prices(): HasMany
     {
-        return $this->hasMany(StockItemPrice::class);
+        return $this->hasMany(StockItemPrice::class,'stock_price_id','id');
     }
-    public function stock_item_category(): BelongsTo
+    public function stock_category(): BelongsTo
     {
-        return $this->belongsTo(StockCategory::class);
+        return $this->belongsTo(StockCategory::class,'stock_category_id','id');
     }
-    public function stock_item_group(): BelongsTo
+    public function stock_group(): BelongsTo
     {
-        return $this->belongsTo(StockGroup::class);
+        return $this->belongsTo(StockGroup::class,'stock_group_id','id');
     }
     public function stock_unit(): BelongsTo
     {
-        return $this->belongsTo(StockUnit::class);
+        return $this->belongsTo(StockUnit::class,'stock_unit_id','id');
     }
     public function alternate_stock_unit(): BelongsTo
     {
-        return $this->belongsTo(StockUnit::class);
+        return $this->belongsTo(StockUnit::class,'alternate_stock_unit_id','id');
     }
     public function unique_quantity_code(): BelongsTo
     {
-        return $this->belongsTo(UniqueQuantityCode::class);
+        return $this->belongsTo(UniqueQuantityCode::class,'unique_quantity_id','id');
     }
 }

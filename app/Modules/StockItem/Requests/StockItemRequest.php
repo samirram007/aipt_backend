@@ -59,6 +59,11 @@ class StockItemRequest extends FormRequest
             'standard_selling_price' => ['sometimes', 'required', 'numeric'],
             'icon' => ['sometimes', 'nullable', 'string', 'max:255'],
             'status' => ['sometimes', 'required', 'string', 'max:255'],
+            'is_package' => ['sometimes', 'required', 'boolean'],
+            'is_sample_required' => ['sometimes', 'required', 'boolean'],
+            'sample_name' => ['sometimes', 'required', 'string','max:255'],
+            'process_duration' => ['sometimes', 'required','numeric'],
+            'process_type' => ['sometimes', 'required','string'],
         ];
 
         // For update requests, make validation more flexible

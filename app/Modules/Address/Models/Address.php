@@ -33,7 +33,7 @@ class Address extends Model
     ];
 
     protected $casts = [
-        'created_at' => 'datetime',
+ 'created_at' => 'datetime',
         'updated_at' => 'datetime',
         'is_primary' => 'boolean',
         // 'address_type' => AddressType::class,

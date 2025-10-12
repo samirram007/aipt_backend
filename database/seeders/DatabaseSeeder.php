@@ -37,6 +37,7 @@ use App\Modules\AccountLedger\Database\Seeders\AccountLedgerSeeder;
 use App\Modules\AccountNature\Database\Seeders\AccountNatureSeeder;
 use App\Modules\Agent\Database\Seeders\AgentSeeder;
 use App\Modules\Discipline\Database\Seeders\DisciplineSeeder;
+use App\Modules\Patient\Database\Seeders\PatientSeeder;
 use App\Modules\Physician\Database\Seeders\PhysicianSeeder;
 use App\Modules\StockCategory\Database\Seeders\StockCategorySeeder;
 use App\Modules\VoucherClassification\Models\VoucherClassification;
@@ -85,7 +86,8 @@ class DatabaseSeeder extends Seeder
             // VoucherEntrySeeder::class,
             DisciplineSeeder::class,
             AgentSeeder::class,
-            PhysicianSeeder::class
+            PhysicianSeeder::class,
+            // PatientSeeder::class
 
         ]);
         // User::factory(10)->create();

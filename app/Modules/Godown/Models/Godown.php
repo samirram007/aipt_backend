@@ -25,7 +25,7 @@ class Godown extends Model
     ];
 
     protected $casts = [
-        'created_at' => 'datetime',
+ 'created_at' => 'datetime',
         'updated_at' => 'datetime',
         'our_stock_with_third_party' => 'boolean',
         'third_party_stock_with_us' => 'boolean',

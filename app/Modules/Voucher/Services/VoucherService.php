@@ -10,7 +10,7 @@ class VoucherService implements VoucherServiceInterface
 {
     protected $resource = ['voucher_entries.account_ledger',
     'stock_journal.stock_journal_entries.stock_item',
-    'stock_journal.stock_journal_entries.stock_unit'];
+    'stock_journal.stock_journal_entries.stock_unit','voucher_references.voucher'];
 
     public function getAll(): Collection
     {

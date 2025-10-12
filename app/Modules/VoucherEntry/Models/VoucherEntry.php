@@ -24,7 +24,7 @@ class VoucherEntry extends Model
     ];
 
     protected $casts = [
-        'created_at' => 'datetime',
+ 'created_at' => 'datetime',
         'updated_at' => 'datetime',
     ];
 

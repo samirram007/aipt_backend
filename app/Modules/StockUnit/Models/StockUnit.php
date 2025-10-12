@@ -32,7 +32,7 @@ class StockUnit extends Model
     ];
 
     protected $casts = [
-        'created_at' => 'datetime',
+ 'created_at' => 'datetime',
         'updated_at' => 'datetime',
         'unit_type' => UnitType::class,
         'quantity_type' => QuantityType::class,

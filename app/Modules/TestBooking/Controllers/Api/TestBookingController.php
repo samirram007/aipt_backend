@@ -14,8 +14,11 @@ use App\Modules\Patient\Models\Patient;
 use App\Modules\StockItem\Models\StockItem;
 use App\Modules\StockJournal\Models\StockJournal;
 use App\Modules\StockJournalEntry\Models\StockJournalEntry;
+use App\Modules\TestBooking\Requests\TestConfirmRequest;
 use App\Modules\Voucher\Models\Voucher;
+use App\Modules\Voucher\Resources\VoucherCollection;
 use App\Modules\VoucherEntry\Models\VoucherEntry;
+use App\Modules\VoucherPatient\Resources\VoucherPatientCollection;
 use App\Traits\ApiResponseTrait;
 use Illuminate\Http\JsonResponse;
 use Carbon\Carbon;
@@ -26,6 +29,12 @@ class TestBookingController extends Controller
     use ApiResponseTrait;
 
     public function __construct(protected TestBookingServiceInterface $service) {}
+
+    public function all_bookings():SuccessCollection
+    {
+        $data = $this->service->all_bookings();
+        return new VoucherPatientCollection($data);
+    }
 
     public function index(): SuccessCollection
     {
@@ -44,6 +53,11 @@ class TestBookingController extends Controller
     {
         $data = $this->service->store($request->validated());
        return  new TestBookingResource((object)$data, $messages='TestBooking created successfully');
+    }
+
+    public function confirm_payment(TestConfirmRequest $request): SuccessResource{
+        $data = $this->service->confirm_payment($request->validated());
+        return new TestBookingResource($data,$messages="Payment confirmed successfully");
     }
 
 

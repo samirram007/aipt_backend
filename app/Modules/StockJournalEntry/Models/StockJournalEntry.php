@@ -26,12 +26,16 @@ class StockJournalEntry extends Model
         'rate',
         'movement_type',
         'godown_id',
+        'start_date',
+        'end_date'
 
     ];
 
     protected $casts = [
-        'created_at' => 'datetime',
-        'updated_at' => 'datetime',
+        'created_at' => 'datetime:Y-m-d H:i:s',
+        'updated_at' => 'datetime:Y-m-d H:i:s',
+        'start_date' => 'datetime:Y-m-d H:i:s',
+        'end_date' => 'datetime:Y-m-d H:i:s'
     ];
 
     public function stock_journal():BelongsTo{

@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Collection;
 
 class VoucherReferenceService implements VoucherReferenceServiceInterface
 {
-    protected $resource=[];
+    protected $resource=['voucher','voucher_reference'];
 
     public function getAll(): Collection
     {

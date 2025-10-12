@@ -62,7 +62,7 @@ class ItemPrice extends Model
     ];
 
     protected $casts = [
-        'created_at' => 'datetime',
+ 'created_at' => 'datetime',
         'updated_at' => 'datetime',
         'is_negative_sales_allow' => 'boolean',
         'is_maintain_batch' => 'boolean',

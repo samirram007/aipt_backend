@@ -3,6 +3,7 @@
 use App\Enums\CostingMethod;
 use App\Enums\MarketValuationMethod;
 use App\Enums\PricingMethod;
+use App\Enums\ProcessType;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -42,6 +43,11 @@ return new class extends Migration {
 
             // Manufacturing / type
             $table->boolean('is_finish_goods')->default(true);
+            $table->boolean('is_package')->default(false);
+            $table->boolean('is_sample_required')->default(true);
+            $table->string('sample_name')->default('blood');
+            $table->integer('process_duration')->default(1)->comment('This will be in days');
+            $table->enum('process_type',ProcessType::getValues())->default(ProcessType::InHouse->value);
             $table->boolean('is_raw_material')->default(false);
             $table->boolean('is_unfinished_goods')->default(false);
 

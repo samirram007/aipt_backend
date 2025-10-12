@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Collection;
 
 class VoucherPatientService implements VoucherPatientServiceInterface
 {
-    protected $resource=['agent','physician','patient.account_ledger'];
+    protected $resource=['agent','physician','patient.account_ledger','voucher'];
 
     public function getAll(): Collection
     {
@@ -17,7 +17,15 @@ class VoucherPatientService implements VoucherPatientServiceInterface
 
     public function getById(int $id): ?VoucherPatient
     {
-        return VoucherPatient::with($this->resource)->findOrFail($id);
+        $record = VoucherPatient::with($this->resource)->find($id);
+
+        if (!$record) {
+            throw new \Illuminate\Database\Eloquent\ModelNotFoundException(
+                "VoucherPatient with ID {$id} not found"
+            );
+        }
+
+    return $record;
     }
 
     public function store(array $data): VoucherPatient

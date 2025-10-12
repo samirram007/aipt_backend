@@ -10,14 +10,28 @@ class AgentSeeder extends Seeder
     public function run(): void
     {
         Agent::create([
-            "name"=>"Tuhin",
-            "email"=>"tuhin12@gmail.com",
-            "contact_no"=>"1234567789",
-            "commission_percent"=>15.00
+            'name' => 'Rahul Verma',
+            'email' => 'rahul.verma@example.com',
+            'contact_no' => '9876543210',
+            'commission_percent' => 10.50,
+            'is_active' => true,
         ]);
 
-        // Uncomment to use factory if available
-        // Agent::factory()->count(10)->create();
+        Agent::create([
+            'name' => 'Sneha Patel',
+            'email' => 'sneha.patel@example.com',
+            'contact_no' => '9123456789',
+            'commission_percent' => 8.25,
+            'is_active' => true,
+        ]);
+
+        Agent::create([
+            'name' => 'Amit Kumar',
+            'email' => 'amit.kumar@example.com',
+            'contact_no' => '9988776655',
+            'commission_percent' => 12.00,
+            'is_active' => false,
+        ]);
 
 
     }

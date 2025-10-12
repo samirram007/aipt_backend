@@ -12,4 +12,6 @@ interface TestBookingServiceInterface
     public function store(array $data): TestBooking;
     public function update(array $data, int $id): TestBooking;
     public function delete(int $id): bool;
+    public function confirm_payment(array $data): TestBooking;
+    public function all_bookings():Collection;
 }

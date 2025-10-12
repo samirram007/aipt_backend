@@ -8,6 +8,7 @@ use App\Modules\FiscalYear\Models\FiscalYear;
 use App\Modules\StockJournal\Models\StockJournal;
 use App\Modules\VoucherEntry\Models\VoucherEntry;
 use App\Modules\VoucherPatient\Models\VoucherPatient;
+use App\Modules\VoucherReference\Models\VoucherReference;
 use App\Modules\VoucherType\Models\VoucherType;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -33,7 +34,7 @@ class Voucher extends Model
     ];
 
     protected $casts = [
-        'created_at' => 'datetime',
+ 'created_at' => 'datetime',
         'updated_at' => 'datetime',
     ];
     public function stock_journal(): BelongsTo
@@ -64,5 +65,10 @@ class Voucher extends Model
     public function voucher_patient(): HasOne
     {
         return $this->hasOne(VoucherPatient::class, 'voucher_id', 'id');
+    }
+
+    public function voucher_references(): HasMany
+    {
+        return $this->hasMany(VoucherReference::class, 'voucher_reference_id', 'id');
     }
 }

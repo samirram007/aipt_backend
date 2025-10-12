@@ -10,7 +10,7 @@ return new class extends Migration {
         Schema::create('voucher_references', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('voucher_id');
-            $table->unsignedBigInteger('ref_voucher_id');
+            $table->unsignedBigInteger('voucher_reference_id');
 
             $table->timestamps();
         });

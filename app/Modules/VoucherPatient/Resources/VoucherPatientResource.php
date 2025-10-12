@@ -25,7 +25,7 @@ class VoucherPatientResource extends SuccessResource
             'patient' => PatientResource::make($this->whenLoaded('patient')),
             'agent' => AgentResource::make($this->whenLoaded('agent')),
             'physician' => PhysicianResource::make($this->whenLoaded('physician')),
-            'address' => AddressResource::make($this->whenLoaded('address'))
+            'address' => AddressResource::make($this->whenLoaded('address')),
         ];
     }
 }
