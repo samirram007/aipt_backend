@@ -13,7 +13,6 @@ return new class extends Migration {
             $table->string('line1')->nullable();
             $table->string('line2')->nullable();
             $table->string('landmark')->nullable();
-            $table->string('city')->nullable();
             $table->string('post_office')->nullable();
             $table->string('district')->nullable();
             $table->string('city');

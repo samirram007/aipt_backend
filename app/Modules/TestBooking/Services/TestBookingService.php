@@ -46,7 +46,6 @@ class TestBookingService implements TestBookingServiceInterface
 
     public function store(array $data): TestBooking
     {
-        $testBooking = null;
         try {
             DB::beginTransaction();
 
@@ -70,8 +69,8 @@ class TestBookingService implements TestBookingServiceInterface
                         'stock_item_id' => $stockItem->id,
                         'stock_unit_id' => $stockItem->stock_unit_id,
                         'alternate_unit_id' => $stockItem->stock_unit_id,
-                        'start_date' => $journalEntry['test_date'],
-                        'end_date' => $journalEntry['report_date'],
+                        'start_date' => Carbon::parse($journalEntry['test_date'])->format('Y-m-d H:i:s'),
+                        'end_date' => Carbon::parse($journalEntry['report_date'])->format('Y-m-d H:i:s'),
                         'unit_ratio' => 1.0,
                         'item_cost' => $stockItem->mrp,
                         'quantity' => 1,
@@ -90,6 +89,7 @@ class TestBookingService implements TestBookingServiceInterface
                     'stock_journal_id'=> $stockJournal->id
                 ]);
 
+
                 $accountLedger = AccountLedger::where('ledgerable_id',$data['patient_id'])
                         ->where('ledgerable_type','patient')
                         ->firstOrFail();
@@ -101,6 +101,8 @@ class TestBookingService implements TestBookingServiceInterface
                     'agent_id' => $data['agent_id'],
                     'physician_id' => $data['physician_id'],
                 ]);
+
+
 
                 VoucherEntry::create([
                     'voucher_id' => $voucher->id,
@@ -118,19 +120,16 @@ class TestBookingService implements TestBookingServiceInterface
                     'credit'=> $totalAmount
                 ]);
 
-                // $jobOrder = JobOrder::create([
-
-                // ]);
-
                 $testBooking = TestBooking::find($voucher->id);
-
+                return $testBooking->load($this->resource);
             DB::commit();
         } catch (\Exception $e) {
             DB::rollBack();
+            throw $e;
         }
 
 
-        return $testBooking->load($this->resource);
+
     }
 
 
