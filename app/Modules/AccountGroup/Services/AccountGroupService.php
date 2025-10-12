@@ -16,6 +16,7 @@ class AccountGroupService implements AccountGroupServiceInterface
         return $data;
     }
 
+
     public function getById(int $id): ?AccountGroup
     {
         //dd(AccountGroup::findOrFail($id));
@@ -40,5 +41,15 @@ class AccountGroupService implements AccountGroupServiceInterface
     {
         $record = AccountGroup::findOrFail($id);
         return $record->delete();
+    }
+
+    public function getCurrentLiabilityGroups(): Collection
+    {
+        $data = AccountGroup::with($this->resource)
+            ->where('id', 20002)
+            ->orWhere('parent_id', 20002)
+            ->orderBy('name')->get();
+        //dd($data);
+        return $data;
     }
 }
