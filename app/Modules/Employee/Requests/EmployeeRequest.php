@@ -23,8 +23,8 @@ class EmployeeRequest extends FormRequest
             'contact_no' => ['sometimes', 'nullable', 'string', 'max:255'],
             'education' => ['sometimes', 'nullable', 'string', 'max:255'],
             'pan' => ['sometimes', 'nullable', 'string', 'max:255'],
-            'department_id' => ['sometimes', 'nullable', 'exist:departments,id'],
-            'designation_id' => ['sometimes', 'nullable', 'exist:designations,id'],
+            'department_id' => ['sometimes', 'nullable', 'exists:departments,id'],
+            'designation_id' => ['sometimes', 'nullable', 'exists:designations,id'],
             'status' => ['sometimes', 'required', 'string', 'max:255'],
             'image' => ['sometimes', 'nullable', 'string', 'max:255'],
         ];

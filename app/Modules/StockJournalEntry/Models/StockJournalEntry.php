@@ -32,10 +32,10 @@ class StockJournalEntry extends Model
     ];
 
     protected $casts = [
-        'created_at' => 'datetime:Y-m-d H:i:s',
-        'updated_at' => 'datetime:Y-m-d H:i:s',
-        'start_date' => 'datetime:Y-m-d H:i:s',
-        'end_date' => 'datetime:Y-m-d H:i:s'
+        'created_at' => 'datetime',
+        'updated_at' => 'datetime',
+        'start_date' => 'datetime',
+        'end_date' => 'datetime'
     ];
 
     public function stock_journal():BelongsTo{

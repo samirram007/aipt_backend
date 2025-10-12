@@ -36,6 +36,8 @@ use App\Modules\AccountGroup\Database\Seeders\AccountGroupSeeder;
 use App\Modules\AccountLedger\Database\Seeders\AccountLedgerSeeder;
 use App\Modules\AccountNature\Database\Seeders\AccountNatureSeeder;
 use App\Modules\Agent\Database\Seeders\AgentSeeder;
+use App\Modules\Department\Database\Seeders\DepartmentSeeder;
+use App\Modules\Designation\Database\Seeders\DesignationSeeder;
 use App\Modules\Discipline\Database\Seeders\DisciplineSeeder;
 use App\Modules\Patient\Database\Seeders\PatientSeeder;
 use App\Modules\Physician\Database\Seeders\PhysicianSeeder;
@@ -87,6 +89,8 @@ class DatabaseSeeder extends Seeder
             DisciplineSeeder::class,
             AgentSeeder::class,
             PhysicianSeeder::class,
+            DepartmentSeeder::class,
+            DesignationSeeder::class
             // PatientSeeder::class
 
         ]);

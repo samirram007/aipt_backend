@@ -5,6 +5,7 @@ namespace App\Modules\Employee\Services;
 use App\Modules\AccountLedger\Models\AccountLedger;
 use App\Modules\Employee\Contracts\EmployeeServiceInterface;
 use App\Modules\Employee\Models\Employee;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Collection;
 
 class EmployeeService implements EmployeeServiceInterface
@@ -26,6 +27,8 @@ class EmployeeService implements EmployeeServiceInterface
         if (empty($data['code'])) {
             $data['code'] = $this->getUniqueCode();
         }
+            $data['dob'] = isset($data['dob']) ? Carbon::parse($data['dob'])->toDateString() : null;
+            $data['doj'] = isset($data['doj']) ? Carbon::parse($data['doj'])->toDateString() : null;
         $employee = Employee::create($data);
 
         if ($data['address']) {

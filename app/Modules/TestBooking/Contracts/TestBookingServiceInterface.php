@@ -14,4 +14,5 @@ interface TestBookingServiceInterface
     public function delete(int $id): bool;
     public function confirm_payment(array $data): TestBooking;
     public function all_bookings():Collection;
+    public function post_payment_test_cancellation(): TestBooking;
 }

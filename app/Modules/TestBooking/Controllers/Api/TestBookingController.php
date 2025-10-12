@@ -60,6 +60,11 @@ class TestBookingController extends Controller
         return new TestBookingResource($data,$messages="Payment confirmed successfully");
     }
 
+    public function post_payment_test_cancellation(TestBookingRequest $request):SuccessResource{
+        $data = $this->service->post_payment_test_cancellation($request->validated());
+        return new TestBookingResource($data,$messages="Test Cancellation done successfully");
+    }
+
 
     public function update(TestBookingRequest $request, int $id): SuccessResource
     {

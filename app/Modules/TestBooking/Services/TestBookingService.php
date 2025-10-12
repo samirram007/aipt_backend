@@ -16,6 +16,7 @@ use App\Modules\VoucherReference\Models\VoucherReference;
 use Illuminate\Database\Eloquent\Collection;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class TestBookingService implements TestBookingServiceInterface
 {
@@ -44,8 +45,9 @@ class TestBookingService implements TestBookingServiceInterface
         return TestBooking::with($this->resource)->findOrFail($id);
     }
 
-    public function store(array $data): TestBooking
+  public function store(array $data): TestBooking
     {
+        $testBooking = null;
         try {
             DB::beginTransaction();
 
@@ -60,6 +62,7 @@ class TestBookingService implements TestBookingServiceInterface
 
                 $totalAmount = 0;
 
+
                 foreach($data['tests'] as $journalEntry){
                     $stockItem = StockItem::findOrFail($journalEntry['test_id']);
 
@@ -69,8 +72,8 @@ class TestBookingService implements TestBookingServiceInterface
                         'stock_item_id' => $stockItem->id,
                         'stock_unit_id' => $stockItem->stock_unit_id,
                         'alternate_unit_id' => $stockItem->stock_unit_id,
-                        'start_date' => Carbon::parse($journalEntry['test_date'])->format('Y-m-d H:i:s'),
-                        'end_date' => Carbon::parse($journalEntry['report_date'])->format('Y-m-d H:i:s'),
+                        'start_date' => $journalEntry['test_date'],
+                        'end_date' => $journalEntry['report_date'],
                         'unit_ratio' => 1.0,
                         'item_cost' => $stockItem->mrp,
                         'quantity' => 1,
@@ -82,7 +85,7 @@ class TestBookingService implements TestBookingServiceInterface
                 }
 
                 $newVoucherNo = $this->createVoucherNo((int) $data['patient_id']);
-                $voucher = Voucher::create([
+                $voucher = TestBooking::create([
                     'voucher_no' => $newVoucherNo,
                     'voucher_date' => Carbon::today()->toDateString(),
                     'voucher_type_id' => 1006,
@@ -120,16 +123,20 @@ class TestBookingService implements TestBookingServiceInterface
                     'credit'=> $totalAmount
                 ]);
 
+                // $jobOrder = JobOrder::create([
+
+                // ]);
+
                 $testBooking = TestBooking::find($voucher->id);
-                return $testBooking->load($this->resource);
+
             DB::commit();
         } catch (\Exception $e) {
+            Log::error('TestBooking store error: '.$e->getMessage(), ['trace'=>$e->getTraceAsString()]);
             DB::rollBack();
-            throw $e;
         }
 
 
-
+        return $testBooking->load($this->resource);
     }
 
 
@@ -181,6 +188,11 @@ class TestBookingService implements TestBookingServiceInterface
             DB::rollBack();
              throw $e;
         }
+    }
+
+    public function post_payment_test_cancellation(): TestBooking
+    {
+        return TestBooking::create();
     }
 
     public function createVoucherNo(int $patientId): string{
