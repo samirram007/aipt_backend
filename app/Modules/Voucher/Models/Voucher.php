@@ -25,6 +25,8 @@ class Voucher extends Model
     protected $fillable = [
         'voucher_no',
         'voucher_date',
+        'reference_no',
+        'reference_date',
         'voucher_type_id',
         'remarks',
         'status',

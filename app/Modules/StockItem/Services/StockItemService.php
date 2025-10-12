@@ -38,4 +38,8 @@ class StockItemService implements StockItemServiceInterface
         $record = StockItem::findOrFail($id);
         return $record->delete();
     }
+    public function getPurchasableStockItems(): Collection
+    {
+        return StockItem::with($this->resource)->get();
+    }
 }

@@ -136,4 +136,17 @@ class AccountGroupController extends Controller
             'message' => $result ? 'AccountGroup deleted successfully' : 'AccountGroup not found',
         ]);
     }
+
+
+
+
+
+
+    public function current_liability_groups(): SuccessCollection
+    {
+
+        $data = $this->service->getCurrentLiabilityGroups();
+
+        return new AccountGroupCollection($data);
+    }
 }

@@ -20,6 +20,8 @@ class VoucherResource extends SuccessResource
             'id' => $this->id,
             'voucherNo' => $this->voucher_no,
             'voucherDate' => $this->voucher_date,
+            'referenceNo' => $this->reference_no,
+            'referenceDate' => $this->reference_date,
             'voucherTypeId' => $this->voucher_type_id,
             'remarks' => $this->remarks,
             'status' => $this->status,

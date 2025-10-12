@@ -12,4 +12,5 @@ interface AccountGroupServiceInterface
     public function store(array $data): AccountGroup;
     public function update(array $data, int $id): AccountGroup;
     public function delete(int $id): bool;
+    public function getCurrentLiabilityGroups(): Collection;
 }

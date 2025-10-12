@@ -27,6 +27,8 @@ class AddressRequest extends FormRequest
             'latitude' => ['sometimes', 'nullable', 'numeric', 'between:-90,90'],
             'longitude' => ['sometimes', 'nullable', 'numeric', 'between:-180,180'],
             'address_type' => ['sometimes', 'nullable', 'string', 'max:255'],
+            'post_office' => ['sometimes', 'nullable', 'string', 'max:255'],
+            'district' => ['sometimes', 'nullable', 'string', 'max:255'],
             // 'address_type' => ['sometimes', 'nullable', 'in:' . implode(',', array_column(AddressType::cases(), 'value'))],
             'is_primary' => ['sometimes', 'boolean'],
         ];

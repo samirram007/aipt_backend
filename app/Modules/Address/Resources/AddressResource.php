@@ -15,6 +15,8 @@ class AddressResource extends SuccessResource
             'line1' => $this->line1,
             'line2' => $this->line2,
             'landmark' => $this->landmark,
+            'postOffice' => $this->post_office,
+            'district' => $this->district,
             'city' => $this->city,
             'stateId' => $this->state_id,
             'state' => $this->whenLoaded('state', fn() => [

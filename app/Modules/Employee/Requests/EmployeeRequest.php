@@ -2,6 +2,7 @@
 
 namespace App\Modules\Employee\Requests;
 
+use App\Modules\Address\Requests\AddressRequest;
 use Illuminate\Foundation\Http\FormRequest;
 
 class EmployeeRequest extends FormRequest
@@ -14,21 +15,33 @@ class EmployeeRequest extends FormRequest
     public function rules(): array
     {
         $rules = [
-            'name' => ['required', 'string', 'max:255','unique:employees,name'],
-            'code' => ['sometimes','required', 'string', 'max:255','unique:employees,code'],
-            'description' => ['sometimes','required', 'string', 'max:255'],
-            'status' => ['sometimes','required', 'string', 'max:255'],
+            'name' => ['required', 'string', 'max:255'],
+            'code' => ['sometimes', 'nullable', 'string', 'max:255', 'unique:employees,code'],
+            'dob' => ['sometimes', 'nullable', 'date'],
+            'doj' => ['sometimes', 'nullable', 'date'],
+            'email' => ['sometimes', 'nullable', 'string', 'max:255'],
+            'contact_no' => ['sometimes', 'nullable', 'string', 'max:255'],
+            'education' => ['sometimes', 'nullable', 'string', 'max:255'],
+            'pan' => ['sometimes', 'nullable', 'string', 'max:255'],
+            'department_id' => ['sometimes', 'nullable', 'exist:departments,id'],
+            'designation_id' => ['sometimes', 'nullable', 'exist:designations,id'],
+            'status' => ['sometimes', 'required', 'string', 'max:255'],
+            'image' => ['sometimes', 'nullable', 'string', 'max:255'],
         ];
+        $addressRules = collect((new AddressRequest())->rules())
+            ->mapWithKeys(fn($rule, $key) => ["address.$key" => $rule])
+            ->toArray();
+
 
         // For update requests, make validation more flexible
         if ($this->isMethod('PUT') || $this->isMethod('PATCH')) {
-            $id=$this->route('employee');
-            $rules['name'] = ['sometimes', 'required', 'string', 'max:255', 'unique:employees,name,' . $id,];
+            $id = $this->route('employee');
             $rules['code'] = ['sometimes', 'required', 'string', 'max:255', 'unique:employees,code,' . $id,];
 
         }
 
-        return $rules;
+        return array_merge($rules, $addressRules);
+
     }
 
     public function messages(): array

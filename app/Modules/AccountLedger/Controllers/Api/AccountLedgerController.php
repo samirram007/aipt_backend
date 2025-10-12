@@ -27,6 +27,7 @@ class AccountLedgerController extends Controller
         return new AccountLedgerCollection($data);
     }
 
+
     public function show(int $id): ?SuccessResource
     {
         $data = $this->service->getById($id);
@@ -66,5 +67,22 @@ class AccountLedgerController extends Controller
             'message' => $result ? 'AccountLedger deleted successfully' : 'AccountLedger not found',
         ]);
 
+    }
+
+
+    public function purchase_ledgers(): SuccessCollection
+    {
+        $data = $this->service->getPurchaseLedgers();
+        return new AccountLedgerCollection($data);
+    }
+    public function supplier_ledgers(): SuccessCollection
+    {
+        $data = $this->service->getSupplierLedgers();
+        return new AccountLedgerCollection($data);
+    }
+    public function distributor_ledgers(): SuccessCollection
+    {
+        $data = $this->service->getDistributorLedgers();
+        return new AccountLedgerCollection($data);
     }
 }

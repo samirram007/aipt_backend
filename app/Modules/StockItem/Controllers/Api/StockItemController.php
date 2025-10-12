@@ -16,7 +16,9 @@ class StockItemController extends Controller
 {
     use ApiResponseTrait;
 
-    public function __construct(protected StockItemServiceInterface $service) {}
+    public function __construct(protected StockItemServiceInterface $service)
+    {
+    }
 
     public function index(): SuccessCollection
     {
@@ -27,29 +29,34 @@ class StockItemController extends Controller
     public function show(int $id): SuccessResource
     {
         $data = $this->service->getById($id);
-        return  new StockItemResource($data);
+        return new StockItemResource($data);
     }
 
     public function store(StockItemRequest $request): SuccessResource
     {
         $data = $this->service->store($request->validated());
-       return  new StockItemResource($data, $messages='StockItem created successfully');
+        return new StockItemResource($data, $messages = 'StockItem created successfully');
     }
 
     public function update(StockItemRequest $request, int $id): SuccessResource
     {
         $data = $this->service->update($request->validated(), $id);
-        return  new StockItemResource($data, $messages='StockItem updated successfully');
+        return new StockItemResource($data, $messages = 'StockItem updated successfully');
     }
 
-        public function destroy(int $id): JsonResponse
+    public function destroy(int $id): JsonResponse
     {
 
-        $result=$this->service->delete($id);
+        $result = $this->service->delete($id);
         return new JsonResponse([
             'status' => $result,
             'code' => 204,
-            'message' => $result?'StockItem deleted successfully':'StockItem not found',
+            'message' => $result ? 'StockItem deleted successfully' : 'StockItem not found',
         ]);
+    }
+    public function purchasable_stock_items(): SuccessCollection
+    {
+        $data = $this->service->getPurchasableStockItems();
+        return new StockItemCollection($data);
     }
 }

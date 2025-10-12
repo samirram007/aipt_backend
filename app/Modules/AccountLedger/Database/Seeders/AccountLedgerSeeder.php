@@ -5,96 +5,298 @@ namespace App\Modules\AccountLedger\Database\Seeders;
 use App\Modules\AccountGroup\Models\AccountGroup;
 use Illuminate\Database\Seeder;
 use App\Modules\AccountLedger\Models\AccountLedger;
+use Illuminate\Support\Facades\DB;
 
 class AccountLedgerSeeder extends Seeder
 {
     public function run(): void
     {
+        DB::table('account_ledgers')->truncate();
+
         $ledgers = [
-            'CASH' => [
-                ['id' => 1, 'name' => 'Cash in Hand', 'code' => 'CASH_HAND', 'description' => 'Cash held physically'],
-                ['id' => 2, 'name' => 'Cash at Bank', 'code' => 'CASH_BANK', 'description' => 'Cash in bank accounts'],
+
+            // ==============================
+            // 🔹 ASSETS (1000001–)
+            // ==============================
+            [
+                'id' => 1000001,
+                'name' => 'Cash',
+                'code' => 'CASH',
+                'account_group_id' => 10001, // Cash-in-Hand
+                'description' => 'Cash in hand',
+                'is_system' => true,
+                'is_hidden' => false,
             ],
-            'AR' => [
-                ['id' => 3, 'name' => 'Customer A Receivable', 'code' => 'AR_CUST_A', 'description' => 'Receivable from Customer A'],
-                ['id' => 4, 'name' => 'Customer B Receivable', 'code' => 'AR_CUST_B', 'description' => 'Receivable from Customer B'],
-                ['id' => 5, 'name' => 'Other Trade Receivables', 'code' => 'AR_OTHERS', 'description' => 'Receivable from other customers'],
+            [
+                'id' => 1000002,
+                'name' => 'Bank Account',
+                'code' => 'BANK',
+                'account_group_id' => 10002, // Bank Accounts
+                'description' => 'Default bank ledger',
+                'is_system' => true,
+                'is_hidden' => false,
             ],
-            'AP' => [
-                ['id' => 6, 'name' => 'Vendor X Payable', 'code' => 'AP_VENDOR_X', 'description' => 'Payable to Vendor X'],
-                ['id' => 7, 'name' => 'Vendor Y Payable', 'code' => 'AP_VENDOR_Y', 'description' => 'Payable to Vendor Y'],
-                ['id' => 8, 'name' => 'Other Trade Payables', 'code' => 'AP_OTHERS', 'description' => 'Payable to other vendors'],
+            [
+                'id' => 1000003,
+                'name' => 'Accounts Receivable (Debtors)',
+                'code' => 'DEBTORS',
+                'account_group_id' => 10003, // Sundry Debtors
+                'description' => 'Receivable balances from customers',
+                'is_system' => true,
+                'is_hidden' => false,
             ],
-            'SR' => [
-                ['id' => 9, 'name' => 'Product Sales', 'code' => 'SALE_PROD', 'description' => 'Revenue from products'],
-                ['id' => 10, 'name' => 'Service Income', 'code' => 'SALE_SERV', 'description' => 'Revenue from services'],
-                ['id' => 11, 'name' => 'Export Sales', 'code' => 'SALE_EXPORT', 'description' => 'Revenue from exports'],
+            [
+                'id' => 1000004,
+                'name' => 'Stock-in-Hand',
+                'code' => 'STOCK',
+                'account_group_id' => 10004,
+                'description' => 'Inventory of goods',
+                'is_system' => true,
+                'is_hidden' => false,
             ],
-            'PUR' => [
-                ['id' => 12, 'name' => 'Raw Material Purchases', 'code' => 'PUR_RAW', 'description' => 'Purchase of raw materials'],
-                ['id' => 13, 'name' => 'Finished Goods Purchases', 'code' => 'PUR_FINISH', 'description' => 'Purchase of finished goods'],
-                ['id' => 14, 'name' => 'Service Purchases', 'code' => 'PUR_SERV', 'description' => 'Expenses for purchased services'],
+            [
+                'id' => 1000005,
+                'name' => 'Input CGST',
+                'code' => 'INCGST',
+                'account_group_id' => 20002,
+                'description' => 'Input Central GST',
+                'is_system' => true,
+                'is_hidden' => false,
             ],
-            'INV' => [
-                ['id' => 15, 'name' => 'Raw Material Inventory', 'code' => 'INV_RAW', 'description' => 'Stock of raw materials'],
-                ['id' => 16, 'name' => 'Work in Progress Inventory', 'code' => 'INV_WIP', 'description' => 'Stock of work in progress'],
-                ['id' => 17, 'name' => 'Finished Goods Inventory', 'code' => 'INV_FINISH', 'description' => 'Stock of finished goods'],
+            [
+                'id' => 1000006,
+                'name' => 'Input SGST',
+                'code' => 'INSGST',
+                'account_group_id' => 20002,
+                'description' => 'Input State GST',
+                'is_system' => true,
+                'is_hidden' => false,
             ],
-            'COGS' => [
-                ['id' => 18, 'name' => 'Cost of Goods Sold', 'code' => 'COGS_MAIN', 'description' => 'Direct cost of goods sold'],
-                ['id' => 19, 'name' => 'Production Overheads', 'code' => 'COGS_OVER', 'description' => 'Overheads allocated to production'],
+            [
+                'id' => 1000007,
+                'name' => 'Input IGST',
+                'code' => 'INIGST',
+                'account_group_id' => 20002,
+                'description' => 'Input Integrated GST',
+                'is_system' => true,
+                'is_hidden' => false,
             ],
-            'EXP' => [
-                ['id' => 20, 'name' => 'Rent Expense', 'code' => 'EXP_RENT', 'description' => 'Office or warehouse rent'],
-                ['id' => 21, 'name' => 'Utilities Expense', 'code' => 'EXP_UTIL', 'description' => 'Electricity, water, internet, etc.'],
-                ['id' => 22, 'name' => 'Office Supplies Expense', 'code' => 'EXP_OFF_SUPP', 'description' => 'Stationery and supplies'],
+            [
+                'id' => 1000008,
+                'name' => 'Opening Balance Adjustment',
+                'code' => 'OPENBAL',
+                'account_group_id' => 50001, // Equity adjustment
+                'description' => 'Auto-adjustment for opening balances',
+                'is_system' => true,
+                'is_hidden' => true,
             ],
-            'SAL' => [
-                ['id' => 23, 'name' => 'Monthly Salaries', 'code' => 'SAL_MONTHLY', 'description' => 'Regular monthly salaries'],
-                ['id' => 24, 'name' => 'Overtime Payments', 'code' => 'SAL_OT', 'description' => 'Overtime wages'],
-                ['id' => 25, 'name' => 'Bonus Payments', 'code' => 'SAL_BONUS', 'description' => 'Annual/periodic bonuses'],
+
+            // ==============================
+            // 🔹 LIABILITIES (2000001–)
+            // ==============================
+            [
+                'id' => 2000001,
+                'name' => 'Accounts Payable (Creditors)',
+                'code' => 'CREDITORS',
+                'account_group_id' => 20001, // Sundry Creditors
+                'description' => 'Vendor accounts payable',
+                'is_system' => true,
+                'is_hidden' => false,
             ],
-            'CAP' => [
-                ['id' => 26, 'name' => 'Initial Capital', 'code' => 'CAP_INIT', 'description' => 'Initial owner capital'],
-                ['id' => 27, 'name' => 'Additional Capital', 'code' => 'CAP_ADD', 'description' => 'Extra funds added'],
-                ['id' => 28, 'name' => 'Drawings', 'code' => 'CAP_DRAW', 'description' => 'Owner withdrawals'],
+            [
+                'id' => 2000002,
+                'name' => 'Duties & Taxes Payable',
+                'code' => 'TAXPAY',
+                'account_group_id' => 20002, // Duties & Taxes
+                'description' => 'GST/VAT and statutory liabilities',
+                'is_system' => true,
+                'is_hidden' => false,
             ],
-            'TAX' => [
-                ['id' => 29, 'name' => 'Input GST/VAT', 'code' => 'TAX_INPUT', 'description' => 'GST/VAT paid on purchases'],
-                ['id' => 30, 'name' => 'Output GST/VAT', 'code' => 'TAX_OUTPUT', 'description' => 'GST/VAT collected on sales'],
-                ['id' => 31, 'name' => 'Income Tax Payable', 'code' => 'TAX_IT_PAY', 'description' => 'Corporate income tax liability'],
+            [
+                'id' => 2000003,
+                'name' => 'Outstanding Expenses',
+                'code' => 'OUTEXP',
+                'account_group_id' => 20003,
+                'description' => 'Accrued but unpaid expenses',
+                'is_system' => false,
+                'is_hidden' => false,
             ],
-            'FA' => [
-                ['id' => 32, 'name' => 'Machinery', 'code' => 'FA_MACHINE', 'description' => 'Machinery & equipment'],
-                ['id' => 33, 'name' => 'Furniture & Fixtures', 'code' => 'FA_FURN', 'description' => 'Office furniture and fixtures'],
-                ['id' => 34, 'name' => 'Vehicles', 'code' => 'FA_VEH', 'description' => 'Company-owned vehicles'],
+            [
+                'id' => 2000004,
+                'name' => 'Suspense Account',
+                'code' => 'SUSPENSE',
+                'account_group_id' => 20003,
+                'description' => 'Auto-adjustment suspense ledger',
+                'is_system' => true,
+                'is_hidden' => true,
             ],
-            'LOAN' => [
-                ['id' => 35, 'name' => 'Bank Loan', 'code' => 'LOAN_BANK', 'description' => 'Loans from banks'],
-                ['id' => 36, 'name' => 'Loan from Director', 'code' => 'LOAN_DIR', 'description' => 'Funds borrowed from director'],
+            [
+                'id' => 2000005,
+                'name' => 'Provision for Taxation',
+                'code' => 'PROVTAX',
+                'account_group_id' => 20003,
+                'description' => 'Provision created for tax liability',
+                'is_system' => true,
+                'is_hidden' => false,
+            ],
+            [
+                'id' => 2000006,
+                'name' => 'Output CGST',
+                'code' => 'OUTCGST',
+                'account_group_id' => 20002,
+                'description' => 'Output Central GST liability',
+                'is_system' => true,
+                'is_hidden' => false,
+            ],
+            [
+                'id' => 2000007,
+                'name' => 'Output SGST',
+                'code' => 'OUTSGST',
+                'account_group_id' => 20002,
+                'description' => 'Output State GST liability',
+                'is_system' => true,
+                'is_hidden' => false,
+            ],
+            [
+                'id' => 2000008,
+                'name' => 'Output IGST',
+                'code' => 'OUTIGST',
+                'account_group_id' => 20002,
+                'description' => 'Output Integrated GST liability',
+                'is_system' => true,
+                'is_hidden' => false,
+            ],
+
+            // ==============================
+            // 🔹 INCOME (3000001–)
+            // ==============================
+            [
+                'id' => 3000001,
+                'name' => 'Sales Account',
+                'code' => 'SALES',
+                'account_group_id' => 30001,
+                'description' => 'Sales of goods or services',
+                'is_system' => true,
+                'is_hidden' => false,
+            ],
+            [
+                'id' => 3000002,
+                'name' => 'Discount Received',
+                'code' => 'DISCIN',
+                'account_group_id' => 30002,
+                'description' => 'Discounts received from suppliers',
+                'is_system' => false,
+                'is_hidden' => false,
+            ],
+            [
+                'id' => 3000003,
+                'name' => 'Interest Income',
+                'code' => 'INTINC',
+                'account_group_id' => 30002,
+                'description' => 'Interest earned on deposits or loans',
+                'is_system' => false,
+                'is_hidden' => false,
+            ],
+            [
+                'id' => 3000004,
+                'name' => 'Foreign Exchange Gain',
+                'code' => 'FXGAIN',
+                'account_group_id' => 30002,
+                'description' => 'Gain on currency revaluation',
+                'is_system' => true,
+                'is_hidden' => true,
+            ],
+
+            // ==============================
+            // 🔹 EXPENSES (4000001–)
+            // ==============================
+            [
+                'id' => 4000001,
+                'name' => 'Purchase Account',
+                'code' => 'PURCHASE',
+                'account_group_id' => 40001,
+                'description' => 'Purchase of goods or materials',
+                'is_system' => true,
+                'is_hidden' => false,
+            ],
+            [
+                'id' => 4000002,
+                'name' => 'Freight & Carriage',
+                'code' => 'FREIGHT',
+                'account_group_id' => 40002,
+                'description' => 'Freight and delivery charges',
+                'is_system' => false,
+                'is_hidden' => false,
+            ],
+            [
+                'id' => 4000003,
+                'name' => 'Rent Expense',
+                'code' => 'RENT',
+                'account_group_id' => 40002,
+                'description' => 'Rent for office or premises',
+                'is_system' => false,
+                'is_hidden' => false,
+            ],
+            [
+                'id' => 4000004,
+                'name' => 'Rounding Off',
+                'code' => 'ROUND',
+                'account_group_id' => 40002,
+                'description' => 'Minor rounding adjustments',
+                'is_system' => true,
+                'is_hidden' => true,
+            ],
+            [
+                'id' => 4000005,
+                'name' => 'Exchange Difference Loss',
+                'code' => 'FXLOSS',
+                'account_group_id' => 40002,
+                'description' => 'Loss due to currency revaluation',
+                'is_system' => true,
+                'is_hidden' => true,
+            ],
+            [
+                'id' => 4000006,
+                'name' => 'Salary Expense',
+                'code' => 'SALARY',
+                'account_group_id' => 40002,
+                'description' => 'Employee salary and wages',
+                'is_system' => false,
+                'is_hidden' => false,
+            ],
+
+            // ==============================
+            // 🔹 EQUITY (5000001–)
+            // ==============================
+            [
+                'id' => 5000001,
+                'name' => 'Capital Account',
+                'code' => 'CAPITAL',
+                'account_group_id' => 50001,
+                'description' => 'Owner’s capital',
+                'is_system' => true,
+                'is_hidden' => false,
+            ],
+            [
+                'id' => 5000002,
+                'name' => 'Drawings',
+                'code' => 'DRAWING',
+                'account_group_id' => 50001,
+                'description' => 'Withdrawals by proprietor',
+                'is_system' => true,
+                'is_hidden' => false,
+            ],
+            [
+                'id' => 5000003,
+                'name' => 'Profit & Loss Account',
+                'code' => 'PLACC',
+                'account_group_id' => 50002,
+                'description' => 'System ledger for profit and loss summary',
+                'is_system' => true,
+                'is_hidden' => true,
             ],
         ];
 
-
-        foreach ($ledgers as $groupCode => $entries) {
-            $group = AccountGroup::where('code', $groupCode)->first();
-
-            if (!$group) {
-                continue;
-            }
-
-            foreach ($entries as $ledger) {
-                AccountLedger::updateOrCreate(
-                    ['code' => $ledger['code']],
-                    [
-                        'name' => $ledger['name'],
-                        'description' => $ledger['description'],
-                        'account_group_id' => $group->id,
-                        'status' => 'active',
-                        'icon' => null,
-                    ]
-                );
-            }
-        }
+        DB::table('account_ledgers')->insert($ledgers);
     }
 }
