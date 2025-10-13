@@ -5,6 +5,7 @@ namespace App\Modules\StockItem\Models;
 use App\Enums\CostingMethod;
 use App\Enums\MarketValuationMethod;
 use App\Enums\TypeOfSupply;
+use App\Models\BaseModel;
 use App\Modules\StockCategory\Models\StockCategory;
 use App\Modules\StockGroup\Models\StockGroup;
 use App\Modules\StockItemPrice\Models\StockItemPrice;
@@ -15,7 +16,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
-class StockItem extends Model
+class StockItem extends BaseModel
 {
     use HasFactory;
 
@@ -69,7 +70,7 @@ class StockItem extends Model
 
     ];
 
-    protected $casts = [
+    protected static array $baseCasts = [
         'created_at' => 'datetime',
         'updated_at' => 'datetime',
         'is_negative_sales_allow' => 'boolean',
@@ -92,9 +93,8 @@ class StockItem extends Model
         'is_sales_as_new_manufacture' => 'boolean',
         'is_purchase_as_consumed' => 'boolean',
         'is_rejection_as_scrap' => 'boolean',
-
-
     ];
+
 
     public function stock_item_prices(): HasMany
     {
