@@ -15,11 +15,18 @@ class UserRequest extends FormRequest
     {
         $rules = [
             'name' => ['required', 'string', 'max:255'],
+            'password' => ['sometimes', 'required', 'string', 'max:255'],
+            'username' => ['sometimes', 'required', 'string', 'max:255', 'unique:users,username'],
+            'email' => ['required', 'string', 'max:255', 'unique:users,email'],
+            'status' => ['sometimes', 'required', 'string', 'max:255'],
         ];
 
         // For update requests, make validation more flexible
         if ($this->isMethod('PUT') || $this->isMethod('PATCH')) {
-            $rules['name'] = ['sometimes', 'required', 'string', 'max:255'];
+            $id = $this->route('user');
+            $rules['username'] = ['sometimes', 'required', 'string', 'max:255', 'unique:users,username,' . $id];
+            $rules['email'] = ['sometimes', 'required', 'string', 'max:255', 'unique:users,email,' . $id];
+
         }
 
         return $rules;

@@ -9,7 +9,7 @@ class DepartmentSeeder extends Seeder
 {
     public function run(): void
     {
-        Department::create(['name' => 'Sample Department']);
+        Department::create(['id' => '101', 'name' => 'Primary', 'code' => 'PRI', 'status' => 'active']);
 
         // Uncomment to use factory if available
         // Department::factory()->count(10)->create();

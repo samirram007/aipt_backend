@@ -9,7 +9,7 @@ class GradeSeeder extends Seeder
 {
     public function run(): void
     {
-        Grade::create(['name' => 'Sample Grade']);
+        Grade::create(['id' => '101', 'name' => 'Primary', 'code' => 'PRI', 'status' => 'active']);
 
         // Uncomment to use factory if available
         // Grade::factory()->count(10)->create();

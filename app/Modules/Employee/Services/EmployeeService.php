@@ -23,11 +23,15 @@ class EmployeeService implements EmployeeServiceInterface
 
     public function store(array $data): Employee
     {
-        if (empty($data['code'])) {
-            $data['code'] = $this->getUniqueCode();
-        }
-        $employee = Employee::create($data);
 
+        if (empty($data['code'])) {
+
+            $data['code'] = Employee::getUniqueCode();
+            //dd($data);
+        }
+
+        $employee = Employee::create($data);
+        // dd($data);
         if ($data['address']) {
 
             $data['address']['address_type'] = 'office';

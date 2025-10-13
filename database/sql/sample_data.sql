@@ -70,9 +70,17 @@
 -- Dumping data for table aipt.telescope_monitoring: ~0 rows (approximately)
 
 -- Dumping data for table aipt.users: ~2 rows (approximately)
-INSERT INTO `users` (`id`, `name`,`user_type`, `email`, `email_verified_at`, `password`, `remember_token`, `created_at`, `updated_at`) VALUES
-	(1, 'Admin User', 'admin', 'admin@admin.com', '2025-06-14 17:39:14', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'yaQRzRT1BQ', '2025-06-14 17:39:14', '2025-06-14 17:39:14'),
-	(2, 'Manager User', 'user','manager@admin.com', '2025-06-14 17:39:14', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'zuUppGB7Bl', '2025-06-14 17:39:14', '2025-06-14 17:39:14');
+INSERT INTO `users` (`id`, `name`,`username`,`user_type`, `email`, `email_verified_at`, `password`, `remember_token`,`status`, `created_at`, `updated_at`) VALUES
+	(1, 'Admin User', 'admin@admin.com','admin', 'admin@admin.com', '2025-06-14 17:39:14', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'yaQRzRT1BQ','active', '2025-06-14 17:39:14', '2025-06-14 17:39:14'),
+	(2, 'Manager User', 'manager@admin.com', 'user','manager@admin.com', '2025-06-14 17:39:14', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'zuUppGB7Bl','active', '2025-06-14 17:39:14', '2025-06-14 17:39:14');
+
+
+INSERT INTO `shifts` (`id`, `name`, `code`, `status`, `icon`, `created_at`, `updated_at`) VALUES
+	(101, 'Morning Shift', 'MS', 'active', NULL, '2025-10-12 22:03:40', '2025-10-12 22:03:40'),
+	(102, 'Day Shift', 'DS', 'active', NULL, '2025-10-12 22:05:41', '2025-10-12 22:05:41'),
+	(103, 'Evening Shift', 'ES', 'active', NULL, '2025-10-12 22:05:50', '2025-10-12 22:05:50'),
+	(104, 'Night Shift', 'NS', 'active', NULL, '2025-10-12 22:06:02', '2025-10-12 22:06:02');
+
 
 -- Dumping data for table aipt.vouchers: ~0 rows (approximately)
 

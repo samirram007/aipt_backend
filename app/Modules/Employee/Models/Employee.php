@@ -2,9 +2,13 @@
 
 namespace App\Modules\Employee\Models;
 
+use App\Modules\AccountLedger\Models\AccountLedger;
 use App\Modules\Address\Models\Address;
 use App\Modules\Department\Models\Department;
 use App\Modules\Designation\Models\Designation;
+use App\Modules\EmployeeGroup\Models\EmployeeGroup;
+use App\Modules\Grade\Models\Grade;
+use App\Modules\Shift\Models\Shift;
 use App\Modules\User\Models\User;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -28,6 +32,9 @@ class Employee extends Model
         'pan',
         'department_id',
         'designation_id',
+        'employee_group_id',
+        'shift_id',
+        'grade_id',
         'status',
         'image',
 
@@ -36,6 +43,8 @@ class Employee extends Model
     protected $casts = [
         'created_at' => 'datetime',
         'updated_at' => 'datetime',
+        'dob' => 'date',
+        'doj' => 'date',
     ];
 
     public static function getUniqueCode(): string
@@ -78,5 +87,17 @@ class Employee extends Model
     public function designation(): BelongsTo
     {
         return $this->belongsTo(Designation::class, 'designation_id', 'id');
+    }
+    public function shift(): BelongsTo
+    {
+        return $this->belongsTo(Shift::class, 'shift_id', 'id');
+    }
+    public function grade(): BelongsTo
+    {
+        return $this->belongsTo(Grade::class, 'grade_id', 'id');
+    }
+    public function account_ledger(): MorphOne
+    {
+        return $this->morphOne(AccountLedger::class, 'ledgerable');
     }
 }

@@ -20,7 +20,7 @@ class UserResource extends JsonResource
      *     @OA\Property(property="role", type="string", example="admin"),
      *     @OA\Property(property="contactNo", type="string", example="1234567890"),
      * )
-    */
+     */
     public function toArray(Request $request): array
     {
         return [
@@ -30,7 +30,7 @@ class UserResource extends JsonResource
             'username' => $this->username,
             'userType' => $this->user_type,
             'role' => $this->user_type,
-            'contactNo' => $this->contact_no,
+            'status' => $this->status
         ];
     }
 }

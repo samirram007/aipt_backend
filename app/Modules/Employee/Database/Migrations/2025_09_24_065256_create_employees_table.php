@@ -19,6 +19,9 @@ return new class extends Migration {
             $table->string('pan')->nullable();
             $table->unsignedBigInteger('department_id')->nullable();
             $table->unsignedBigInteger('designation_id')->nullable();
+            $table->unsignedBigInteger('shift_id')->nullable();
+            $table->unsignedBigInteger('grade_id')->nullable();
+            $table->unsignedBigInteger('employee_group_id')->nullable();
 
             $table->string('status')->default('active');
             $table->string('image')->nullable();
