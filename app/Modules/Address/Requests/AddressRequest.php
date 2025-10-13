@@ -17,7 +17,7 @@ class AddressRequest extends FormRequest
 
         $rules = [
             'id' => ['sometimes', 'nullable', 'numeric', 'exists:addresses,id'],
-            'line1' => ['required', 'string', 'max:255'],
+            'line1' => ['sometimes', 'nullable', 'string', 'max:255'],
             'line2' => ['sometimes', 'nullable', 'string', 'max:255'],
             'landmark' => ['sometimes', 'nullable', 'string', 'max:255'],
             'city' => ['sometimes', 'nullable', 'string', 'max:100'],

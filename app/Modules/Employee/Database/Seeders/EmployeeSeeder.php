@@ -9,7 +9,7 @@ class EmployeeSeeder extends Seeder
 {
     public function run(): void
     {
-        Employee::create(['name' => 'Sample Employee']);
+        // Employee::create(['name' => 'Sample Employee']);
 
         // Uncomment to use factory if available
         // Employee::factory()->count(10)->create();

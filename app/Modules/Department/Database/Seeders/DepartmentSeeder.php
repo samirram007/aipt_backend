@@ -10,20 +10,21 @@ class DepartmentSeeder extends Seeder
 {
     public function run(): void
     {
-        $departments = [
-            ['name' => 'Biochemistry', 'code' => 'BIOC', 'status' => 'active'],
-            ['name' => 'Microbiology', 'code' => 'MICR', 'status' => 'active'],
-            ['name' => 'Hematology', 'code' => 'HEMA', 'status' => 'active'],
-            ['name' => 'Pathology', 'code' => 'PATH', 'status' => 'active'],
-            ['name' => 'Radiology', 'code' => 'RADI', 'status' => 'active'],
-            ['name' => 'Immunology', 'code' => 'IMMU', 'status' => 'active'],
-            ['name' => 'Pharmacology', 'code' => 'PHAR', 'status' => 'active'],
-        ];
+        // $departments = [
+        //     ['name' => 'Biochemistry', 'code' => 'BIOC', 'status' => 'active'],
+        //     ['name' => 'Microbiology', 'code' => 'MICR', 'status' => 'active'],
+        //     ['name' => 'Hematology', 'code' => 'HEMA', 'status' => 'active'],
+        //     ['name' => 'Pathology', 'code' => 'PATH', 'status' => 'active'],
+        //     ['name' => 'Radiology', 'code' => 'RADI', 'status' => 'active'],
+        //     ['name' => 'Immunology', 'code' => 'IMMU', 'status' => 'active'],
+        //     ['name' => 'Pharmacology', 'code' => 'PHAR', 'status' => 'active'],
+        // ];
 
-        foreach ($departments as $dept) {
-            Department::create($dept);
-        }
+        // foreach ($departments as $dept) {
+        //     Department::create($dept);
+        // }
 
+        Department::create(['id' => '101', 'name' => 'Primary', 'code' => 'PRI', 'status' => 'active']);
 
         // Uncomment to use factory if available
         // Department::factory()->count(10)->create();

@@ -24,13 +24,15 @@ class EmployeeService implements EmployeeServiceInterface
 
     public function store(array $data): Employee
     {
-        if (empty($data['code'])) {
-            $data['code'] = Employee::getUniqueCode();
-        }
-            $data['dob'] = isset($data['dob']) ? Carbon::parse($data['dob'])->toDateString() : null;
-            $data['doj'] = isset($data['doj']) ? Carbon::parse($data['doj'])->toDateString() : null;
-        $employee = Employee::create($data);
 
+        if (empty($data['code'])) {
+
+            $data['code'] = Employee::getUniqueCode();
+            //dd($data);
+        }
+
+        $employee = Employee::create($data);
+        // dd($data);
         if ($data['address']) {
 
             $data['address']['address_type'] = 'office';

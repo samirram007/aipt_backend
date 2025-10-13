@@ -5,6 +5,9 @@ namespace App\Modules\Employee\Resources;
 use App\Modules\Address\Resources\AddressResource;
 use App\Modules\Department\Resources\DepartmentResource;
 use App\Modules\Designation\Resources\DesignationResource;
+use App\Modules\EmployeeGroup\Resources\EmployeeGroupResource;
+use App\Modules\Grade\Resources\GradeResource;
+use App\Modules\Shift\Resources\ShiftResource;
 use Illuminate\Http\Request;
 
 use App\Http\Resources\SuccessResource;
@@ -26,8 +29,14 @@ class EmployeeResource extends SuccessResource
             'status' => $this->status,
             'departmentId' => $this->department_id,
             'designationId' => $this->designation_id,
+            'employeeGroupId' => $this->employee_group_id,
+            'shiftId' => $this->shift_id,
+            'gradeId' => $this->grade_id,
             'department' => DepartmentResource::make($this->whenLoaded('department')),
             'designation' => DesignationResource::make($this->whenLoaded('designation')),
+            'employeeGroup' => EmployeeGroupResource::make($this->whenLoaded('employee_group')),
+            'shift' => ShiftResource::make($this->whenLoaded('shift')),
+            'grade' => GradeResource::make($this->whenLoaded('grade')),
             'address' => AddressResource::make($this->whenLoaded('address')),
 
         ];

@@ -5,6 +5,12 @@ namespace Database\Seeders;
 use App\Models\User;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use App\Modules\Currency\Database\Seeders\CurrencySeeder;
+use App\Modules\Department\Database\Seeders\DepartmentSeeder;
+use App\Modules\Department\Models\Department;
+use App\Modules\Designation\Database\Seeders\DesignationSeeder;
+use App\Modules\EmployeeGroup\Database\Seeders\EmployeeGroupSeeder;
+use App\Modules\Grade\Database\Seeders\GradeSeeder;
+use App\Modules\Shift\Database\Seeders\ShiftSeeder;
 use App\Modules\Voucher\Database\Seeders\VoucherSeeder;
 use App\Modules\VoucherEntry\Database\Seeders\VoucherEntrySeeder;
 use Illuminate\Support\Str;
@@ -83,6 +89,10 @@ class DatabaseSeeder extends Seeder
             StockItemSeeder::class,
                 // PurchaseSeeder::class
             GodownSeeder::class,
+            DepartmentSeeder::class,
+            DesignationSeeder::class,
+            GradeSeeder::class,
+                // ShiftSeeder::class,
 
             // VoucherSeeder::class,
             // VoucherEntrySeeder::class,
@@ -92,6 +102,8 @@ class DatabaseSeeder extends Seeder
             DepartmentSeeder::class,
             DesignationSeeder::class
             // PatientSeeder::class
+
+            EmployeeGroupSeeder::class,
 
         ]);
         // User::factory(10)->create();

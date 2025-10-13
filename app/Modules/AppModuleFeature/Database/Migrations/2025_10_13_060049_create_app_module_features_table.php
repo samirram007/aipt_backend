@@ -6,27 +6,22 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
     public function up(): void
     {
-        Schema::create('modules', function (Blueprint $table) {
+        Schema::create('app_module_features', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
+            $table->string('name')->unique();
             $table->string('code')->unique();
             $table->string('description')->nullable();
             $table->string('status')->default('active');
             $table->string('icon')->nullable();
+
             $table->timestamps();
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
     public function down(): void
     {
-        Schema::dropIfExists('modules');
+        Schema::dropIfExists('app_module_features');
     }
 };

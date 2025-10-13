@@ -25,9 +25,14 @@ class EmployeeRequest extends FormRequest
             'pan' => ['sometimes', 'nullable', 'string', 'max:255'],
             'department_id' => ['sometimes', 'nullable', 'exists:departments,id'],
             'designation_id' => ['sometimes', 'nullable', 'exists:designations,id'],
+            'account_group_id' => ['sometimes', 'nullable', 'exists:account_groups,id'],
+            'employee_group_id' => ['sometimes', 'nullable', 'exists:employee_groups,id'],
+            'shift_id' => ['sometimes', 'nullable', 'exists:shifts,id'],
+            'grade_id' => ['sometimes', 'nullable', 'exists:grades,id'],
             'status' => ['sometimes', 'required', 'string', 'max:255'],
             'image' => ['sometimes', 'nullable', 'string', 'max:255'],
         ];
+        //return $rules;
         $addressRules = collect((new AddressRequest())->rules())
             ->mapWithKeys(fn($rule, $key) => ["address.$key" => $rule])
             ->toArray();
@@ -39,6 +44,7 @@ class EmployeeRequest extends FormRequest
             $rules['code'] = ['sometimes', 'required', 'string', 'max:255', 'unique:employees,code,' . $id,];
 
         }
+        // dd($rules, $addressRules);
 
         return array_merge($rules, $addressRules);
 
