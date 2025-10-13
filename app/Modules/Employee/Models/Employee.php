@@ -2,6 +2,7 @@
 
 namespace App\Modules\Employee\Models;
 
+use App\Modules\AccountLedger\Models\AccountLedger;
 use App\Modules\Address\Models\Address;
 use App\Modules\Department\Models\Department;
 use App\Modules\Designation\Models\Designation;
@@ -78,5 +79,10 @@ class Employee extends Model
     public function designation(): BelongsTo
     {
         return $this->belongsTo(Designation::class, 'designation_id', 'id');
+    }
+
+    public function account_ledger(): MorphOne
+    {
+        return $this->morphOne(AccountLedger::class, 'ledgerable');
     }
 }

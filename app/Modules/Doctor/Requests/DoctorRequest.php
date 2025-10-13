@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Modules\TestItemReportTemplate\Requests;
+namespace App\Modules\Doctor\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class TestItemReportTemplateRequest extends FormRequest
+class DoctorRequest extends FormRequest
 {
     public function authorize(): bool
     {
@@ -14,16 +14,17 @@ class TestItemReportTemplateRequest extends FormRequest
     public function rules(): array
     {
         $rules = [
-            'stock_item_id' => ['required','numeric','exists:stock_items,id'],
-            'employee_id' => ['required', 'numeric', 'exists:employees,id'],
-            'report_template_name' => ['required', 'string', 'max:255'],
+            'name' => ['required', 'string', 'max:255','unique:doctors,name'],
+            'code' => ['sometimes','required', 'string', 'max:255','unique:doctors,code'],
+            'description' => ['sometimes','required', 'string', 'max:255'],
+            'status' => ['sometimes','required', 'string', 'max:255'],
         ];
 
         // For update requests, make validation more flexible
         if ($this->isMethod('PUT') || $this->isMethod('PATCH')) {
-            $id=$this->route('test_item_report_template');
-            $rules['stock_item_id'] = ['required','numeric', 'exists:stock_items,id,' . $id,];
-            $rules['employee_id'] = ['required','numeric', 'exists:employees,id,' . $id,];
+            $id=$this->route('doctor');
+            $rules['name'] = ['sometimes', 'required', 'string', 'max:255', 'unique:doctors,name,' . $id,];
+            $rules['code'] = ['sometimes', 'required', 'string', 'max:255', 'unique:doctors,code,' . $id,];
 
         }
 
