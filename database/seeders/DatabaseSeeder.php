@@ -4,12 +4,14 @@ namespace Database\Seeders;
 
 use App\Models\User;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use App\Modules\AppModule\Database\Seeders\AppModuleSeeder;
 use App\Modules\Currency\Database\Seeders\CurrencySeeder;
 use App\Modules\Department\Database\Seeders\DepartmentSeeder;
 use App\Modules\Department\Models\Department;
 use App\Modules\Designation\Database\Seeders\DesignationSeeder;
 use App\Modules\EmployeeGroup\Database\Seeders\EmployeeGroupSeeder;
 use App\Modules\Grade\Database\Seeders\GradeSeeder;
+use App\Modules\Role\Database\Seeders\RoleSeeder;
 use App\Modules\Shift\Database\Seeders\ShiftSeeder;
 use App\Modules\Voucher\Database\Seeders\VoucherSeeder;
 use App\Modules\VoucherEntry\Database\Seeders\VoucherEntrySeeder;
@@ -60,6 +62,10 @@ class DatabaseSeeder extends Seeder
 
 
         $this->call([
+
+            AppModuleSeeder::class,
+            RoleSeeder::class,
+
             CurrencySeeder::class,
             CountrySeeder::class,
             StateSeeder::class,

@@ -1,19 +1,19 @@
 <?php
 
-namespace App\Modules\Role\Resources;
+namespace App\Modules\UserRole\Resources;
 
 use Illuminate\Http\Request;
 
 use App\Http\Resources\SuccessResource;
-class RoleResource extends SuccessResource
+class UserRoleResource extends SuccessResource
 {
     public function toArray(Request $request): array
     {
         return [
             'id' => $this->id,
             'name' => $this->name,
-            'code' => $this->code,
-            'status' => $this->status,
+            'created_at' => $this->created_at?->toISOString(),
+            'updated_at' => $this->updated_at?->toISOString(),
         ];
     }
 }

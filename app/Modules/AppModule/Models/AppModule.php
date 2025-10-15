@@ -2,8 +2,10 @@
 
 namespace App\Modules\AppModule\Models;
 
+use App\Modules\AppModuleFeature\Models\AppModuleFeature;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class AppModule extends Model
 {
@@ -20,7 +22,9 @@ class AppModule extends Model
     ];
 
     protected $casts = [
-        'created_at' => 'datetime',
-        'updated_at' => 'datetime',
     ];
+    public function app_module_features(): HasMany
+    {
+        return $this->hasMany(AppModuleFeature::class, 'app_module_id');
+    }
 }

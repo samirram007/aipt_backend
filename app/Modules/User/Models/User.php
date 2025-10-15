@@ -2,8 +2,10 @@
 
 namespace App\Modules\User\Models;
 
+use App\Modules\Role\Models\Role;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Notifications\Notifiable;
 use PHPOpenSourceSaver\JWTAuth\Contracts\JWTSubject;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -48,6 +50,26 @@ class User extends Authenticatable implements JWTSubject
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+
+    public function roles(): BelongsToMany
+    {
+        return $this->belongsToMany(Role::class, 'user_roles', 'user_id', 'role_id');
+    }
+
+    // Helper: Check if user has a specific role
+    public function hasRole(string $roleName): bool
+    {
+        return $this->roles->contains('name', $roleName);
+    }
+
+    // Helper: Assign a role to the user
+    public function assignRole($role): void
+    {
+        $roleId = $role instanceof Role ? $role->id : Role::where('name', $role)->value('id');
+        if ($roleId) {
+            $this->roles()->syncWithoutDetaching([$roleId]);
+        }
     }
 
     public function userable()

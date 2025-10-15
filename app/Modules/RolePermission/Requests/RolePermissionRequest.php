@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Modules\Role\Requests;
+namespace App\Modules\RolePermission\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class RoleRequest extends FormRequest
+class RolePermissionRequest extends FormRequest
 {
     public function authorize(): bool
     {
@@ -14,16 +14,14 @@ class RoleRequest extends FormRequest
     public function rules(): array
     {
         $rules = [
-            'name' => ['required', 'string', 'max:255', 'unique:roles,name'],
-            'code' => ['sometimes', 'required', 'string', 'max:255', 'unique:roles,code'],
-            'status' => ['sometimes', 'required', 'string', 'max:255'],
+            'role_id' => ['required', 'numeric', 'exists:roles,id'],
+            'app_module_feature_id' => ['required', 'numeric', 'exists:app_module_features,id'],
+            'is_allowed' => ['required', 'boolean'],
         ];
 
         // For update requests, make validation more flexible
         if ($this->isMethod('PUT') || $this->isMethod('PATCH')) {
-            $id = $this->route('role');
-            $rules['name'] = ['sometimes', 'required', 'string', 'max:255', 'unique:roles,name,' . $id,];
-            $rules['code'] = ['sometimes', 'required', 'string', 'max:255', 'unique:roles,code,' . $id,];
+            // $id = $this->route('role_permission');
 
         }
 
@@ -33,10 +31,10 @@ class RoleRequest extends FormRequest
     public function messages(): array
     {
         return [
-            'name.required' => 'The role field is required.',
-            'name.string' => 'The role must be a string.',
-            'name.max' => 'The role may not be greater than 255 characters.',
-            'name.unique' => 'The role has already been taken.',
+            'name.required' => 'The name field is required.',
+            'name.string' => 'The name must be a string.',
+            'name.max' => 'The name may not be greater than 255 characters.',
+            'name.unique' => 'The name has already been taken.',
             'code.required' => 'The code field is required.',
             'code.string' => 'The code must be a string.',
             'code.max' => 'The code may not be greater than 255 characters.',

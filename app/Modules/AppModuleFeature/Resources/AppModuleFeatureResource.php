@@ -2,6 +2,7 @@
 
 namespace App\Modules\AppModuleFeature\Resources;
 
+use App\Modules\AppModule\Resources\AppModuleResource;
 use Illuminate\Http\Request;
 
 use App\Http\Resources\SuccessResource;
@@ -12,8 +13,13 @@ class AppModuleFeatureResource extends SuccessResource
         return [
             'id' => $this->id,
             'name' => $this->name,
-            'created_at' => $this->created_at?->toISOString(),
-            'updated_at' => $this->updated_at?->toISOString(),
+            'code' => $this->code,
+            'status' => $this->status,
+            'description' => $this->description,
+            'action' => $this->action,
+            'appModuleId' => $this->app_module_id,
+            'appModule' => AppModuleResource::make($this->whenLoaded('module')),
+
         ];
     }
 }

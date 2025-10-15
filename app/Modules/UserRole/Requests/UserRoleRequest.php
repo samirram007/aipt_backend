@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Modules\Role\Requests;
+namespace App\Modules\UserRole\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class RoleRequest extends FormRequest
+class UserRoleRequest extends FormRequest
 {
     public function authorize(): bool
     {
@@ -14,16 +14,17 @@ class RoleRequest extends FormRequest
     public function rules(): array
     {
         $rules = [
-            'name' => ['required', 'string', 'max:255', 'unique:roles,name'],
-            'code' => ['sometimes', 'required', 'string', 'max:255', 'unique:roles,code'],
-            'status' => ['sometimes', 'required', 'string', 'max:255'],
+            'name' => ['required', 'string', 'max:255','unique:user_roles,name'],
+            'code' => ['sometimes','required', 'string', 'max:255','unique:user_roles,code'],
+            'description' => ['sometimes','required', 'string', 'max:255'],
+            'status' => ['sometimes','required', 'string', 'max:255'],
         ];
 
         // For update requests, make validation more flexible
         if ($this->isMethod('PUT') || $this->isMethod('PATCH')) {
-            $id = $this->route('role');
-            $rules['name'] = ['sometimes', 'required', 'string', 'max:255', 'unique:roles,name,' . $id,];
-            $rules['code'] = ['sometimes', 'required', 'string', 'max:255', 'unique:roles,code,' . $id,];
+            $id=$this->route('user_role');
+            $rules['name'] = ['sometimes', 'required', 'string', 'max:255', 'unique:user_roles,name,' . $id,];
+            $rules['code'] = ['sometimes', 'required', 'string', 'max:255', 'unique:user_roles,code,' . $id,];
 
         }
 
@@ -33,10 +34,10 @@ class RoleRequest extends FormRequest
     public function messages(): array
     {
         return [
-            'name.required' => 'The role field is required.',
-            'name.string' => 'The role must be a string.',
-            'name.max' => 'The role may not be greater than 255 characters.',
-            'name.unique' => 'The role has already been taken.',
+            'name.required' => 'The name field is required.',
+            'name.string' => 'The name must be a string.',
+            'name.max' => 'The name may not be greater than 255 characters.',
+            'name.unique' => 'The name has already been taken.',
             'code.required' => 'The code field is required.',
             'code.string' => 'The code must be a string.',
             'code.max' => 'The code may not be greater than 255 characters.',
