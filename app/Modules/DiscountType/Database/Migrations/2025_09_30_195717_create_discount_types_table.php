@@ -13,20 +13,23 @@ return new class extends Migration
             $table->id();
             $table->string('name')->unique();
             $table->string('code')->unique()->nullable();
-            $table->enum('type',DiscountValueType::getValues())->default(DiscountValueType::Percentage->value);
+            $table->boolean('is_percentage')->default(true);
             $table->decimal('value',10,2)->default(0.00);
-            $table->boolean('is_global')->default(false);
-            $table->boolean('is_stackable')->default(false);
-            $table->string('description')->nullable();
-            $table->string('status')->default('active');
-            $table->string('icon')->nullable();
+            // $table->enum('type',DiscountValueType::getValues())->default(DiscountValueType::Percentage->value);
+            // $table->decimal('value',10,2)->default(0.00);
+            // $table->boolean('is_global')->default(false);
+            // $table->boolean('is_stackable')->default(false);
+            // $table->string('description')->nullable();
+            // $table->string('status')->default('active');
+            // $table->string('icon')->nullable();
 
-            // polymorphic relation using short type
-            $table->unsignedBigInteger('discountable_id');
-            $table->string('discountable_type');
+            // // polymorphic relation using short type
+            // $table->unsignedBigInteger('discountable_id');
+            // $table->string('discountable_type');
+            // $table->index(['discountable_id','discountable_type']);
+
 
             $table->timestamps();
-            $table->index(['discountable_id','discountable_type']);
         });
     }
 

@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Collection;
 
 class JobOrderService implements JobOrderServiceInterface
 {
-    protected $resource=[];
+    protected $resource=['test_item.test_item_report_templates.doctor'];
 
     public function getAll(): Collection
     {
@@ -22,7 +22,14 @@ class JobOrderService implements JobOrderServiceInterface
 
     public function store(array $data): JobOrder
     {
-        return JobOrder::create($data);
+        return JobOrder::create([
+            "stock_journal_entry_id" => $data["stock_journal_entry_id"],
+            "stock_item_id" => $data["stock_item_id"],
+            "status" => $data["status"],
+            "expected_start_date" => $data["start_date"],
+            "expected_end_date" => $data["end_date"],
+            "voucher_id" => $data["voucher_id"]
+        ]);
     }
 
     public function update(array $data, int $id): JobOrder

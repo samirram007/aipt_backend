@@ -3,6 +3,7 @@
 namespace App\Modules\TestItemReportTemplate\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class TestItemReportTemplateRequest extends FormRequest
 {
@@ -13,11 +14,24 @@ class TestItemReportTemplateRequest extends FormRequest
 
     public function rules(): array
     {
+        $id = $this->route('test_item_report_template'); // current record id
+
         $rules = [
-            'stock_item_id' => ['required','numeric','exists:stock_items,id'],
-            'employee_id' => ['required', 'numeric', 'exists:employees,id'],
-            'report_template_name' => ['required', 'string', 'max:255'],
+        'test_item_id' => ['required','numeric','exists:stock_items,id'],
+        'doctor_id' => ['required','numeric','exists:employees,id'],
+        'report_template_name' => [
+            'required',
+            'string',
+            'max:255',
+            Rule::unique('test_item_report_templates')
+                ->where(function ($query) {
+                    return $query->where('doctor_id', $this->doctor_id)
+                                    ->where('test_item_id', $this->test_item_id);
+                })
+                ->ignore($id) // ignore current record on update
+        ],
         ];
+
 
         // For update requests, make validation more flexible
         if ($this->isMethod('PUT') || $this->isMethod('PATCH')) {

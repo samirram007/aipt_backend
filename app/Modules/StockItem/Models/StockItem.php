@@ -100,6 +100,7 @@ class StockItem extends Model
         'is_sample_required' => 'boolean',
     ];
 
+
     public function stock_item_prices(): HasMany
     {
         return $this->hasMany(StockItemPrice::class,'stock_price_id','id');
@@ -124,4 +125,5 @@ class StockItem extends Model
     {
         return $this->belongsTo(UniqueQuantityCode::class,'unique_quantity_id','id');
     }
+
 }

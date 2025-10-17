@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Http\Controllers\Api;
 
 
@@ -20,4 +21,20 @@ class FileController
         return response()->json(['data' => $templates]);
     }
 
+    public function downloadTemplate(string $filename)
+    {
+        $filePath = 'reportTemplate/' . $filename;
+
+        if (!Storage::disk('public')->exists($filePath)) {
+            return response()->json(['message' => 'File not found'], 404);
+        }
+
+        $fullPath = Storage::disk('public')->path($filePath);
+
+        return response()->download(
+            $fullPath,
+            $filename,
+            ['Content-Type' => 'application/vnd.openxmlformats-officedocument.wordprocessingml.document']
+        );
+    }
 }

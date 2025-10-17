@@ -6,6 +6,8 @@ use App\Modules\StockUnit\Resources\StockUnitResource;
 use Illuminate\Http\Request;
 
 use App\Http\Resources\SuccessResource;
+use App\Modules\JobOrder\Resources\JobOrderResource;
+
 class StockItemResource extends SuccessResource
 {
 
@@ -59,7 +61,11 @@ class StockItemResource extends SuccessResource
             'status' => $this->status,
             'createdAt' => $this->created_at,
             'updatedAt' => $this->updated_at,
-
+            'isPackage' => $this->is_package,
+            'isSampleRequired'=> $this->is_sample_required,
+            'sampleName'=> $this->sample_name,
+            'processDuration' => $this->process_duration,
+            'processType'=> $this->process_type,
 
             'stockUnit' => StockUnitResource::make($this->whenLoaded('stock_unit')),
             'alternateStockUnit' => StockUnitResource::make($this->whenLoaded('alternate_stock_unit'))

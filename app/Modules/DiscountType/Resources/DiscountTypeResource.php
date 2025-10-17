@@ -12,8 +12,9 @@ class DiscountTypeResource extends SuccessResource
         return [
             'id' => $this->id,
             'name' => $this->name,
-            'created_at' => $this->created_at?->toISOString(),
-            'updated_at' => $this->updated_at?->toISOString(),
+            'code'=> $this->code,
+            'isPercentage'=> $this->is_percentage,
+            'value' => $this->value
         ];
     }
 }

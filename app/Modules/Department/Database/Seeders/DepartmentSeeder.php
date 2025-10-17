@@ -10,23 +10,20 @@ class DepartmentSeeder extends Seeder
 {
     public function run(): void
     {
-        // $departments = [
-        //     ['name' => 'Biochemistry', 'code' => 'BIOC', 'status' => 'active'],
-        //     ['name' => 'Microbiology', 'code' => 'MICR', 'status' => 'active'],
-        //     ['name' => 'Hematology', 'code' => 'HEMA', 'status' => 'active'],
-        //     ['name' => 'Pathology', 'code' => 'PATH', 'status' => 'active'],
-        //     ['name' => 'Radiology', 'code' => 'RADI', 'status' => 'active'],
-        //     ['name' => 'Immunology', 'code' => 'IMMU', 'status' => 'active'],
-        //     ['name' => 'Pharmacology', 'code' => 'PHAR', 'status' => 'active'],
-        // ];
+        $departments = [
+            ['id' => 101, 'name' => 'Primary', 'code' => 'PRI', 'status' => 'active'],
+            ['id' => 102, 'name' => 'Biochemistry', 'code' => 'BIOC', 'status' => 'active'],
+            ['id' => 103, 'name' => 'Microbiology', 'code' => 'MICR', 'status' => 'active'],
+            ['id' => 104, 'name' => 'Hematology', 'code' => 'HEMA', 'status' => 'active'],
+            ['id' => 105, 'name' => 'Pathology', 'code' => 'PATH', 'status' => 'active'],
+            ['id' => 106, 'name' => 'Radiology', 'code' => 'RADI', 'status' => 'active'],
+            ['id' => 107, 'name' => 'Immunology', 'code' => 'IMMU', 'status' => 'active'],
+            ['id' => 108, 'name' => 'Pharmacology', 'code' => 'PHAR', 'status' => 'active'],
+        ];
 
-        // foreach ($departments as $dept) {
-        //     Department::create($dept);
-        // }
+        foreach ($departments as $dept) {
+            Department::create($dept);
+        }
 
-        Department::create(['id' => '101', 'name' => 'Primary', 'code' => 'PRI', 'status' => 'active']);
-
-        // Uncomment to use factory if available
-        // Department::factory()->count(10)->create();
     }
 }

@@ -12,13 +12,15 @@ return new class extends Migration
     {
         Schema::create('job_orders', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('patient_id');
-            $table->unsignedBigInteger('voucher_id');
-            $table->unsignedBigInteger('stock_journal_id');
+            $table->unsignedBigInteger('voucher_id')->nullable();
+            $table->unsignedBigInteger('stock_journal_id')->nullable();
             $table->unsignedBigInteger('stock_journal_entry_id');
+            $table->date('expected_start_date')->nullable();
+            $table->date('expected_end_date')->nullable();
+            $table->date('actual_start_date')->nullable();
+            $table->date('actual_end_date')->nullable();
             $table->enum('status',JobStatus::getValues())->default(JobStatus::Booked->value);
-            $table->enum('payment_status',PaymentStatus::getValues())->default(PaymentStatus::Pending->value);
-            $table->date('report_date')->nullable();
+            $table->unsignedBigInteger('stock_item_id')->nullable();
             $table->timestamps();
         });
     }

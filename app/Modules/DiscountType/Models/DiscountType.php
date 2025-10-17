@@ -14,14 +14,13 @@ class DiscountType extends Model
     protected $fillable = [
         'name',
         'code',
-        'description',
-        'status',
-        'value',
-        'icon'
+        'is_percentage',
+        'value'
     ];
 
     protected $casts = [
- 'created_at' => 'datetime',
+        'created_at' => 'datetime',
         'updated_at' => 'datetime',
+        'is_percentage' => 'boolean'
     ];
 }

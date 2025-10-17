@@ -14,18 +14,13 @@ class JobOrderRequest extends FormRequest
     public function rules(): array
     {
         $rules = [
-            'patient_id' => ['required', 'numeric', 'exists:patients,id'],
+            'stock_journal_id' => ['sometimes','required','numeric', 'exists:stock_journals,id'],
+            'stock_journal_entry_id' => ['required','numeric', 'exists:stock_journal_entries,id'],
+            'stock_item_id' => ['required','numeric', 'exists:stock_items,id'],
+            'status' => ['required', 'string', 'max:255'],
+            'start_date' => ['sometimes','required','date'],
+            'end_date' => ['sometimes','required','date'],
             'voucher_id' => ['required', 'numeric', 'exists:vouchers,id'],
-            'status' => ['sometimes', 'required', 'in:booked,sample_collected,in_process,completed,delivered,cancelled,drafted'],
-            'payment_status' => ['sometimes', 'required', 'in:pending,partial,completed'],
-            'priority' => ['sometimes', 'required', 'in:normal,urgent,critical'],
-            'booked_date' => ['sometimes','nullable', 'date'],
-            'expected_delivery_date' => ['sometimes','nullable', 'date'],
-            'report_generated_date' => ['sometimes','nullable', 'date'],
-            'report_delivered_date' => ['sometimes','nullable', 'date'],
-            'cancelled_date' => ['sometimes','nullable', 'date'],
-            'report_file_path' => ['nullable', 'string', 'max:255'],
-            'remarks' => ['nullable', 'string', 'max:255'],
         ];
 
         // If updating (PUT/PATCH), make some rules optional

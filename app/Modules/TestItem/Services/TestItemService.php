@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Collection;
 
 class TestItemService implements TestItemServiceInterface
 {
-    protected $resource = ['stock_unit', 'alternate_stock_unit','stock_category'];
+    protected $resource = ['stock_unit', 'alternate_stock_unit','stock_category','test_item_report_templates.doctor'];
 
     public function getAll(): Collection
     {

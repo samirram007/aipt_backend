@@ -42,9 +42,9 @@ use App\Modules\AccountGroup\Database\Seeders\AccountGroupSeeder;
 use App\Modules\AccountLedger\Database\Seeders\AccountLedgerSeeder;
 use App\Modules\AccountNature\Database\Seeders\AccountNatureSeeder;
 use App\Modules\Agent\Database\Seeders\AgentSeeder;
-use App\Modules\Department\Database\Seeders\DepartmentSeeder;
-use App\Modules\Designation\Database\Seeders\DesignationSeeder;
 use App\Modules\Discipline\Database\Seeders\DisciplineSeeder;
+use App\Modules\DiscountType\Database\Seeders\DiscountTypeSeeder;
+use App\Modules\Employee\Database\Seeders\EmployeeSeeder;
 use App\Modules\Patient\Database\Seeders\PatientSeeder;
 use App\Modules\Physician\Database\Seeders\PhysicianSeeder;
 use App\Modules\StockCategory\Database\Seeders\StockCategorySeeder;
@@ -89,8 +89,6 @@ class DatabaseSeeder extends Seeder
             StockItemSeeder::class,
                 // PurchaseSeeder::class
             GodownSeeder::class,
-            DepartmentSeeder::class,
-            DesignationSeeder::class,
             GradeSeeder::class,
                 // ShiftSeeder::class,
 
@@ -100,10 +98,12 @@ class DatabaseSeeder extends Seeder
             AgentSeeder::class,
             PhysicianSeeder::class,
             DepartmentSeeder::class,
-            DesignationSeeder::class
+            DesignationSeeder::class,
             // PatientSeeder::class
 
             EmployeeGroupSeeder::class,
+            DiscountTypeSeeder::class,
+               EmployeeSeeder::class,
 
         ]);
         // User::factory(10)->create();

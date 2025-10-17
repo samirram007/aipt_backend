@@ -10,10 +10,14 @@ return new class extends Migration
     {
         Schema::create('test_item_report_templates', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('stock_item_id');
+            $table->unsignedBigInteger('test_item_id');
             $table->string('code')->unique()->nullable();
-            $table->unsignedBigInteger('employee_id')->nullable();
-            $table->string('report_template_name')->default('active');
+            $table->unsignedBigInteger('doctor_id')->nullable();
+            $table->string('report_template_name');
+            $table->unique(
+                ['test_item_id', 'doctor_id', 'report_template_name'],
+                'unique_test_item_doctor_template_name'
+            );
             $table->timestamps();
         });
     }

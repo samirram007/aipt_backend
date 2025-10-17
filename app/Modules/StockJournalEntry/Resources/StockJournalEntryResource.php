@@ -5,6 +5,7 @@ namespace App\Modules\StockJournalEntry\Resources;
 use Illuminate\Http\Request;
 
 use App\Http\Resources\SuccessResource;
+use App\Modules\JobOrder\Resources\JobOrderResource;
 use App\Modules\StockItem\Resources\StockItemResource;
 use App\Modules\StockJournal\Resources\StockJournalResource;
 use App\Modules\StockUnit\Resources\StockUnitResource;
@@ -29,6 +30,7 @@ class StockJournalEntryResource extends SuccessResource
             'stockJournal'=> new StockJournalResource($this->whenLoaded('stock_journal')),
             'stockItem'=> new StockItemResource($this->whenLoaded('stock_item')),
             'stockUnit'=> new StockUnitResource($this->whenLoaded('stock_unit')),
+            'jobOrder' => JobOrderResource::make($this->whenLoaded('job_order')),
         ];
     }
 }

@@ -6,16 +6,21 @@ use App\Enums\CostingMethod;
 use App\Enums\MarketValuationMethod;
 use App\Enums\TypeOfSupply;
 use App\Modules\StockItem\Models\StockItem;
+use App\Modules\TestItemReportTemplate\Models\TestItemReportTemplate;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class TestItem extends StockItem
 {
     use HasFactory;
 
 
+
+
+
     protected $casts = [
- 'created_at' => 'datetime',
+        'created_at' => 'datetime',
         'updated_at' => 'datetime',
         'is_negative_sales_allow' => 'boolean',
         'is_maintain_batch' => 'boolean',
@@ -40,4 +45,9 @@ class TestItem extends StockItem
         'is_package' => 'boolean',
         'is_sample_required' => 'boolean',
     ];
+
+    public function test_item_report_templates():HasMany
+    {
+        return $this->hasMany(TestItemReportTemplate::class,'test_item_id','id');
+    }
 }

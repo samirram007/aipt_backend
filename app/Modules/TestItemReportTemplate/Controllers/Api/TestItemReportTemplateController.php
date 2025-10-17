@@ -24,10 +24,15 @@ class TestItemReportTemplateController extends Controller
         return new TestItemReportTemplateCollection($data);
     }
 
-    public function show(int $id): SuccessResource
+    public function show(int $id): SuccessCollection
     {
-        $data = $this->service->getById($id);
-        return  new TestItemReportTemplateResource($data);
+        $data = $this->service->getByTestId($id);
+        return  new  TestItemReportTemplateCollection($data);
+    }
+    public function showTestById(int $id): SuccessCollection
+    {
+        $data = $this->service->getByTestId($id);
+        return  new TestItemReportTemplateCollection($data);
     }
 
     public function store(TestItemReportTemplateRequest $request): SuccessResource

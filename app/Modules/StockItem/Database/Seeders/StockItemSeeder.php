@@ -112,7 +112,8 @@ class StockItemSeeder extends Seeder
             "standard_cost" => 300.00,
             "standard_selling_price" => 500.00,
             'icon' => null,
-            "status" => "active"
+            "status" => "active",
+            "is_sample_required" => true
         ]);
         StockItem::create([
             "name"=> "Thyroid Function Test (TFT)",
@@ -147,7 +148,8 @@ class StockItemSeeder extends Seeder
             "standard_cost" => 300.00,
             "standard_selling_price" => 450.00,
             'icon' => null,
-            "status" => "active"
+            "status" => "active",
+            "is_sample_required" => false
         ]);
     }
 }

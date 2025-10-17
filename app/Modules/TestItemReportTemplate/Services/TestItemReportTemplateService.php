@@ -8,21 +8,31 @@ use Illuminate\Database\Eloquent\Collection;
 
 class TestItemReportTemplateService implements TestItemReportTemplateServiceInterface
 {
-    protected $resource=[];
+    protected $resource=['doctor','test_item'];
 
     public function getAll(): Collection
     {
         return TestItemReportTemplate::with($this->resource)->get();
     }
 
-    public function getById(int $id): ?TestItemReportTemplate
+    public function getById(int $id): Collection
     {
-        return TestItemReportTemplate::with($this->resource)->findOrFail($id);
+         return TestItemReportTemplate::with($this->resource)
+        ->where('test_item_id', $id)
+        ->get();
+    }
+
+    public function getByTestId(int $id): Collection
+    {
+           return TestItemReportTemplate::with($this->resource)
+        ->where('test_item_id', $id)
+        ->get();
     }
 
     public function store(array $data): TestItemReportTemplate
     {
-        return TestItemReportTemplate::create($data);
+        $result = TestItemReportTemplate::create($data);
+        return $result->load($this->resource);
     }
 
     public function update(array $data, int $id): TestItemReportTemplate

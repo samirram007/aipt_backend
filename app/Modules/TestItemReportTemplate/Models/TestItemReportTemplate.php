@@ -2,7 +2,8 @@
 
 namespace App\Modules\TestItemReportTemplate\Models;
 
-use App\Modules\Employee\Models\Employee;
+use App\Modules\Doctor\Models\Doctor;
+use App\Modules\TestItem\Models\TestItem;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -14,8 +15,8 @@ class TestItemReportTemplate extends Model
     protected $table = 'test_item_report_templates';
 
     protected $fillable = [
-        'stock_item_id',
-        'employee_id',
+        'test_item_id',
+        'doctor_id',
         'report_template_name',
 
     ];
@@ -25,8 +26,13 @@ class TestItemReportTemplate extends Model
         'updated_at' => 'datetime',
     ];
 
-    public function employee(): BelongsTo
+    public function doctor(): BelongsTo
     {
-        return $this->belongsTo(Employee::class,'employee_id','id');
+        return $this->belongsTo(Doctor::class,'doctor_id','id');
     }
+    public function test_item(): BelongsTo
+    {
+        return $this->belongsTo(TestItem::class,'test_item_id','id');
+    }
+
 }

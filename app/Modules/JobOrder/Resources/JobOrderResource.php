@@ -5,23 +5,24 @@ namespace App\Modules\JobOrder\Resources;
 use Illuminate\Http\Request;
 
 use App\Http\Resources\SuccessResource;
+use App\Modules\TestItem\Resources\TestItemResource;
+
 class JobOrderResource extends SuccessResource
 {
     public function toArray(Request $request): array
     {
         return [
             'id' => $this->id,
-            'patientId' => $this->patient_id,
-            'voucherId' => $this->voucher_id,
+            'stockJournalId' => $this->stock_journal_id,
+            'stockJournalEntryId' => $this->stock_journal_entry_id,
             'status'=> $this->status,
-            'paymentStatus' => $this->payment_status,
-            'bookedDate' => $this->booked_date,
-            'expectedDeliveryDate' => $this->expected_delivery_date,
-            'report_generated_date' => $this->report_generated_date,
-            'report_delivered_date' => $this->report_delivered_date,
-            'cancelled_date' => $this->cancelled_date,
-            'report_file_path' => $this->report_file_path,
-            'remarks' => $this->remarks
+            'stockItemId' => $this->stock_item_id,
+            'expectedStartDate' => $this->expected_start_date,
+            'expectedEndDate' => $this->expected_end_date,
+            'actualStartDate' => $this->actual_start_date,
+            'actualEndDate' => $this->actual_end_date,
+            'testItem' => TestItemResource::make($this->whenLoaded('test_item')),
+
         ];
     }
 }

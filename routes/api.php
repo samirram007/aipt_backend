@@ -71,6 +71,7 @@ Route::middleware(['jwt.cookies'])->group(function () {
     // Route::apiResource('tax_types', TaxTypeController::class);
     Route::get('enums/{enum}', [EnumController::class, 'index']);
     Route::get('report_template_files', [FileController::class, 'report_template_files']);
+    Route::get('report_template_files/{filename}',[FileController::class,'downloadTemplate']);
 
     Route::get('/cookie-test', function () {
         return response()->json(['cookie' => request()->cookie('token')]);
