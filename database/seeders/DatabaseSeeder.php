@@ -13,6 +13,8 @@ use App\Modules\EmployeeGroup\Database\Seeders\EmployeeGroupSeeder;
 use App\Modules\Grade\Database\Seeders\GradeSeeder;
 use App\Modules\Role\Database\Seeders\RoleSeeder;
 use App\Modules\Shift\Database\Seeders\ShiftSeeder;
+use App\Modules\Voucher\Database\Seeders\ReceiptNoteSeeder;
+use App\Modules\Voucher\Database\Seeders\VoucherDemoSeeder;
 use App\Modules\Voucher\Database\Seeders\VoucherSeeder;
 use App\Modules\VoucherEntry\Database\Seeders\VoucherEntrySeeder;
 use Illuminate\Support\Str;
@@ -94,10 +96,13 @@ class DatabaseSeeder extends Seeder
             GradeSeeder::class,
                 // ShiftSeeder::class,
 
-            VoucherSeeder::class,
-            VoucherEntrySeeder::class,
+                // VoucherSeeder::class,
+                // VoucherEntrySeeder::class,
 
             EmployeeGroupSeeder::class,
+            VoucherDemoSeeder::class,
+            ReceiptNoteSeeder::class,
+
 
         ]);
         // User::factory(10)->create();

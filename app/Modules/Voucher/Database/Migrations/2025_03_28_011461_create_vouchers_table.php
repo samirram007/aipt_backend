@@ -22,6 +22,8 @@ return new class extends Migration {
             $table->foreignId('voucher_type_id');
             $table->boolean('is_effecting')->default(true);
             $table->boolean('is_optional')->default(false);
+            $table->boolean('effects_account')->default(true);
+            $table->boolean('effects_stock')->default(false);
 
             $table->text('remarks')->nullable();
             $table->string('status')->default('active');

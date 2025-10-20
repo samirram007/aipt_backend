@@ -62,4 +62,31 @@ class Voucher extends Model
     }
 
 
+
+    protected $appends = ['party_ledger', 'transaction_ledger', 'amount'];
+
+    public function getPartyLedgerAttribute()
+    {
+        if (!isset($this->relations['party_ledger'])) {
+            return null;
+        }
+        return $this->relations['party_ledger'];
+    }
+
+    public function getTransactionLedgerAttribute()
+    {
+        if (!isset($this->relations['transaction_ledger'])) {
+            return null;
+        }
+        return $this->relations['transaction_ledger'];
+    }
+
+    public function getAmountAttribute()
+    {
+        if (!isset($this->relations['amount'])) {
+            return $this->voucher_entries->sum(fn($entry) => $entry->debit ?: $entry->credit ?: 0);
+        }
+        return $this->relations['amount'];
+    }
+
 }

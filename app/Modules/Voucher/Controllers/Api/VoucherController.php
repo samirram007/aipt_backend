@@ -23,6 +23,7 @@ class VoucherController extends Controller
     public function index(): SuccessCollection
     {
         $data = $this->service->getAll();
+       // dd($data);
         return new VoucherCollection($data);
     }
 

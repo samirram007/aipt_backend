@@ -44,6 +44,7 @@ class AccountLedgerSeeder extends Seeder
                 'description' => 'Receivable balances from customers',
                 'is_system' => true,
                 'is_hidden' => false,
+                // 'ledgerable_type' => 'customer'
             ],
             [
                 'id' => 1000004,
@@ -102,6 +103,8 @@ class AccountLedgerSeeder extends Seeder
                 'description' => 'Vendor accounts payable',
                 'is_system' => true,
                 'is_hidden' => false,
+                // 'ledgerable_type' => 'supplier'
+
             ],
             [
                 'id' => 2000002,

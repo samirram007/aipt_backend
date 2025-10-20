@@ -18,7 +18,6 @@ return new class extends Migration {
             $table->string('icon')->nullable();
             $table->boolean('our_stock_with_third_party')->default(false);
             $table->boolean('third_party_stock_with_us')->default(false);
-            $table->json('address')->nullable();
 
             $table->timestamps();
         });

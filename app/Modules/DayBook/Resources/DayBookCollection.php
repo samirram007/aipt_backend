@@ -1,14 +1,14 @@
 <?php
 
-namespace App\Modules\Godown\Resources;
+namespace App\Modules\DayBook\Resources;
 
 use Illuminate\Http\Request;
 use App\Http\Resources\SuccessCollection;
 
-class GodownCollection extends SuccessCollection
+class DayBookCollection extends SuccessCollection
 {
 
-    /**
+         /**
      * Transform the resource collection into an array.
      *
      * @return array<int|string, mixed>

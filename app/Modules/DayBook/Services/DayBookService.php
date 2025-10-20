@@ -1,47 +1,44 @@
 <?php
 
-namespace App\Modules\Voucher\Services;
+namespace App\Modules\DayBook\Services;
 
-use App\Modules\Voucher\Contracts\VoucherServiceInterface;
+use App\Modules\DayBook\Contracts\DayBookServiceInterface;
+use App\Modules\DayBook\Models\DayBook;
 use App\Modules\Voucher\Models\Voucher;
 use Illuminate\Database\Eloquent\Collection;
 
-class VoucherService implements VoucherServiceInterface
+class DayBookService implements DayBookServiceInterface
 {
     protected $resource = ['voucher_entries.account_ledger', 'voucher_type'];
 
     public function getAll(): Collection
     {
-        // return Voucher::with($this->resource)->get();
         $vouchers = Voucher::with($this->resource)->get();
         //dd($vouchers);
         // Optionally map each voucher to include party/transaction detection
         return $vouchers->map(fn($voucher) => $this->attachLedgerInfo($voucher));
     }
 
-    public function getById(int $id): ?Voucher
+    public function getById(int $id): ?DayBook
     {
-        // return Voucher::with($this->resource)->findOrFail($id);
-        $voucher = Voucher::with($this->resource)->findOrFail($id);
-
-        return $this->attachLedgerInfo($voucher);
+        return DayBook::with($this->resource)->findOrFail($id);
     }
 
-    public function store(array $data): Voucher
+    public function store(array $data): DayBook
     {
-        return Voucher::create($data);
+        return DayBook::create($data);
     }
 
-    public function update(array $data, int $id): Voucher
+    public function update(array $data, int $id): DayBook
     {
-        $record = Voucher::findOrFail($id);
+        $record = DayBook::findOrFail($id);
         $record->update($data);
         return $record->fresh();
     }
 
     public function delete(int $id): bool
     {
-        $record = Voucher::findOrFail($id);
+        $record = DayBook::findOrFail($id);
         return $record->delete();
     }
 
@@ -89,7 +86,7 @@ class VoucherService implements VoucherServiceInterface
             'transaction_ledger',
             $transactionEntry?->account_ledger
             ? array_merge(
-                $transactionEntry->account_ledger->only(['id', 'name', 'code', 'account_group_id']),
+                $transactionEntry->account_ledger->only(['id', 'name', 'code', 'ledger_type', 'account_group_id']),
                 ['current_balance' => $transactionCurrentBalance]
             )
             : null
@@ -101,5 +98,4 @@ class VoucherService implements VoucherServiceInterface
 
         return $voucher;
     }
-
 }

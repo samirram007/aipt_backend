@@ -5,11 +5,12 @@ namespace App\Modules\Employee\Services;
 use App\Modules\AccountLedger\Models\AccountLedger;
 use App\Modules\Employee\Contracts\EmployeeServiceInterface;
 use App\Modules\Employee\Models\Employee;
+use App\Modules\User\Models\User;
 use Illuminate\Database\Eloquent\Collection;
 
 class EmployeeService implements EmployeeServiceInterface
 {
-    protected $resource = ['department', 'designation', 'address'];
+    protected $resource = ['department', 'designation', 'address', 'user'];
 
     public function getAll(): Collection
     {
@@ -50,6 +51,21 @@ class EmployeeService implements EmployeeServiceInterface
             $employee->account_ledger()->create($data['account_ledger']);
 
         }
+        if (!empty($data['has_user_account']) && !empty($data['email'])) {
+            if (!User::where('username', $data['email'])->exists()) {
+                $data['user']['name'] = $employee->name;
+                $data['user']['email'] = $employee->email;
+                $data['user']['username'] = $employee->email;
+                $data['user']['user_type'] = 'user';
+                $data['user']['password'] = bcrypt('password');
+                $data['user']['userable_type'] = 'employee';
+                $data['user']['userable_id'] = $employee->id;
+                $data['user']['status'] = 'active';
+                $employee->user()->create($data['user']);
+
+            }
+        }
+
 
         return $employee->load($this->resource);
     }
@@ -119,6 +135,21 @@ class EmployeeService implements EmployeeServiceInterface
                 $employee->account_ledger()->create($data['account_ledger']);
             }
 
+        }
+
+        if (!empty($data['has_user_account']) && !empty($data['email'])) {
+            if (!User::where('username', $data['email'])->exists()) {
+                $data['user']['name'] = $employee->name;
+                $data['user']['email'] = $employee->email;
+                $data['user']['username'] = $employee->email;
+                $data['user']['user_type'] = 'user';
+                $data['user']['password'] = bcrypt('password');
+                $data['user']['userable_type'] = 'employee';
+                $data['user']['userable_id'] = $employee->id;
+                $data['user']['status'] = 'active';
+                $employee->user()->create($data['user']);
+
+            }
         }
 
         return $employee->fresh()->load($this->resource);

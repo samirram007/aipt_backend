@@ -3,6 +3,7 @@
 namespace App\Modules\AppModuleFeature\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class AppModuleFeatureRequest extends FormRequest
 {
@@ -14,18 +15,47 @@ class AppModuleFeatureRequest extends FormRequest
     public function rules(): array
     {
         $rules = [
-            'name' => ['required', 'string', 'max:255', 'unique:app_module_features,name'],
+            // 'name' => ['required', 'string', 'max:255', 'unique:app_module_features,name'],
             'code' => ['sometimes', 'required', 'string', 'max:255', 'unique:app_module_features,code'],
             'description' => ['sometimes', 'required', 'string', 'max:255'],
             'status' => ['sometimes', 'required', 'string', 'max:255'],
             'app_module_id' => ['required', 'numeric', 'exists:app_modules,id']
         ];
+        $rules['name'] = [
+            'required',
+            'string',
+            'max:255',
+            Rule::unique('app_module_features')->where(fn($query) => $query->where('app_module_id', $this->app_module_id))
+        ];
 
+        $rules['code'] = [
+            'required',
+            'string',
+            'max:255',
+            Rule::unique('app_module_features')->where(fn($query) => $query->where('app_module_id', $this->app_module_id))
+        ];
         // For update requests, make validation more flexible
         if ($this->isMethod('PUT') || $this->isMethod('PATCH')) {
             $id = $this->route('app_module_feature');
-            $rules['name'] = ['sometimes', 'required', 'string', 'max:255', 'unique:app_module_features,name,' . $id,];
-            $rules['code'] = ['sometimes', 'required', 'string', 'max:255', 'unique:app_module_features,code,' . $id,];
+            $rules['name'] = [
+                'sometimes',
+                'required',
+                'string',
+                'max:255',
+                Rule::unique('app_module_features')
+                    ->ignore($id)
+                    ->where(fn($query) => $query->where('app_module_id', $this->app_module_id)),
+            ];
+
+            $rules['code'] = [
+                'sometimes',
+                'required',
+                'string',
+                'max:255',
+                Rule::unique('app_module_features')
+                    ->ignore($id)
+                    ->where(fn($query) => $query->where('app_module_id', $this->app_module_id)),
+            ];
 
         }
 

@@ -10,7 +10,7 @@ return new class extends Migration {
         Schema::create('app_module_features', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('app_module_id');
-            $table->string('name')->unique();
+            $table->string('name');
             $table->string('code')->unique();
             $table->string('description')->nullable();
             $table->string('status')->default('active');

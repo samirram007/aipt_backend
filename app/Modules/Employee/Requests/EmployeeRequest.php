@@ -31,6 +31,7 @@ class EmployeeRequest extends FormRequest
             'grade_id' => ['sometimes', 'nullable', 'exists:grades,id'],
             'status' => ['sometimes', 'required', 'string', 'max:255'],
             'image' => ['sometimes', 'nullable', 'string', 'max:255'],
+            'has_user_account' => ['sometimes', 'nullable', 'boolean'],
         ];
         //return $rules;
         $addressRules = collect((new AddressRequest())->rules())

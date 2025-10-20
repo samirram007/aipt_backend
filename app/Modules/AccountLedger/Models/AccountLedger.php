@@ -2,10 +2,12 @@
 
 namespace App\Modules\AccountLedger\Models;
 
+use App\Modules\VoucherEntry\Models\VoucherEntry;
 use Illuminate\Database\Eloquent\Model;
 use App\Modules\AccountGroup\Models\AccountGroup;
 use App\Modules\AccountNature\Models\AccountNature;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOneThrough;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
 
@@ -34,6 +36,10 @@ class AccountLedger extends Model
     public function account_group()
     {
         return $this->belongsTo(AccountGroup::class);
+    }
+    public function voucher_entries(): HasMany
+    {
+        return $this->hasMany(VoucherEntry::class, 'account_ledger_id', 'id');
     }
 
     public function ledgerable(): MorphTo

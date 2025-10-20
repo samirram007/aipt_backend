@@ -8,6 +8,7 @@ use App\Modules\Designation\Resources\DesignationResource;
 use App\Modules\EmployeeGroup\Resources\EmployeeGroupResource;
 use App\Modules\Grade\Resources\GradeResource;
 use App\Modules\Shift\Resources\ShiftResource;
+use App\Modules\User\Resources\UserResource;
 use Illuminate\Http\Request;
 
 use App\Http\Resources\SuccessResource;
@@ -38,6 +39,7 @@ class EmployeeResource extends SuccessResource
             'shift' => ShiftResource::make($this->whenLoaded('shift')),
             'grade' => GradeResource::make($this->whenLoaded('grade')),
             'address' => AddressResource::make($this->whenLoaded('address')),
+            'user' => UserResource::make($this->whenLoaded('user')),
 
         ];
     }
