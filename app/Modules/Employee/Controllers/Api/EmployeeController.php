@@ -42,7 +42,13 @@ class EmployeeController extends Controller
         return  new EmployeeResource($data, $messages='Employee updated successfully');
     }
 
-        public function destroy(int $id): JsonResponse
+    public function sample_collectors(): SuccessCollection
+    {
+        $data = $this->service->sample_collectors();
+        return new EmployeeCollection($data);
+    }
+
+    public function destroy(int $id): JsonResponse
     {
 
         $result=$this->service->delete($id);

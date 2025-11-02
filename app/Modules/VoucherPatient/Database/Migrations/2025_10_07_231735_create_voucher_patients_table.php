@@ -12,8 +12,10 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('voucher_id');
             $table->unsignedBigInteger('patient_id');
-            $table->unsignedBigInteger('agent_id');
-            $table->unsignedBigInteger('physician_id');
+            $table->unsignedBigInteger('agent_id')->nullable();
+            $table->unsignedBigInteger('physician_id')->nullable();
+            $table->unsignedBigInteger('discount_type_id')->nullable();
+            $table->unsignedBigInteger('sample_collector_id')->nullable();
             $table->string('status')->default('active');
 
             $table->timestamps();

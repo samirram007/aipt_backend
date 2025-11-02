@@ -8,6 +8,7 @@ enum JobStatus: string
     case SampleCollected = 'sample_collected';
     case InProcess = 'in_process';
     case Completed = 'completed';
+    case DeliverToDesk = 'deliver_to_desk';
     case Delivered = 'delivered';
     case Cancelled = 'cancelled';
     case Drafted = 'drafted';

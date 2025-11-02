@@ -151,5 +151,42 @@ class StockItemSeeder extends Seeder
             "status" => "active",
             "is_sample_required" => false
         ]);
+        StockItem::create([
+            "name" => "Lipid Profile Test",
+            "code" => "LT-LIPID-005",
+            "print_name" => "Lipid Profile",
+            "sku" => "LIPID005",
+            "description" => "Measures cholesterol and triglyceride levels to assess cardiovascular risk.",
+            "stock_category_id" => 7,
+            "stock_group_id" => 8,
+            "stock_unit_id" => 43,
+            "alternate_stock_unit_id" => 43,
+            'unique_quantity_code_id' => $uqc->id,
+            "base_unit_value" => 1.0,
+            "alternate_unit_value" => 1.0,
+            "type_of_supply" => "goods",
+            "is_negative_sales_allow" => false,
+            "is_maintain_batch" => false,
+            "is_maintain_serial" => false,
+            "use_expiry_date" => false,
+            "track_manufacturing_date" => false,
+            "is_finish_goods" => false,
+            "is_raw_material" => false,
+            "is_unfinished_goods" => false,
+            "costing_method" => "avg_cost",
+            "market_valuation_method" => "avg_price",
+            "reorder_level" => 0,
+            "minimum_stock" => 5.0,
+            "maximum_stock" => 30.0,
+            "is_gst_applicable" => true,
+            "gst_type" => "cgst_sgst",
+            "mrp" => 650.00,
+            "standard_cost" => 450.00,
+            "standard_selling_price" => 650.00,
+            'icon' => null,
+            "status" => "active",
+            "is_sample_required" => false
+        ]);
+
     }
 }

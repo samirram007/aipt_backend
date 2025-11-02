@@ -7,7 +7,9 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use App\Modules\Address\Models\Address;
 use App\Modules\Agent\Models\Agent;
+use App\Modules\DiscountType\Models\DiscountType;
 use App\Modules\Physician\Models\Physician;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\MorphOne;
 
 class Patient extends Model
@@ -26,6 +28,7 @@ class Patient extends Model
         'alt_contact_no',
         'agent_id',
         'physician_id',
+        'discount_type_id'
     ];
 
     protected $casts = [
@@ -54,6 +57,11 @@ class Patient extends Model
 
     public function agent(){
         return $this->belongsTo(Agent::class);
+    }
+
+    public function discount_type(): BelongsTo
+    {
+        return $this->belongsTo(DiscountType::class);
     }
 
 }

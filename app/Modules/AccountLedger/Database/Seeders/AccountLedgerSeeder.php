@@ -264,6 +264,15 @@ class AccountLedgerSeeder extends Seeder
                 'is_system' => false,
                 'is_hidden' => false,
             ],
+            [
+                'id' => 4000007,
+                'name' => 'Discount Allowed',
+                'code' => 'DISCALW',
+                'account_group_id' => 40002,
+                'description' => 'Discounts allowed from suppliers',
+                'is_system' => false,
+                'is_hidden' => false,
+            ],
 
             // ==============================
             // 🔹 EQUITY (5000001–)

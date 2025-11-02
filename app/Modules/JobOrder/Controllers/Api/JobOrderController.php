@@ -11,6 +11,7 @@ use App\Http\Resources\SuccessResource;
 use App\Http\Resources\SuccessCollection;
 use App\Traits\ApiResponseTrait;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 
 class JobOrderController extends Controller
 {
@@ -42,7 +43,15 @@ class JobOrderController extends Controller
         return  new JobOrderResource($data, $messages='JobOrder updated successfully');
     }
 
-        public function destroy(int $id): JsonResponse
+    public function uploadReport(Request $request, int $id): ?JsonResponse
+    {
+        $request->validate([
+            'report_file' => ['required', 'file', 'mimes:pdf', 'max:5120'],
+        ]);
+        return $this->service->upload_report($id);
+    }
+
+    public function destroy(int $id): JsonResponse
     {
 
         $result=$this->service->delete($id);

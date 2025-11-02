@@ -10,6 +10,7 @@ use App\Modules\TestItem\Models\TestItem;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class StockJournalEntry extends Model
@@ -55,5 +56,9 @@ class StockJournalEntry extends Model
 
     public function job_order():HasOne{
         return $this->hasOne(JobOrder::class,'stock_journal_entry_id','id');
+    }
+
+    public function job_orders():HasMany{
+        return $this->hasMany(JobOrder::class,'stock_journal_entry_id','id');
     }
 }

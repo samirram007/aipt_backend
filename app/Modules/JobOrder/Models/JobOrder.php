@@ -5,6 +5,7 @@ namespace App\Modules\JobOrder\Models;
 use App\Modules\StockItem\Models\StockItem;
 use App\Modules\StockJournal\Models\StockJournal;
 use App\Modules\StockJournalEntry\Models\StockJournalEntry;
+use App\Modules\TestBooking\Models\TestBooking;
 use App\Modules\TestItem\Models\TestItem;
 use App\Modules\Voucher\Models\Voucher;
 use Illuminate\Database\Eloquent\Model;
@@ -46,6 +47,11 @@ class JobOrder extends Model
     public function stock_journal_entry(): BelongsTo
     {
         return $this->belongsTo(StockJournalEntry::class, 'stock_journal_entry_id','id');
+    }
+
+    public function test_booking():BelongsTo
+    {
+        return $this->belongsTo(TestBooking::class, 'voucher_id', 'id');
     }
 
 }

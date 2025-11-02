@@ -10,7 +10,6 @@ use App\Modules\FiscalYear\Resources\FiscalYearResource;
 use App\Modules\Patient\Resources\PatientResource;
 use App\Modules\StockJournal\Resources\StockJournalResource;
 use App\Modules\VoucherEntry\Resources\VoucherEntryResource;
-use App\Modules\VoucherPatient\Models\VoucherPatient;
 use App\Modules\VoucherPatient\Resources\VoucherPatientResource;
 use App\Modules\VoucherReference\Resources\VoucherReferenceResource;
 use App\Modules\VoucherType\Resources\VoucherTypeResource;

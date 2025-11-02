@@ -18,6 +18,7 @@ class DesignationSeeder extends Seeder
             ['id' => 106, 'name' => 'Radiologist', 'code' => 'RAD', 'status' => 'active'],
             ['id' => 107, 'name' => 'Pharmacologist', 'code' => 'PHAR', 'status' => 'active'],
             ['id' => 108, 'name' => 'Microbiologist', 'code' => 'MICRO', 'status' => 'active'],
+            ['id' => 109, 'name' => 'Sample Collector', 'code' => 'SPECI', 'status' => 'active'],
         ];
 
         foreach ($designations as $desig) {

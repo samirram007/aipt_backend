@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Collection;
 
 class DiscountTypeService implements DiscountTypeServiceInterface
 {
-    protected $resource=[];
+    protected $resource=['account_ledger'];
 
     public function getAll(): Collection
     {

@@ -12,4 +12,6 @@ interface EmployeeServiceInterface
     public function store(array $data): Employee;
     public function update(array $data, int $id): Employee;
     public function delete(int $id): bool;
+    // Employee as Sample Collector
+    public function sample_collectors(): Collection;
 }

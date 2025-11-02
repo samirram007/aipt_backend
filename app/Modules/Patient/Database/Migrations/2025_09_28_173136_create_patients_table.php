@@ -16,8 +16,8 @@ return new class extends Migration
             $table->integer('age')->nullable();
             $table->enum('gender',['male','female','others']);
             $table->string('status')->default('active');
-            $table->unsignedBigInteger('agent_id');
-            $table->unsignedBigInteger('physician_id');
+            $table->unsignedBigInteger('agent_id')->nullable();
+            $table->unsignedBigInteger('physician_id')->nullable();
             $table->unsignedBigInteger('discount_type_id')->default(1);
             $table->timestamps();
         });

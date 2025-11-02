@@ -19,8 +19,10 @@ return new class extends Migration
             $table->date('expected_end_date')->nullable();
             $table->date('actual_start_date')->nullable();
             $table->date('actual_end_date')->nullable();
+            $table->unsignedBigInteger('proccess_by')->nullable();
             $table->enum('status',JobStatus::getValues())->default(JobStatus::Booked->value);
             $table->unsignedBigInteger('stock_item_id')->nullable();
+            $table->string('report_file_name')->nullable();
             $table->timestamps();
         });
     }

@@ -22,7 +22,9 @@ class VoucherPatient extends Model
         'patient_id',
         'agent_id',
         'physician_id',
-        'status'
+        'status',
+        'discount_type_id',
+        'sample_collector_id'
     ];
 
     protected $casts = [

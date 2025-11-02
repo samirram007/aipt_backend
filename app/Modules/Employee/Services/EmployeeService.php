@@ -125,6 +125,11 @@ class EmployeeService implements EmployeeServiceInterface
         return $employee->fresh()->load($this->resource);
     }
 
+    public function sample_collectors(): Collection
+    {
+        return Employee::with($this->resource)->where(['designation_id'=> 109])->get();
+    }
+
     public function delete(int $id): bool
     {
         $record = Employee::findOrFail($id);

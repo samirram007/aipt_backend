@@ -9,20 +9,10 @@ use App\Modules\TestBooking\Resources\TestBookingCollection;
 use App\Modules\TestBooking\Requests\TestBookingRequest;
 use App\Http\Resources\SuccessResource;
 use App\Http\Resources\SuccessCollection;
-use App\Modules\AccountLedger\Models\AccountLedger;
-use App\Modules\Patient\Models\Patient;
-use App\Modules\StockItem\Models\StockItem;
-use App\Modules\StockJournal\Models\StockJournal;
-use App\Modules\StockJournalEntry\Models\StockJournalEntry;
 use App\Modules\TestBooking\Requests\TestConfirmRequest;
-use App\Modules\Voucher\Models\Voucher;
-use App\Modules\Voucher\Resources\VoucherCollection;
-use App\Modules\VoucherEntry\Models\VoucherEntry;
 use App\Modules\VoucherPatient\Resources\VoucherPatientCollection;
 use App\Traits\ApiResponseTrait;
 use Illuminate\Http\JsonResponse;
-use Carbon\Carbon;
-use Illuminate\Support\Facades\DB;
 
 class TestBookingController extends Controller
 {
@@ -30,9 +20,9 @@ class TestBookingController extends Controller
 
     public function __construct(protected TestBookingServiceInterface $service) {}
 
-    public function all_bookings():SuccessCollection
+    public function all_bookings(?string $start_date = null,?string $end_date = null):SuccessCollection
     {
-        $data = $this->service->all_bookings();
+        $data = $this->service->all_bookings($start_date,$end_date);
         return new VoucherPatientCollection($data);
     }
 

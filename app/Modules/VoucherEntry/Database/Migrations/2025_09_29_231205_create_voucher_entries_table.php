@@ -1,5 +1,6 @@
 <?php
 
+use App\Enums\CalculationType;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -14,6 +15,8 @@ return new class extends Migration {
             $table->foreignId('account_ledger_id'); // Ledger/GL account
             $table->decimal('debit', 15, 2)->default(0)->nullable();
             $table->decimal('credit', 15, 2)->default(0)->nullable();
+            $table->decimal('rate',15,6)->default(100);
+            $table->enum('calculation_type',array_column(CalculationType::cases(), 'value'))->default(CalculationType::currentTotal->value);
             $table->text('remarks')->nullable();
 
             $table->timestamps();

@@ -20,8 +20,9 @@ class PatientRequest extends FormRequest
             'contact_no' => ['nullable','string','max:13'],
             'age' => ['integer'],
             'gender' => ['string','in:male,female,others'],
-            'agent_id' => ['sometimes','nullable','integer'],
-            'physician_id' => ['sometimes','nullable','integer'],
+            'agent_id' => ['nullable','numeric'],
+            'physician_id' => ['nullable','numeric'],
+            'discount_type_id' => ['nullable','numeric'],
 
             // address
             'address'=>['array'],

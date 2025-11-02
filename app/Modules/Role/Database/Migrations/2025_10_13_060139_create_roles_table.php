@@ -8,20 +8,20 @@ return new class extends Migration
 {
     public function up(): void
     {
-        Schema::create('roles', function (Blueprint $table) {
-            $table->id();
-            $table->string('name')->unique();
-            $table->string('code')->unique();
-            $table->string('description')->nullable();
-            $table->string('status')->default('active');
-            $table->string('icon')->nullable();
+        // Schema::create('roles', function (Blueprint $table) {
+        //     $table->id();
+        //     $table->string('name')->unique();
+        //     $table->string('code')->unique();
+        //     $table->string('description')->nullable();
+        //     $table->string('status')->default('active');
+        //     $table->string('icon')->nullable();
 
-            $table->timestamps();
-        });
+        //     $table->timestamps();
+        // });
     }
 
     public function down(): void
     {
-        Schema::dropIfExists('roles');
+        // Schema::dropIfExists('roles');
     }
 };

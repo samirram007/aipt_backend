@@ -2,6 +2,7 @@
 
 namespace App\Modules\TestBooking\Services;
 
+use App\Enums\CalculationType;
 use App\Modules\AccountLedger\Models\AccountLedger;
 use App\Modules\Patient\Models\Patient;
 use App\Modules\StockItem\Models\StockItem;
@@ -29,9 +30,23 @@ class TestBookingService implements TestBookingServiceInterface
     protected $voucherPatientResource = ['agent','physician','patient.account_ledger','voucher'];
 
     // This is the list of all bookings for patient only
-    public function all_bookings(): Collection
+    public function all_bookings(?string $start_date = null, ?string $end_date = null): Collection
     {
-        return VoucherPatient::with($this->voucherPatientResource)->get();
+        $query = VoucherPatient::with($this->voucherPatientResource);
+
+        if($start_date && $end_date){
+            $start = Carbon::parse($start_date)->startOfDay();
+            $end = Carbon::parse($end_date)->endOfDay();
+            $query->whereBetween('created_at',[$start,$end]);
+        }
+        return $query->get();
+    }
+
+    public function test_booking_search($start_date, $end_date): Collection
+    {
+        $start = Carbon::parse($start_date)->startOfDay();
+        $end = Carbon::parse($end_date)->endOfDay();
+        return VoucherPatient::with($this->voucherPatientResource)->whereBetween('created_at',[$start,$end])->get();
     }
 
     public function getAll(): Collection
@@ -98,34 +113,59 @@ class TestBookingService implements TestBookingServiceInterface
                         ->firstOrFail();
 
 
+
                 VoucherPatient::create([
                     'voucher_id'=> $voucher->id,
                     'patient_id' => $data['patient_id'],
                     'agent_id' => $data['agent_id'],
                     'physician_id' => $data['physician_id'],
+                    'sample_collector_id' => $data['sample_collector_id'],
+                    'discount_type_id' => $data['discount_type_id']
                 ]);
+
+                // calaulation of rate and discount
+                $discountRate = $data['rate'] == 100 ? 0 : $data['rate'];
+                $discountAmount = ($totalAmount * $discountRate) / 100;
+                $cashReceived = $totalAmount - $discountAmount;
+
+                $entryOrder = 1;
 
 
 
                 VoucherEntry::create([
                     'voucher_id' => $voucher->id,
-                    'entry_order'=> 1,
+                    'entry_order'=> $entryOrder++,
                     'account_ledger_id'=> $accountLedger->id,
-                    'debit' => $totalAmount,
-                    'credit'=>0
+                    'debit' => 0,
+                    'credit'=> $totalAmount,
+                    'rate' => 100,
+                    'calculation_type' => CalculationType::currentTotal->value
                 ]);
+
+                if(!empty($data['discount_type_id'])){
+                    VoucherEntry::create([
+                        'voucher_id' => $voucher->id,
+                        'entry_order'=> $entryOrder++,
+                        'account_ledger_id'=> 4000007,
+                        'debit'=> $discountAmount,
+                        'credit'=> 0,
+                        'rate' => $discountRate,
+                        'calculation_type' => CalculationType::currentTotal->value,
+                    ]);
+                }
 
                 VoucherEntry::create([
                     'voucher_id' => $voucher->id,
-                    'entry_order'=> 2,
-                    'account_ledger_id'=> 9,
-                    'debit'=> 0,
-                    'credit'=> $totalAmount
+                    'entry_order'=> $entryOrder++,
+                    'account_ledger_id'=> 3000001,
+                    'debit'=> $cashReceived,
+                    'credit'=> 0,
+                    'rate' => 100 - $discountRate,
+                    'calculation_type' => CalculationType::currentTotal->value,
                 ]);
 
-                // $jobOrder = JobOrder::create([
 
-                // ]);
+
 
                 $testBooking = TestBooking::find($voucher->id);
 

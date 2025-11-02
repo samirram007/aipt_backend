@@ -9,7 +9,7 @@ use App\Modules\AccountLedger\Resources\AccountLedgerResource;
 use App\Modules\Agent\Resources\AgentResource;
 use App\Modules\Physician\Resources\PhysicianResource;
 use App\Modules\Address\Resources\AddressResource;
-
+use App\Modules\DiscountType\Resources\DiscountTypeResource;
 
 class PatientResource extends SuccessResource
 {
@@ -23,10 +23,12 @@ class PatientResource extends SuccessResource
             'gender'=> $this->gender,
             'status'=> $this->status,
             'agentId'=> $this->agent_id,
+            'discountTypeId' => $this->discount_type_id,
             'physicianId'=> $this->physician_id,
             'agent'       => new AgentResource($this->whenLoaded('agent')),
             'physician'   => new PhysicianResource($this->whenLoaded('physician')),
             'address' => new AddressResource($this->whenLoaded('address')),
+            'discountType' => new DiscountTypeResource($this->whenLoaded('discount_type')),
             'accountLedger' => AccountLedgerResource::make($this->whenLoaded('account_ledger'))
         ];
     }

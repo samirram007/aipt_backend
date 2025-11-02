@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Collection;
 
 class PatientService implements PatientServiceInterface
 {
-    protected $resource=['agent','physician','address'];
+    protected $resource=['agent','physician','address','discount_type'];
 
     public function getAll(): Collection
     {

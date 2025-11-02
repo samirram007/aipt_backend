@@ -11,6 +11,7 @@ class JobOrderRequest extends FormRequest
         return true;
     }
 
+
     public function rules(): array
     {
         $rules = [
@@ -21,12 +22,22 @@ class JobOrderRequest extends FormRequest
             'start_date' => ['sometimes','required','date'],
             'end_date' => ['sometimes','required','date'],
             'voucher_id' => ['required', 'numeric', 'exists:vouchers,id'],
+            'report_file' => ['sometimes', 'file', 'mimes:pdf', 'max:5120'],
         ];
 
         // If updating (PUT/PATCH), make some rules optional
         if ($this->isMethod('PUT') || $this->isMethod('PATCH')) {
-            $rules['patient_id'][0] = 'sometimes';
-            $rules['voucher_id'][0] = 'sometimes';
+            $id=$this->route('job_order');
+            $rules = [
+                'stock_journal_id' => ['sometimes', 'numeric', 'exists:stock_journals,id'],
+                'stock_journal_entry_id' => ['sometimes', 'numeric', 'exists:stock_journal_entries,id'],
+                'stock_item_id' => ['sometimes', 'numeric', 'exists:stock_items,id'],
+                'status' => ['nullable', 'string', 'max:255'],
+                'start_date' => ['sometimes', 'date'],
+                'end_date' => ['sometimes', 'date'],
+                'voucher_id' => ['sometimes', 'numeric', 'exists:vouchers,id'],
+                'report_file' => ['sometimes', 'file', 'mimes:pdf', 'max:5120'],
+            ];
         }
 
         return $rules;
