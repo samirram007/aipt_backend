@@ -18,8 +18,9 @@ return new class extends Migration {
             $table->decimal('quantity', 15, 4)->default(1);
             $table->decimal('rate', 15, 2)->default(0);
             $table->string('movement_type')->default('in'); // 'in', 'out'
-            $table->foreignId('godown_id')->nullable();
+
             $table->timestamps();
+            $table->blamable();
         });
     }
 

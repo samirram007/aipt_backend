@@ -12,4 +12,5 @@ interface AppModuleFeatureServiceInterface
     public function store(array $data): AppModuleFeature;
     public function update(array $data, int $id): AppModuleFeature;
     public function delete(int $id): bool;
+    public function getByRoleAndModule(int $role_id, int $module_id): Collection;
 }

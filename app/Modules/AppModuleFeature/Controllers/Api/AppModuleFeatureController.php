@@ -16,7 +16,9 @@ class AppModuleFeatureController extends Controller
 {
     use ApiResponseTrait;
 
-    public function __construct(protected AppModuleFeatureServiceInterface $service) {}
+    public function __construct(protected AppModuleFeatureServiceInterface $service)
+    {
+    }
 
     public function index(): SuccessCollection
     {
@@ -24,32 +26,40 @@ class AppModuleFeatureController extends Controller
         return new AppModuleFeatureCollection($data);
     }
 
+
     public function show(int $id): SuccessResource
     {
         $data = $this->service->getById($id);
-        return  new AppModuleFeatureResource($data);
+        return new AppModuleFeatureResource($data);
     }
 
     public function store(AppModuleFeatureRequest $request): SuccessResource
     {
         $data = $this->service->store($request->validated());
-       return  new AppModuleFeatureResource($data, $messages='AppModuleFeature created successfully');
+        return new AppModuleFeatureResource($data, $messages = 'AppModuleFeature created successfully');
     }
 
     public function update(AppModuleFeatureRequest $request, int $id): SuccessResource
     {
         $data = $this->service->update($request->validated(), $id);
-        return  new AppModuleFeatureResource($data, $messages='AppModuleFeature updated successfully');
+        return new AppModuleFeatureResource($data, $messages = 'AppModuleFeature updated successfully');
     }
 
-        public function destroy(int $id): JsonResponse
+    public function destroy(int $id): JsonResponse
     {
 
-        $result=$this->service->delete($id);
+        $result = $this->service->delete($id);
         return new JsonResponse([
             'status' => $result,
             'code' => 204,
-            'message' => $result?'AppModuleFeature deleted successfully':'AppModuleFeature not found',
+            'message' => $result ? 'AppModuleFeature deleted successfully' : 'AppModuleFeature not found',
         ]);
+    }
+
+    public function getModuleFeaturesByRole(int $role_id, int $module_id): SuccessCollection
+    {
+        $data = $this->service->getByRoleAndModule($role_id, $module_id);
+        //dd($data);
+        return new AppModuleFeatureCollection($data);
     }
 }

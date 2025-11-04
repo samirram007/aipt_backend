@@ -30,7 +30,7 @@ class AddressRequest extends FormRequest
             'post_office' => ['sometimes', 'nullable', 'string', 'max:255'],
             'district' => ['sometimes', 'nullable', 'string', 'max:255'],
             // 'address_type' => ['sometimes', 'nullable', 'in:' . implode(',', array_column(AddressType::cases(), 'value'))],
-            'is_primary' => ['sometimes', 'boolean'],
+            'is_primary' => ['sometimes', 'nullable', 'boolean'],
         ];
 
         // For update requests, allow ignoring the current address id

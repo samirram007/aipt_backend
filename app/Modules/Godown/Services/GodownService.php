@@ -35,7 +35,9 @@ class GodownService implements GodownServiceInterface
         $godown = Godown::create($data);
         // dd($data);
         if ($data['address']) {
-
+            if (empty($data['address']['is_primary'])) {
+                $data['address']['is_primary'] = false;
+            }
             $data['address']['address_type'] = 'office';
             $data['address']['addressable_type'] = 'godown';
             $data['address']['addressable_id'] = $godown->id;
@@ -57,7 +59,9 @@ class GodownService implements GodownServiceInterface
         $godown->update($data);
 
         if (isset($data['address'])) {
-
+            if (empty($data['address']['is_primary'])) {
+                $data['address']['is_primary'] = false;
+            }
             $data['address']['address_type'] = 'office';
             $data['address']['addressable_type'] = 'godown';
             $data['address']['addressable_id'] = $godown->id;

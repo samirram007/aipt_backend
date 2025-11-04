@@ -8,6 +8,7 @@ use App\Modules\FiscalYear\Models\FiscalYear;
 use App\Modules\StockJournal\Models\StockJournal;
 use App\Modules\VoucherEntry\Models\VoucherEntry;
 use App\Modules\VoucherType\Models\VoucherType;
+use App\Traits\Blameable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -16,7 +17,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 class Voucher extends Model
 {
     use HasFactory;
-
+    use Blameable;
     protected $table = 'vouchers';
 
     protected $fillable = [

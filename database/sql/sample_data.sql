@@ -1,75 +1,4 @@
--- --------------------------------------------------------
--- Host:                         127.0.0.1
--- Server version:               8.0.30 - MySQL Community Server - GPL
--- Server OS:                    Win64
--- HeidiSQL Version:             12.1.0.6537
--- --------------------------------------------------------
 
-/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
-/*!40101 SET NAMES utf8 */;
-/*!50503 SET NAMES utf8mb4 */;
-/*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
-/*!40103 SET TIME_ZONE='+00:00' */;
-/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
-/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
-/*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
-
--- Dumping data for table aipt.account_groups: ~0 rows (approximately)
-
--- Dumping data for table aipt.account_ledgers: ~0 rows (approximately)
-
--- Dumping data for table aipt.account_types: ~0 rows (approximately)
-
--- Dumping data for table aipt.cache: ~0 rows (approximately)
-
--- Dumping data for table aipt.cache_locks: ~0 rows (approximately)
-
--- Dumping data for table aipt.companies: ~0 rows (approximately)
-
--- Dumping data for table aipt.company_types: ~0 rows (approximately)
-
--- Dumping data for table aipt.countries: ~0 rows (approximately)
-
--- Dumping data for table aipt.currencies: ~0 rows (approximately)
-
--- Dumping data for table aipt.failed_jobs: ~0 rows (approximately)
-
--- Dumping data for table aipt.fiscal_years: ~0 rows (approximately)
-
--- Dumping data for table aipt.jobs: ~0 rows (approximately)
-
--- Dumping data for table aipt.job_batches: ~0 rows (approximately)
-
--- Dumping data for table aipt.journals: ~0 rows (approximately)
-
--- Dumping data for table aipt.languages: ~0 rows (approximately)
-
--- Dumping data for table aipt.migrations: ~1 rows (approximately)
-
-
--- Dumping data for table aipt.modules: ~0 rows (approximately)
-
--- Dumping data for table aipt.password_reset_tokens: ~0 rows (approximately)
-
--- Dumping data for table aipt.permissions: ~0 rows (approximately)
-
--- Dumping data for table aipt.personal_access_tokens: ~0 rows (approximately)
-
--- Dumping data for table aipt.roles: ~0 rows (approximately)
-
--- Dumping data for table aipt.sessions: ~0 rows (approximately)
-
--- Dumping data for table aipt.settings: ~0 rows (approximately)
-
--- Dumping data for table aipt.states: ~0 rows (approximately)
-
--- Dumping data for table aipt.telescope_entries: ~0 rows (approximately)
-
--- Dumping data for table aipt.telescope_entries_tags: ~0 rows (approximately)
-
--- Dumping data for table aipt.telescope_monitoring: ~0 rows (approximately)
-
--- Dumping data for table aipt.users: ~2 rows (approximately)
 INSERT INTO `users` (`id`, `name`,`username`,`user_type`, `email`, `email_verified_at`, `password`, `remember_token`,`status`, `created_at`, `updated_at`) VALUES
 	(1, 'Admin User', 'admin@admin.com','admin', 'admin@admin.com', '2025-06-14 17:39:14', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'yaQRzRT1BQ','active', '2025-06-14 17:39:14', '2025-06-14 17:39:14'),
 	(2, 'Manager User', 'manager@admin.com', 'user','manager@admin.com', '2025-06-14 17:39:14', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'zuUppGB7Bl','active', '2025-06-14 17:39:14', '2025-06-14 17:39:14');
@@ -94,7 +23,7 @@ INSERT INTO `shifts` (`id`, `name`, `code`, `status`, `icon`, `created_at`, `upd
 
 -- Dumping data for table aipt.app_modules: ~43 rows (approximately)
 INSERT IGNORE INTO `app_modules` (`id`, `name`, `code`, `description`, `status`, `icon`, `created_at`, `updated_at`) VALUES
-	(10000, 'User Management', 'USER_MGMT', 'Manage users, roles, and permissions', 'active', 'users', '2025-10-18 09:00:48', '2025-10-18 09:00:48'),
+	(10000, 'AUTHENTICATION', 'AUTHENTICATION', 'Manage users, roles, and permissions', 'active', 'users', '2025-10-18 09:00:48', '2025-10-18 09:00:48'),
 	(10001, 'Finance', 'FINANCE', 'Handles financial transactions, invoices, and ledgers', 'active', 'wallet', '2025-10-18 09:00:48', '2025-10-18 09:00:48'),
 	(10002, 'Inventory', 'INVENTORY', 'Manages stock items, batches, and warehouse data', 'active', 'boxes', '2025-10-18 09:00:48', '2025-10-18 09:00:48'),
 	(10003, 'Sales', 'SALES', 'Sales orders, customers, and billing operations', 'active', 'shopping-cart', '2025-10-18 09:00:48', '2025-10-18 09:00:48'),

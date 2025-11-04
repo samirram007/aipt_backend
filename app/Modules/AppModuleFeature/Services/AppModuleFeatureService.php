@@ -37,4 +37,20 @@ class AppModuleFeatureService implements AppModuleFeatureServiceInterface
         $record = AppModuleFeature::findOrFail($id);
         return $record->delete();
     }
+
+    public function getByRoleAndModule(int $role_id, int $module_id): Collection
+    {
+
+        $data = AppModuleFeature::where('app_module_id', $module_id)
+            ->with([
+                'module',
+                'role_permissions' => function ($query) use ($role_id) {
+                    $query->where('role_id', $role_id);
+                }
+            ])
+            ->get();
+        // dd($data->toArray());
+        return $data;
+        // return AppModuleFeature::where('app_module_id', $module_id)->get();
+    }
 }

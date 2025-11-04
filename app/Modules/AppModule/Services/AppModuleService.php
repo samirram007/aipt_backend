@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Collection;
 
 class AppModuleService implements AppModuleServiceInterface
 {
-    protected $resource=[];
+    protected $resource = ['app_module_features'];
 
     public function getAll(): Collection
     {

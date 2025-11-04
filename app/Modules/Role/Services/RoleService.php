@@ -8,10 +8,11 @@ use Illuminate\Database\Eloquent\Collection;
 
 class RoleService implements RoleServiceInterface
 {
-    protected $resource=[];
+    protected $resource = ['permissions.feature.module'];
 
     public function getAll(): Collection
     {
+        // dd(Role::with($this->resource)->get()->toArray());
         return Role::with($this->resource)->get();
     }
 

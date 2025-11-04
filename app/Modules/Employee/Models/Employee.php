@@ -96,8 +96,5 @@ class Employee extends Model
     {
         return $this->belongsTo(Grade::class, 'grade_id', 'id');
     }
-    public function account_ledger(): MorphOne
-    {
-        return $this->morphOne(AccountLedger::class, 'ledgerable');
-    }
+
 }

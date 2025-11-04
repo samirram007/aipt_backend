@@ -22,7 +22,8 @@ class RolePermissionRequest extends FormRequest
         // For update requests, make validation more flexible
         if ($this->isMethod('PUT') || $this->isMethod('PATCH')) {
             // $id = $this->route('role_permission');
-
+            $rules['role_id'] = ['sometimes', 'numeric', 'exists:roles,id'];
+            $rules['app_module_feature_id'] = ['sometimes', 'numeric', 'exists:app_module_features,id'];
         }
 
         return $rules;
@@ -31,19 +32,14 @@ class RolePermissionRequest extends FormRequest
     public function messages(): array
     {
         return [
-            'name.required' => 'The name field is required.',
-            'name.string' => 'The name must be a string.',
-            'name.max' => 'The name may not be greater than 255 characters.',
-            'name.unique' => 'The name has already been taken.',
-            'code.required' => 'The code field is required.',
-            'code.string' => 'The code must be a string.',
-            'code.max' => 'The code may not be greater than 255 characters.',
-            'code.unique' => 'The code has already been taken.',
-            'description.required   ' => 'The description field is required.',
-            'description.string' => 'The description must be a string.',
-            'description.max' => 'The description may not be greater than 255 characters.',
-            'status.required' => 'The status field is required.',
-            'status.string' => 'The status must be a string.',
+            'is_allowed.required' => 'The is_allowed field is required.',
+            'is_allowed.boolean' => 'The is_allowed field must be true or false.',
+            'role_id.required' => 'The role_id field is required.',
+            'role_id.numeric' => 'The role_id field must be a number.',
+            'role_id.exists' => 'The selected role_id is invalid.',
+            'app_module_feature_id.required' => 'The app_module_feature_id field is required.',
+            'app_module_feature_id.numeric' => 'The app_module_feature_id field must be a number.',
+            'app_module_feature_id.exists' => 'The selected app_module_feature_id is invalid.',
         ];
     }
 }

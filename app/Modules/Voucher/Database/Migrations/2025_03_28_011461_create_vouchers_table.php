@@ -32,6 +32,7 @@ return new class extends Migration {
             $table->unsignedBigInteger('stock_journal_id')->nullable();
 
             $table->timestamps();
+            $table->blamable();
         });
     }
 

@@ -16,10 +16,13 @@ class RoleController extends Controller
 {
     use ApiResponseTrait;
 
-    public function __construct(protected RoleServiceInterface $service) {}
+    public function __construct(protected RoleServiceInterface $service)
+    {
+    }
 
     public function index(): SuccessCollection
     {
+
         $data = $this->service->getAll();
         return new RoleCollection($data);
     }
@@ -27,29 +30,29 @@ class RoleController extends Controller
     public function show(int $id): SuccessResource
     {
         $data = $this->service->getById($id);
-        return  new RoleResource($data);
+        return new RoleResource($data);
     }
 
     public function store(RoleRequest $request): SuccessResource
     {
         $data = $this->service->store($request->validated());
-       return  new RoleResource($data, $messages='Role created successfully');
+        return new RoleResource($data, $messages = 'Role created successfully');
     }
 
     public function update(RoleRequest $request, int $id): SuccessResource
     {
         $data = $this->service->update($request->validated(), $id);
-        return  new RoleResource($data, $messages='Role updated successfully');
+        return new RoleResource($data, $messages = 'Role updated successfully');
     }
 
-        public function destroy(int $id): JsonResponse
+    public function destroy(int $id): JsonResponse
     {
 
-        $result=$this->service->delete($id);
+        $result = $this->service->delete($id);
         return new JsonResponse([
             'status' => $result,
             'code' => 204,
-            'message' => $result?'Role deleted successfully':'Role not found',
+            'message' => $result ? 'Role deleted successfully' : 'Role not found',
         ]);
     }
 }

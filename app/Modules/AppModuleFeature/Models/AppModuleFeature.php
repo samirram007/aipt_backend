@@ -34,6 +34,6 @@ class AppModuleFeature extends Model
 
     public function role_permissions(): HasMany
     {
-        return $this->hasMany(RolePermission::class, 'app_module_feature_id');
+        return $this->hasMany(RolePermission::class, 'app_module_feature_id', 'id');
     }
 }

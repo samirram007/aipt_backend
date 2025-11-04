@@ -24,7 +24,7 @@ class Role extends Model
     }
     public function permissions(): HasMany
     {
-        return $this->hasMany(RolePermission::class);
+        return $this->hasMany(RolePermission::class, 'role_id');
     }
 
     // Helper: check if role has permission for a feature

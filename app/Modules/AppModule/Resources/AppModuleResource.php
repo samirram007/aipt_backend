@@ -2,6 +2,8 @@
 
 namespace App\Modules\AppModule\Resources;
 
+use App\Modules\AppModuleFeature\Models\AppModuleFeature;
+use App\Modules\AppModuleFeature\Resources\AppModuleFeatureResource;
 use Illuminate\Http\Request;
 
 use App\Http\Resources\SuccessResource;
@@ -15,6 +17,7 @@ class AppModuleResource extends SuccessResource
             'code' => $this->code,
             'status' => $this->status,
             'description' => $this->description,
+            'features' => AppModuleFeatureResource::collection($this->whenLoaded('app_module_features')),
         ];
     }
 }

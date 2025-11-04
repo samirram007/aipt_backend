@@ -9,7 +9,7 @@ class UserSeeder extends Seeder
 {
     public function run(): void
     {
-        User::create(['name' => 'Sample User']);
+        //User::create(['name' => 'Sample User']);
 
         // Uncomment to use factory if available
         // User::factory()->count(10)->create();

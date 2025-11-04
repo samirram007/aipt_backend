@@ -2,12 +2,15 @@
 
 namespace App\Modules\StockJournalEntry\Models;
 
+use App\Enums\MovementType;
+use App\Traits\Blameable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class StockJournalEntry extends Model
 {
     use HasFactory;
+    use Blameable;
 
     protected $table = 'stock_journal_entries';
 
@@ -28,5 +31,6 @@ class StockJournalEntry extends Model
     protected $casts = [
         'created_at' => 'datetime',
         'updated_at' => 'datetime',
+        'movement_type' => MovementType::class,
     ];
 }
