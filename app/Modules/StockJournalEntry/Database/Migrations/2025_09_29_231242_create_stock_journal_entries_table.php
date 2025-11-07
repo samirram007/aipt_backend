@@ -9,14 +9,22 @@ return new class extends Migration {
     {
         Schema::create('stock_journal_entries', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('stock_journal_id')->constrained()->cascadeOnDelete();
-            $table->foreignId('stock_item_id');
-            $table->decimal('stock_unit_id', 15, 4)->nullable();
-            $table->decimal('alternate_unit_id', 15, 4)->nullable();
+            $table->unsignedBigInteger('stock_journal_id');
+            $table->unsignedBigInteger('stock_item_id');
+            $table->unsignedBigInteger('stock_unit_id')->nullable();
+            $table->unsignedBigInteger('alternate_unit_id')->nullable();
             $table->decimal('unit_ratio', 15, 4)->default(1.00);
             $table->decimal('item_cost', 15, 4)->default(0);
-            $table->decimal('quantity', 15, 4)->default(1);
+            $table->decimal('actual_quantity', 15, 4)->default(1);
+            $table->decimal('billing_quantity', 15, 4)->default(1);
             $table->decimal('rate', 15, 2)->default(0);
+            $table->unsignedBigInteger('rate_unit_id')->default(0);
+            $table->decimal('rate_unit_ratio', 15, 4)->default(1);
+            $table->decimal('discount_percentage', 15, 4)->default(0);
+            $table->decimal('discount', 15, 4)->default(0);
+
+            $table->decimal('amount', 18, 4)
+                ->virtualAs('billing_quantity * rate - discount');
             $table->string('movement_type')->default('in'); // 'in', 'out'
 
             $table->timestamps();

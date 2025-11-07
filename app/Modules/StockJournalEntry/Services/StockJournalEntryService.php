@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Collection;
 
 class StockJournalEntryService implements StockJournalEntryServiceInterface
 {
-    protected $resource=[];
+    protected $resource = ['rate_unit'];
 
     public function getAll(): Collection
     {

@@ -11,9 +11,23 @@ class StockJournalGodownEntryResource extends SuccessResource
     {
         return [
             'id' => $this->id,
-            'name' => $this->name,
-            'created_at' => $this->created_at?->toISOString(),
-            'updated_at' => $this->updated_at?->toISOString(),
+            'stockJournalEntryId' => $this->stock_journal_entry_id,
+            'godownId' => $this->godown_id,
+            'batchNo' => $this->batch_no,
+            'mfgDate' => $this->mfg_date,
+            'expiryDate' => $this->expiry_date,
+            'serialNo' => $this->serial_no,
+            'actualQuantity' => $this->actual_quantity,
+            'billingQuantity' => $this->billing_quantity,
+            'rate' => $this->rate,
+            'discountPercentage' => $this->discount_percentage,
+            'discount' => $this->discount,
+            'amount' => $this->amount,
+            'movementType' => $this->movement_type,
+            'remarks' => $this->remarks,
+            'createdAt' => $this->created_at?->toISOString(),
+            'updatedAt' => $this->updated_at?->toISOString(),
+
         ];
     }
 }

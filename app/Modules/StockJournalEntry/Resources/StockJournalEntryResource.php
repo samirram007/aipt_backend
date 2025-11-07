@@ -2,6 +2,7 @@
 
 namespace App\Modules\StockJournalEntry\Resources;
 
+use App\Modules\StockUnit\Resources\StockUnitResource;
 use Illuminate\Http\Request;
 
 use App\Http\Resources\SuccessResource;
@@ -17,12 +18,18 @@ class StockJournalEntryResource extends SuccessResource
             'alternateUnitId' => $this->alternate_unit_id,
             'unitRatio' => $this->unit_ratio,
             'itemCost' => $this->item_cost,
-            'quantity' => $this->quantity,
+            'actualQuantity' => $this->actual_quantity,
+            'billingQuantity' => $this->billing_quantity,
             'rate' => $this->rate,
+            'rateUnitId' => $this->rate_unit_id,
+            'rateUnitRatio' => $this->rate_unit_ratio,
+            'discountPercentage' => $this->discount_percentage,
+            'discount' => $this->discount,
             'movementType' => $this->movement_type,
-            'godownId' => $this->godown_id,
-            'created_at' => $this->created_at?->toISOString(),
-            'updated_at' => $this->updated_at?->toISOString(),
+            'rateUnit' => StockUnitResource::make($this->whenLoaded('rate_unit')),
+
+            'createdAt' => $this->created_at?->toISOString(),
+            'updatedAt' => $this->updated_at?->toISOString(),
         ];
     }
 }

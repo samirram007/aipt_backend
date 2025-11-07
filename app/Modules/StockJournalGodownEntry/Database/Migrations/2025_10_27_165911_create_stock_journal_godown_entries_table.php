@@ -20,9 +20,12 @@ return new class extends Migration {
             // Serial tracking
             $table->string('serial_no')->nullable();
             // Quantities
-            $table->decimal('quantity', 15, 4)->default(0);
+            $table->decimal('actual_quantity', 15, 4)->default(1);
+            $table->decimal('billing_quantity', 15, 4)->default(1);
             $table->decimal('rate', 15, 4)->default(0);
-            $table->decimal('amount', 18, 4)->virtualAs('quantity * rate');
+            $table->decimal('discount_percentage', 15, 4)->default(0);
+            $table->decimal('discount', 15, 4)->default(0);
+            $table->decimal('amount', 18, 4)->virtualAs('billing_quantity * rate - discount');
 
             // Movement direction: in / out
             $table->enum('movement_type', ['in', 'out'])->default('in');

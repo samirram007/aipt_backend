@@ -65,6 +65,22 @@ class StockUnitSeeder extends Seeder
 
             // Others
             ['name' => 'Others', 'code' => 'OTH', 'unit_type' => 'simple', 'quantity_type' => 'others', 'description' => 'Other units', 'status' => 'active', 'icon' => 'FaEllipsisH', 'unique_quantity_code_id' => 44, 'primary_stock_unit_id' => null, 'secondary_stock_unit_id' => null, 'conversion_factor' => null, 'created_at' => now(), 'updated_at' => now(), 'no_of_decimal_places' => 2],
+            [
+                'name' => 'Bags of 50 Kilograms',
+                'code' => 'BAG of 50 KGS',
+                'unit_type' => 'compound',
+                'quantity_type' => 'measure',
+                'description' => 'Bags of 50 Kilograms',
+                'status' => 'active',
+                'icon' => 'FaEllipsisH',
+                'unique_quantity_code_id' => 44,
+                'primary_stock_unit_id' => 19,
+                'secondary_stock_unit_id' => 15,
+                'conversion_factor' => 50.0,
+                'created_at' => now(),
+                'updated_at' => now(),
+                'no_of_decimal_places' => 2
+            ],
         ]);
     }
 }

@@ -19,7 +19,23 @@ class StockItemSeeder extends Seeder
     {
         // Assuming related models (StockUnit, Uqc, Brand, StockCategory, StockGroup) are seeded or exist
         $stockUnit = StockUnit::where('code', 'MTS')->first() ?? StockUnit::create(['name' => 'MT']);
-        $alternateStockUnit = StockUnit::where('name', 'Bags')->first() ?? StockUnit::create(['name' => 'Bags']);
+        $alternateStockUnit = StockUnit::where('name', 'Bags of 50 Kilograms')->first() ??
+            StockUnit::create([
+                'name' => 'Bags of 50 Kilograms',
+                'code' => 'BAG of 50 KGS',
+                'unit_type' => 'compound',
+                'quantity_type' => 'measure',
+                'description' => 'Bags of 50 Kilograms',
+                'status' => 'active',
+                'icon' => 'FaEllipsisH',
+                'unique_quantity_code_id' => 44,
+                'primary_stock_unit_id' => 19,
+                'secondary_stock_unit_id' => 15,
+                'conversion_factor' => 50.0,
+                'created_at' => now(),
+                'updated_at' => now(),
+                'no_of_decimal_places' => 2
+            ]);
         $uqc = UniqueQuantityCode::where('code', 'KGS')->first() ??
             UniqueQuantityCode::create(['code' => 'KGS', 'description' => 'Kilogram']);
         $brand = StockItemBrand::where('name', 'UltraTech')->first() ??
