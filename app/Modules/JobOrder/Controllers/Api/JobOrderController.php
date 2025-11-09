@@ -51,6 +51,11 @@ class JobOrderController extends Controller
         return $this->service->upload_report($id);
     }
 
+    public function destroyReport(Request $request, int $id): ?JsonResponse
+    {
+        return $this->service->destroyReport($id);
+    }
+
     public function destroy(int $id): JsonResponse
     {
 

@@ -19,6 +19,7 @@ return new class extends Migration
             $table->unsignedBigInteger('agent_id')->nullable();
             $table->unsignedBigInteger('physician_id')->nullable();
             $table->unsignedBigInteger('discount_type_id')->default(1);
+            $table->unique(['name','contact_no']);
             $table->timestamps();
         });
 

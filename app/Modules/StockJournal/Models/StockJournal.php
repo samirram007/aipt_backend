@@ -25,15 +25,17 @@ class StockJournal extends Model
     ];
 
     protected $casts = [
- 'created_at' => 'datetime',
+        'created_at' => 'datetime',
         'updated_at' => 'datetime',
     ];
 
-    public function stock_journal_entries():HasMany{
+    public function stock_journal_entries(): HasMany
+    {
         return $this->hasMany(StockJournalEntry::class);
     }
 
-    public function voucher():BelongsTo{
+    public function voucher(): BelongsTo
+    {
         return $this->belongsTo(Voucher::class);
     }
 }

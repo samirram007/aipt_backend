@@ -21,6 +21,9 @@ return new class extends Migration {
             $table->decimal('rate', 15, 2)->default(0);
             $table->string('movement_type')->default('in'); // 'in', 'out'
             $table->unsignedBigInteger('godown_id')->nullable();
+            $table->boolean('is_cancelled')->default(false);
+            $table->unsignedBigInteger('cancelled_by')->nullable();
+            $table->text('cancellation_reason')->nullable();
             $table->timestamps();
         });
     }

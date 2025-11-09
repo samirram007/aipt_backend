@@ -12,6 +12,7 @@ enum JobStatus: string
     case Delivered = 'delivered';
     case Cancelled = 'cancelled';
     case Drafted = 'drafted';
+    case CancelRequest = "cancellation_requested";
 
     public static function getValues(): array
     {

@@ -80,49 +80,84 @@ class JobOrderService implements JobOrderServiceInterface
 
     }
 
-  public function upload_report(int $id): ?JsonResponse
-{
-    try {
-        $jobOrder = JobOrder::findOrFail($id);
+    public function upload_report(int $id): ?JsonResponse
+    {
+        try {
+            $jobOrder = JobOrder::findOrFail($id);
 
-        if (!request()->hasFile('report_file')) {
+            if (!request()->hasFile('report_file')) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'No report file provided.',
+                ], 400);
+            }
+
+            $file = request()->file('report_file');
+
+            $voucherId = $jobOrder->voucher_id;
+            $timestamp = now()->format('Ymd_His');
+            $originalName = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
+            $extension = $file->getClientOriginalExtension();
+            $filename = "{$voucherId}_{$timestamp}_{$originalName}.{$extension}";
+
+            $path = $file->storeAs('reports', $filename, 'public');
+
+            $jobOrder->report_file_name = $path;
+            $jobOrder->save();
+
+            $publicUrl = asset(str_replace('storage/', '', $path));
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Report uploaded successfully.',
+                'file_path' => $publicUrl,
+            ]);
+        } catch (Exception $e) {
+            Log::error('JobOrder upload_report error: ' . $e->getMessage(), [
+                'trace' => $e->getTraceAsString(),
+            ]);
+
             return response()->json([
                 'success' => false,
-                'message' => 'No report file provided.',
-            ], 400);
+                'message' => 'Failed to upload report file.',
+            ], 500);
+        }
+    }
+
+    public function destroyReport(int $id): ?JsonResponse
+    {
+        try {
+        $jobOrder = JobOrder::findOrFail($id);
+
+        if (!$jobOrder->report_file_name) {
+            return response()->json([
+                'success' => false,
+                'message' => 'No report file found for this job order.',
+            ], 404);
         }
 
-        $file = request()->file('report_file');
+        if (Storage::disk('public')->exists($jobOrder->report_file_name)) {
+            Storage::disk('public')->delete($jobOrder->report_file_name);
+        }
 
-        $voucherId = $jobOrder->voucher_id;
-        $timestamp = now()->format('Ymd_His');
-        $originalName = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
-        $extension = $file->getClientOriginalExtension();
-        $filename = "{$voucherId}_{$timestamp}_{$originalName}.{$extension}";
-
-        $path = $file->storeAs('reports', $filename, 'public');
-
-        $jobOrder->report_file_name = $path;
+        $jobOrder->report_file_name = null;
         $jobOrder->save();
-
-        $publicUrl = asset(str_replace('storage/', '', $path));
 
         return response()->json([
             'success' => true,
-            'message' => 'Report uploaded successfully.',
-            'file_path' => $publicUrl,
+            'message' => 'Report deleted successfully.',
         ]);
     } catch (Exception $e) {
-        Log::error('JobOrder upload_report error: ' . $e->getMessage(), [
+        Log::error('JobOrder destroy_report error: ' . $e->getMessage(), [
             'trace' => $e->getTraceAsString(),
         ]);
 
         return response()->json([
             'success' => false,
-            'message' => 'Failed to upload report file.',
+            'message' => 'Failed to delete report file.',
         ], 500);
     }
-}
+    }
 
     public function delete(int $id): bool
     {

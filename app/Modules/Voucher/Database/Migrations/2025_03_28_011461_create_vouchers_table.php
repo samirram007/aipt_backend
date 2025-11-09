@@ -28,7 +28,9 @@ return new class extends Migration {
             $table->unsignedBigInteger('fiscal_year_id')->default(2025);
             $table->unsignedBigInteger('company_id')->default(1);
             $table->unsignedBigInteger('stock_journal_id')->nullable();
-
+            $table->boolean('is_cancelled')->default(false);
+            $table->unsignedBigInteger('cancelled_by')->nullable();
+            $table->text('cancellation_reason')->nullable();
             $table->timestamps();
         });
     }

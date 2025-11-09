@@ -9,7 +9,7 @@ class PatientSeeder extends Seeder
 {
     public function run(): void
     {
-   Patient::create([
+        Patient::create([
             'name' => 'Abhijeet',
             'status' => 'active',
             'gender' => 'male',
@@ -17,14 +17,6 @@ class PatientSeeder extends Seeder
             'contact_no' => '6200000000',
             'agent_id' => 1,
             'physician_id' => 1,
-            'address' => json_encode([
-                'line1' => 'abasadsv',
-                'line2' => 'dafdfsdfdfa',
-                'city' => 'Kolkata',
-                'state_id' => 1,
-                'is_primary' => true,
-                'postal_code' => ''
-            ]),
         ]);
 
         Patient::create([
@@ -35,14 +27,6 @@ class PatientSeeder extends Seeder
             'contact_no' => '9876543210',
             'agent_id' => 2,
             'physician_id' => 1,
-            'address' => json_encode([
-                'line1' => '45 Park Street',
-                'line2' => 'Apt 5B',
-                'city' => 'Kolkata',
-                'state_id' => 1,
-                'is_primary' => true,
-                'postal_code' => '700016'
-            ]),
         ]);
 
         Patient::create([
@@ -53,102 +37,87 @@ class PatientSeeder extends Seeder
             'contact_no' => '9988776655',
             'agent_id' => 3,
             'physician_id' => 2,
-            'address' => json_encode([
-                'line1' => 'Sector 21',
-                'line2' => 'Palm Residency',
-                'city' => 'Noida',
-                'state_id' => 9,
-                'is_primary' => true,
-                'postal_code' => '201301'
-            ]),
         ]);
-//         [
-//   {
-//     "name": "Prashant",
-//     "status": "active",
-//     "gender": "male",
-//     "age": 34,
-//     "contact_no": "6200000000",
-//     "agent_id": 1,
-//     "physician_id": 1,
-//     "address": {
-//       "line1": "abasadsv",
-//       "line2": "dafdfsdfdfa",
-//       "city": "Kolkata",
-//       "state_id": 1,
-//       "is_primary": true,
-//       "postal_code": ""
-//     }
-//   },
-//   {
-//     "name": "Rohit",
-//     "status": "active",
-//     "gender": "male",
-//     "age": 28,
-//     "contact_no": "6200000001",
-//     "agent_id": 2,
-//     "physician_id": 2,
-//     "address": {
-//       "line1": "Street 12",
-//       "line2": "Block A",
-//       "city": "Mumbai",
-//       "state_id": 2,
-//       "is_primary": true,
-//       "postal_code": "400001"
-//     }
-//   },
-//   {
-//     "name": "Anjali",
-//     "status": "active",
-//     "gender": "female",
-//     "age": 30,
-//     "contact_no": "6200000002",
-//     "agent_id": 1,
-//     "physician_id": 3,
-//     "address": {
-//       "line1": "Street 34",
-//       "line2": "Block B",
-//       "city": "Delhi",
-//       "state_id": 3,
-//       "is_primary": true,
-//       "postal_code": "110001"
-//     }
-//   },
-//   {
-//     "name": "Suman",
-//     "status": "active",
-//     "gender": "female",
-//     "age": 26,
-//     "contact_no": "6200000003",
-//     "agent_id": 2,
-//     "physician_id": 1,
-//     "address": {
-//       "line1": "Street 56",
-//       "line2": "Block C",
-//       "city": "Bangalore",
-//       "state_id": 4,
-//       "is_primary": true,
-//       "postal_code": "560001"
-//     }
-//   },
-//   {
-//     "name": "Ravi",
-//     "status": "active",
-//     "gender": "male",
-//     "age": 32,
-//     "contact_no": "6200000004",
-//     "agent_id": 3,
-//     "physician_id": 2,
-//     "address": {
-//       "line1": "Street 78",
-//       "line2": "Block D",
-//       "city": "Chennai",
-//       "state_id": 5,
-//       "is_primary": true,
-//       "postal_code": "600001"
-//     }
-//   }
-// ]
 
+        // ✅ New patients
+        Patient::create([
+            'name' => 'Nisha Verma',
+            'status' => 'active',
+            'gender' => 'female',
+            'age' => 36,
+            'contact_no' => '9812233445',
+            'agent_id' => 1,
+            'physician_id' => 2,
+        ]);
+
+        Patient::create([
+            'name' => 'Arjun Patel',
+            'status' => 'active',
+            'gender' => 'male',
+            'age' => 27,
+            'contact_no' => '9821345678',
+            'agent_id' => 2,
+            'physician_id' => 3,
+        ]);
+
+        Patient::create([
+            'name' => 'Sneha Iyer',
+            'status' => 'active',
+            'gender' => 'female',
+            'age' => 32,
+            'contact_no' => '9876512345',
+            'agent_id' => 1,
+            'physician_id' => 2,
+        ]);
+
+        Patient::create([
+            'name' => 'Vikram Sethi',
+            'status' => 'inactive',
+            'gender' => 'male',
+            'age' => 45,
+            'contact_no' => '9955112233',
+            'agent_id' => 3,
+            'physician_id' => 3,
+        ]);
+
+        Patient::create([
+            'name' => 'Meena Gupta',
+            'status' => 'active',
+            'gender' => 'female',
+            'age' => 54,
+            'contact_no' => '9788899777',
+            'agent_id' => 2,
+            'physician_id' => 4,
+        ]);
+
+        Patient::create([
+            'name' => 'Deepak Rao',
+            'status' => 'active',
+            'gender' => 'male',
+            'age' => 38,
+            'contact_no' => '9898989898',
+            'agent_id' => 1,
+            'physician_id' => 1,
+        ]);
+
+        Patient::create([
+            'name' => 'Aarav Khanna',
+            'status' => 'active',
+            'gender' => 'male',
+            'age' => 22,
+            'contact_no' => '9000001111',
+            'agent_id' => 3,
+            'physician_id' => 2,
+        ]);
+
+        Patient::create([
+            'name' => 'Ritu Malhotra',
+            'status' => 'inactive',
+            'gender' => 'female',
+            'age' => 48,
+            'contact_no' => '9090909090',
+            'agent_id' => 1,
+            'physician_id' => 3,
+        ]);
     }
 }

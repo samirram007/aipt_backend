@@ -5,6 +5,8 @@ namespace App\Modules\AccountLedger\Database\Seeders;
 use App\Modules\AccountGroup\Models\AccountGroup;
 use Illuminate\Database\Seeder;
 use App\Modules\AccountLedger\Models\AccountLedger;
+use App\Modules\Employee\Models\Employee;
+use App\Modules\Patient\Models\Patient;
 use Illuminate\Support\Facades\DB;
 
 class AccountLedgerSeeder extends Seeder
@@ -307,5 +309,42 @@ class AccountLedgerSeeder extends Seeder
         ];
 
         DB::table('account_ledgers')->insert($ledgers);
+
+        // creating patient ledgers
+
+        $patients = Patient::all();
+
+        foreach ($patients as $index => $patient){
+            $accountLedger = [
+                'name' => $patient->name,
+                'code' => 'P-' . str_pad($patient->id, 4, '0', STR_PAD_LEFT),
+                'account_group_id' => 10001,
+                'description' => 'Patient',
+                'status' => 'active',
+                'is_system' => false,
+                'is_hidden' => false,
+                'ledgerable_id' => $patient->id,
+                'ledgerable_type' => 'patient'
+            ];
+            AccountLedger::create($accountLedger);
+        }
+
+        // create employee ledgers
+
+        $employees = Employee::all();
+
+        foreach($employees as $index => $employee){
+            $employeeAccountLedger = [
+                'name' => $employee->name,
+                'code' => 'P-' . str_pad($employee->id, 4, '0', STR_PAD_LEFT),
+                'account_group_id' => 10001,
+                'description' => 'Employees',
+                'status' => 'active',
+                'is_system' => false,
+                'is_hidden' => false,
+                'ledgerable_id' => $employee->id,
+                'ledgerable_type' => 'employee'
+            ];
+        }
     }
 }

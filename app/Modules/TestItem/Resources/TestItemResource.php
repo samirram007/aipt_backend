@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 
 use App\Http\Resources\SuccessResource;
 use App\Modules\StockCategory\Resources\StockCategoryResource;
+use App\Modules\StockGroup\Resources\StockGroupResource;
 use App\Modules\StockUnit\Resources\StockUnitResource;
 use App\Modules\TestItemReportTemplate\Resources\TestItemReportTemplateResource;
 
@@ -69,6 +70,7 @@ class TestItemResource extends SuccessResource
 
 
             'stockUnit' => StockUnitResource::make($this->whenLoaded('stock_unit')),
+            'stockGroup' => StockGroupResource::make($this->whenLoaded('stock_group')),
             'alternateStockUnit' => StockUnitResource::make($this->whenLoaded('alternate_stock_unit')),
             'stockCategory' => StockCategoryResource::make($this->whenLoaded('stock_category')),
             'testItemReportTemplates' => TestItemReportTemplateResource::collection($this->whenLoaded('test_item_report_templates'))

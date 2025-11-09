@@ -15,6 +15,10 @@ return new class extends Migration {
             $table->string('type'); // 'in', 'out', 'transfer', 'production'
             $table->text('remarks')->nullable();
 
+            $table->boolean('is_cancelled')->default(false);
+            $table->unsignedBigInteger('cancelled_by')->nullable();
+            $table->text('cancellation_reason')->nullable();
+
             $table->timestamps();
         });
     }

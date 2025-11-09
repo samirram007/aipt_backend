@@ -32,7 +32,7 @@ class PatientService implements PatientServiceInterface
             $patient->addresses()->create($address);
         }
 
-        $data['account_group_id'] = 2;
+        $data['account_group_id'] = 10001;
         if (isset($data['account_group_id'])) {
 
             $data['account_ledger']['name'] = $this->verifyUniqueLedgerName($patient->name, $patient->id);

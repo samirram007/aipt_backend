@@ -13,5 +13,6 @@ interface JobOrderServiceInterface
     public function store(array $data): JobOrder;
     public function update(array $data, int $id): JobOrder;
     public function upload_report(int $id): ?JsonResponse;
+    public function destroyReport(int $id): ?JsonResponse;
     public function delete(int $id): bool;
 }

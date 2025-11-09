@@ -7,6 +7,8 @@ use Illuminate\Http\Request;
 
 use App\Http\Resources\SuccessResource;
 use App\Modules\JobOrder\Resources\JobOrderResource;
+use App\Modules\StockCategory\Resources\StockCategoryResource;
+use App\Modules\StockGroup\Resources\StockGroupResource;
 
 class StockItemResource extends SuccessResource
 {
@@ -68,6 +70,8 @@ class StockItemResource extends SuccessResource
             'processType'=> $this->process_type,
 
             'stockUnit' => StockUnitResource::make($this->whenLoaded('stock_unit')),
+            'stockCategory' => StockCategoryResource::make($this->whenLoaded('stock_category')),
+            'stockGroup' => StockGroupResource::make($this->whenLoaded('stock_group')),
             'alternateStockUnit' => StockUnitResource::make($this->whenLoaded('alternate_stock_unit'))
 
 

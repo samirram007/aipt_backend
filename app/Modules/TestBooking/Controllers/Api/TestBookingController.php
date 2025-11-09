@@ -55,6 +55,15 @@ class TestBookingController extends Controller
         return new TestBookingResource($data,$messages="Test Cancellation done successfully");
     }
 
+    public function test_cancellation(int $id):JsonResponse{
+        $data = $this->service->test_cancellation($id);
+        return new JsonResponse([
+            'status' => $data,
+            'code' => 204,
+            'message' => $data ? 'Test deleted successfully' : 'Test Entry not found',
+        ]);
+    }
+
 
     public function update(TestBookingRequest $request, int $id): SuccessResource
     {
@@ -62,7 +71,7 @@ class TestBookingController extends Controller
         return  new TestBookingResource($data, $messages='TestBooking updated successfully');
     }
 
-        public function destroy(int $id): JsonResponse
+    public function destroy(int $id): JsonResponse
     {
 
         $result=$this->service->delete($id);

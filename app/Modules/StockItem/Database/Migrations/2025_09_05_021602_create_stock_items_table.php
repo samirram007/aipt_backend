@@ -76,6 +76,9 @@ return new class extends Migration {
             $table->unsignedBigInteger('stock_category_id')->nullable();
             $table->unsignedBigInteger('stock_group_id')->nullable();
 
+            // department id
+            $table->unsignedBigInteger('department_id')->nullable();
+
 
             // E-commerce readiness
             $table->decimal('mrp', 15, 2)->nullable();
