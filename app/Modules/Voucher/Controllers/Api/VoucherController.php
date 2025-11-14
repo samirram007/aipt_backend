@@ -23,7 +23,7 @@ class VoucherController extends Controller
     public function index(): SuccessCollection
     {
         $data = $this->service->getAll();
-       // dd($data);
+        // dd($data);
         return new VoucherCollection($data);
     }
 
@@ -35,6 +35,7 @@ class VoucherController extends Controller
 
     public function store(VoucherRequest $request): SuccessResource
     {
+
         $data = $this->service->store($request->validated());
         return new VoucherResource($data, $messages = 'Voucher created successfully');
     }

@@ -14,17 +14,16 @@ class StockJournalRequest extends FormRequest
     public function rules(): array
     {
         $rules = [
-            'name' => ['required', 'string', 'max:255','unique:stock_journals,name'],
-            'code' => ['sometimes','required', 'string', 'max:255','unique:stock_journals,code'],
-            'description' => ['sometimes','required', 'string', 'max:255'],
-            'status' => ['sometimes','required', 'string', 'max:255'],
+            'journal_no' => ['sometimes', 'nullable', 'string', 'max:255'],
+            'journal_date' => ['sometimes', 'nullable', 'date'],
+            'voucher_id' => ['sometimes', 'nullable', 'numeric', 'exists:vouchers,id'],
+            'type' => ['sometimes', 'nullable', 'string', 'max:255'],
+            'remarks' => ['sometimes', 'nullable', 'string', 'max:255'],
+            'stock_journal_entries' => ['sometimes', 'nullable', 'array'],
         ];
 
         // For update requests, make validation more flexible
         if ($this->isMethod('PUT') || $this->isMethod('PATCH')) {
-            $id=$this->route('stock_journal');
-            $rules['name'] = ['sometimes', 'required', 'string', 'max:255', 'unique:stock_journals,name,' . $id,];
-            $rules['code'] = ['sometimes', 'required', 'string', 'max:255', 'unique:stock_journals,code,' . $id,];
 
         }
 

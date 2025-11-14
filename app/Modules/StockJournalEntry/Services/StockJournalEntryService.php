@@ -4,12 +4,22 @@ namespace App\Modules\StockJournalEntry\Services;
 
 use App\Modules\StockJournalEntry\Contracts\StockJournalEntryServiceInterface;
 use App\Modules\StockJournalEntry\Models\StockJournalEntry;
+use App\Modules\StockJournalGodownEntry\Contracts\StockJournalGodownEntryServiceInterface;
+use App\Modules\StockJournalGodownEntry\Requests\StockJournalGodownEntryRequest;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Support\Facades\Validator;
 
 class StockJournalEntryService implements StockJournalEntryServiceInterface
 {
     protected $resource = ['rate_unit'];
+    protected $stockJournalGodownEntryService;
 
+
+    public function __construct(
+        StockJournalGodownEntryServiceInterface $stockJournalGodownEntryService,
+    ) {
+        $this->stockJournalGodownEntryService = $stockJournalGodownEntryService;
+    }
     public function getAll(): Collection
     {
         return StockJournalEntry::with($this->resource)->get();
@@ -22,7 +32,18 @@ class StockJournalEntryService implements StockJournalEntryServiceInterface
 
     public function store(array $data): StockJournalEntry
     {
-        return StockJournalEntry::create($data);
+        $stockJournalEntry = StockJournalEntry::create($data);
+        if (!empty($data['stock_journal_godown_entries'])) {
+            foreach ($data['stock_journal_godown_entries'] as $key => $entryData) {
+
+                $entryData['stock_journal_entry_id'] = $stockJournalEntry->id;
+                $rules = (new StockJournalGodownEntryRequest())->rules();
+                $validatedStockJournalGodownEntry = Validator::make($entryData, $rules)->validate();
+                // dump($validatedStockJournalGodownEntry);
+                $data['stock_journal_godown_entries'][$key] = $this->stockJournalGodownEntryService->store($validatedStockJournalGodownEntry);
+            }
+        }
+        return $stockJournalEntry;
     }
 
     public function update(array $data, int $id): StockJournalEntry

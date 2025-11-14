@@ -80,3 +80,153 @@ INSERT IGNORE INTO `app_module_features` (`id`, `app_module_id`, `name`, `code`,
 	(12, 10009, 'Create', 'ACCOUNT_NATURE_CREATE', 'ACCOUNT_NATURE_CREATE', 'active', NULL, '2025-10-20 02:25:39', '2025-10-20 02:25:39'),
 	(13, 10009, 'Edit', 'ACCOUNT_NATURE_EDIT', 'ACCOUNT_NATURE_EDIT', 'active', NULL, '2025-10-20 02:25:41', '2025-10-20 02:25:41'),
 	(14, 10009, 'Delete', 'ACCOUNT_NATURE_DELETE', 'ACCOUNT_NATURE_DELETE', 'active', NULL, '2025-10-20 02:25:43', '2025-10-20 02:25:43');
+
+
+
+-- DROP TABLE IF EXISTS `account_groups`;
+-- CREATE TABLE IF NOT EXISTS `account_groups` (
+--   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+--   `name` varchar(191) NOT NULL,
+--   `code` varchar(191) DEFAULT NULL,
+--   `parent_id` bigint(20) unsigned DEFAULT NULL,
+--   `account_nature_id` bigint(20) unsigned DEFAULT NULL,
+--   `description` text DEFAULT NULL,
+--   `status` varchar(191) NOT NULL DEFAULT 'active',
+--   `icon` varchar(191) DEFAULT NULL,
+--   `is_system` tinyint(1) NOT NULL DEFAULT 0,
+--   `is_hidden` tinyint(1) NOT NULL DEFAULT 0,
+--   `created_at` timestamp NULL DEFAULT NULL,
+--   `updated_at` timestamp NULL DEFAULT NULL,
+--   PRIMARY KEY (`id`),
+--   UNIQUE KEY `account_groups_name_unique` (`name`)
+-- ) ENGINE=InnoDB AUTO_INCREMENT=50004 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- Dumping data for table aipt.account_groups: ~32 rows (approximately)
+INSERT IGNORE INTO `account_groups` (`id`, `name`, `code`, `parent_id`, `account_nature_id`, `description`, `status`, `icon`, `is_system`, `is_hidden`, `created_at`, `updated_at`) VALUES
+	(10001, 'Assets', 'AS', NULL, 1, 'All asset accounts', 'active', NULL, 1, 0, '2025-11-04 11:53:30', '2025-11-04 11:53:30'),
+	(10002, 'Fixed Assets', 'FA', 10001, 1, 'Tangible and intangible fixed assets', 'active', NULL, 1, 0, '2025-11-04 11:53:30', '2025-11-04 11:53:30'),
+	(10003, 'Current Assets', 'CA', 10001, 1, 'Liquid or short-term assets', 'active', NULL, 1, 0, '2025-11-04 11:53:30', '2025-11-04 11:53:30'),
+	(10004, 'Bank Accounts', 'BA', 10003, 1, 'Bank ledgers', 'active', NULL, 1, 0, '2025-11-04 11:53:30', '2025-11-04 11:53:30'),
+	(10005, 'Cash-in-Hand', 'CH', 10003, 1, 'Cash accounts', 'active', NULL, 1, 0, '2025-11-04 11:53:30', '2025-11-04 11:53:30'),
+	(10006, 'Deposits (Assets)', 'DA', 10003, 1, 'Deposits given', 'active', NULL, 1, 0, '2025-11-04 11:53:30', '2025-11-04 11:53:30'),
+	(10007, 'Loans & Advances (Assets)', 'LAA', 10003, 1, 'Loans and advances receivable', 'active', NULL, 1, 0, '2025-11-04 11:53:30', '2025-11-04 11:53:30'),
+	(10008, 'Sundry Debtors', 'SD', 10003, 1, 'Customer accounts', 'active', NULL, 1, 0, '2025-11-04 11:53:30', '2025-11-04 11:53:30'),
+	(10009, 'Stock-in-Hand', 'SIH', 10003, 1, 'Inventory and closing stock', 'active', NULL, 1, 0, '2025-11-04 11:53:30', '2025-11-04 11:53:30'),
+	(10010, 'Misc Expenses (Asset)', 'MEA', 10003, 1, 'Prepaid or deferred expenses', 'active', NULL, 1, 1, '2025-11-04 11:53:30', '2025-11-04 11:53:30'),
+	(20001, 'Liabilities', 'LB', NULL, 2, 'All liability accounts', 'active', NULL, 1, 0, '2025-11-04 11:53:30', '2025-11-04 11:53:30'),
+	(20002, 'Current Liabilities', 'CL', 20001, 2, 'Short-term obligations', 'active', NULL, 1, 0, '2025-11-04 11:53:30', '2025-11-04 11:53:30'),
+	(20003, 'Sundry Creditors', 'SC', 20002, 2, 'Supplier accounts', 'active', NULL, 1, 0, '2025-11-04 11:53:30', '2025-11-04 11:53:30'),
+	(20004, 'Duties & Taxes', 'DT', 20002, 2, 'Government dues', 'active', NULL, 1, 0, '2025-11-04 11:53:30', '2025-11-04 11:53:30'),
+	(20005, 'Provisions', 'PR', 20002, 2, 'Accrued expenses and provisions', 'active', NULL, 1, 0, '2025-11-04 11:53:30', '2025-11-04 11:53:30'),
+	(20006, 'Loans (Liability)', 'LL', 20001, 2, 'Loans payable', 'active', NULL, 1, 0, '2025-11-04 11:53:30', '2025-11-04 11:53:30'),
+	(20007, 'Secured Loans', 'SL', 20006, 2, 'Loans secured by assets', 'active', NULL, 1, 0, '2025-11-04 11:53:30', '2025-11-04 11:53:30'),
+	(20008, 'Unsecured Loans', 'UL', 20006, 2, 'Unsecured borrowings', 'active', NULL, 1, 0, '2025-11-04 11:53:30', '2025-11-04 11:53:30'),
+	(20009, 'Suspense Account', 'SUS', 20001, 2, 'Temporary adjustment account', 'active', NULL, 1, 1, '2025-11-04 11:53:30', '2025-11-04 11:53:30'),
+	(30001, 'Income', 'INC', NULL, 3, 'All income accounts', 'active', NULL, 1, 0, '2025-11-04 11:53:30', '2025-11-04 11:53:30'),
+	(30002, 'Direct Income', 'DI', 30001, 3, 'Operational income', 'active', NULL, 1, 0, '2025-11-04 11:53:30', '2025-11-04 11:53:30'),
+	(30003, 'Indirect Income', 'II', 30001, 3, 'Non-operational income', 'active', NULL, 1, 0, '2025-11-04 11:53:30', '2025-11-04 11:53:30'),
+	(30004, 'Sales Accounts', 'SA', 30002, 3, 'Sales ledgers', 'active', NULL, 1, 0, '2025-11-04 11:53:30', '2025-11-04 11:53:30'),
+	(30005, 'Other Income', 'OI', 30003, 3, 'Interest, commission, rent, etc.', 'active', NULL, 1, 0, '2025-11-04 11:53:30', '2025-11-04 11:53:30'),
+	(40001, 'Expenses', 'EXP', NULL, 4, 'All expense accounts', 'active', NULL, 1, 0, '2025-11-04 11:53:30', '2025-11-04 11:53:30'),
+	(40002, 'Direct Expenses', 'DE', 40001, 4, 'Manufacturing or purchase related', 'active', NULL, 1, 0, '2025-11-04 11:53:30', '2025-11-04 11:53:30'),
+	(40003, 'Indirect Expenses', 'IE', 40001, 4, 'Administrative and selling expenses', 'active', NULL, 1, 0, '2025-11-04 11:53:30', '2025-11-04 11:53:30'),
+	(40004, 'Purchases Accounts', 'PA', 40002, 4, 'Purchase ledgers', 'active', NULL, 1, 0, '2025-11-04 11:53:30', '2025-11-04 11:53:30'),
+	(40005, 'Cost of Goods Sold', 'COGS', 40002, 4, 'Expense group for traded items', 'active', NULL, 1, 1, '2025-11-04 11:53:30', '2025-11-04 11:53:30'),
+	(50001, 'Capital Account', 'CAP', NULL, 5, 'Owners and partners capital', 'active', NULL, 1, 0, '2025-11-04 11:53:30', '2025-11-04 11:53:30'),
+	(50002, 'Reserves & Surplus', 'RS', 50001, 5, 'Retained earnings and reserves', 'active', NULL, 1, 0, '2025-11-04 11:53:30', '2025-11-04 11:53:30'),
+	(50003, 'Drawings', 'DR', 50001, 5, 'Withdrawals by owner', 'active', NULL, 1, 0, '2025-11-04 11:53:30', '2025-11-04 11:53:30');
+
+
+
+-- DROP TABLE IF EXISTS `account_ledgers`;
+-- CREATE TABLE IF NOT EXISTS `account_ledgers` (
+--   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+--   `name` varchar(191) NOT NULL,
+--   `code` varchar(191) NOT NULL,
+--   `account_group_id` bigint(20) unsigned DEFAULT NULL,
+--   `description` varchar(191) DEFAULT NULL,
+--   `status` varchar(191) NOT NULL DEFAULT 'active',
+--   `icon` varchar(191) DEFAULT NULL,
+--   `is_system` tinyint(1) NOT NULL DEFAULT 0,
+--   `is_hidden` tinyint(1) NOT NULL DEFAULT 0,
+--   `ledgerable_id` bigint(20) unsigned DEFAULT NULL,
+--   `ledgerable_type` varchar(191) DEFAULT NULL,
+--   `created_at` timestamp NULL DEFAULT NULL,
+--   `updated_at` timestamp NULL DEFAULT NULL,
+--   PRIMARY KEY (`id`),
+--   UNIQUE KEY `account_ledgers_name_unique` (`name`),
+--   UNIQUE KEY `account_ledgers_code_unique` (`code`),
+--   KEY `account_ledgers_ledgerable_id_ledgerable_type_index` (`ledgerable_id`,`ledgerable_type`)
+-- ) ENGINE=InnoDB AUTO_INCREMENT=5000005 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- Dumping data for table aipt.account_ledgers: ~29 rows (approximately)
+INSERT IGNORE INTO `account_ledgers` (`id`, `name`, `code`, `account_group_id`, `description`, `status`, `icon`, `is_system`, `is_hidden`, `ledgerable_id`, `ledgerable_type`, `created_at`, `updated_at`) VALUES
+	(1000001, 'Cash', 'CASH', 10001, 'Cash in hand', 'active', NULL, 1, 0, NULL, NULL, NULL, NULL),
+	(1000002, 'Bank Account', 'BANK', 10002, 'Default bank ledger', 'active', NULL, 1, 0, NULL, NULL, NULL, NULL),
+	(1000003, 'Accounts Receivable (Debtors)', 'DEBTORS', 10003, 'Receivable balances from customers', 'active', NULL, 1, 0, NULL, NULL, NULL, NULL),
+	(1000004, 'Stock-in-Hand', 'STOCK', 10004, 'Inventory of goods', 'active', NULL, 1, 0, NULL, NULL, NULL, NULL),
+	(1000005, 'Input CGST', 'INCGST', 20002, 'Input Central GST', 'active', NULL, 1, 0, NULL, NULL, NULL, NULL),
+	(1000006, 'Input SGST', 'INSGST', 20002, 'Input State GST', 'active', NULL, 1, 0, NULL, NULL, NULL, NULL),
+	(1000007, 'Input IGST', 'INIGST', 20002, 'Input Integrated GST', 'active', NULL, 1, 0, NULL, NULL, NULL, NULL),
+	(1000008, 'Opening Balance Adjustment', 'OPENBAL', 50001, 'Auto-adjustment for opening balances', 'active', NULL, 1, 1, NULL, NULL, NULL, NULL),
+	(2000001, 'Accounts Payable (Creditors)', 'CREDITORS', 20001, 'Vendor accounts payable', 'active', NULL, 1, 0, NULL, NULL, NULL, NULL),
+	(2000002, 'Duties & Taxes Payable', 'TAXPAY', 20002, 'GST/VAT and statutory liabilities', 'active', NULL, 1, 0, NULL, NULL, NULL, NULL),
+	(2000003, 'Outstanding Expenses', 'OUTEXP', 40002, 'Accrued but unpaid expenses', 'active', NULL, 0, 0, NULL, NULL, NULL, '2025-11-05 06:03:13'),
+	(2000004, 'Suspense Account', 'SUSPENSE', 20002, 'Auto-adjustment suspense ledger', 'active', NULL, 1, 1, NULL, NULL, NULL, '2025-11-05 06:02:11'),
+	(2000005, 'Provision for Taxation', 'PROVTAX', 20002, 'Provision created for tax liability', 'active', NULL, 1, 0, NULL, NULL, NULL, '2025-11-05 06:01:07'),
+	(2000006, 'Output CGST', 'OUTCGST', 20002, 'Output Central GST liability', 'active', NULL, 1, 0, NULL, NULL, NULL, NULL),
+	(2000007, 'Output SGST', 'OUTSGST', 20002, 'Output State GST liability', 'active', NULL, 1, 0, NULL, NULL, NULL, NULL),
+	(2000008, 'Output IGST', 'OUTIGST', 20002, 'Output Integrated GST liability', 'active', NULL, 1, 0, NULL, NULL, NULL, NULL),
+	(3000001, 'Sales Account', 'SALES', 30001, 'Sales of goods or services', 'active', NULL, 1, 0, NULL, NULL, NULL, NULL),
+	(3000002, 'Discount Received', 'DISCIN', 30002, 'Discounts received from suppliers', 'active', NULL, 0, 0, NULL, NULL, NULL, NULL),
+	(3000003, 'Interest Income', 'INTINC', 30002, 'Interest earned on deposits or loans', 'active', NULL, 0, 0, NULL, NULL, NULL, NULL),
+	(3000004, 'Foreign Exchange Gain', 'FXGAIN', 30002, 'Gain on currency revaluation', 'active', NULL, 1, 1, NULL, NULL, NULL, NULL),
+	(4000001, 'Purchase Account', 'PURCHASE', 40001, 'Purchase of goods or materials', 'active', NULL, 1, 0, NULL, NULL, NULL, NULL),
+	(4000002, 'Freight & Carriage', 'FREIGHT', 40002, 'Freight and delivery charges', 'active', NULL, 0, 0, NULL, NULL, NULL, NULL),
+	(4000003, 'Rent Expense', 'RENT', 40002, 'Rent for office or premises', 'active', NULL, 0, 0, NULL, NULL, NULL, NULL),
+	(4000004, 'Rounding Off', 'ROUND', 40002, 'Minor rounding adjustments', 'active', NULL, 1, 1, NULL, NULL, NULL, NULL),
+	(4000005, 'Exchange Difference Loss', 'FXLOSS', 40002, 'Loss due to currency revaluation', 'active', NULL, 1, 1, NULL, NULL, NULL, NULL),
+	(4000006, 'Salary Expense', 'SALARY', 40002, 'Employee salary and wages', 'active', NULL, 0, 0, NULL, NULL, NULL, NULL),
+	(5000001, 'Capital Account', 'CAPITAL', 50001, 'Owner’s capital', 'active', NULL, 1, 0, NULL, NULL, NULL, NULL),
+	(5000002, 'Drawings', 'DRAWING', 50001, 'Withdrawals by proprietor', 'active', NULL, 1, 0, NULL, NULL, NULL, NULL),
+	(5000003, 'Profit & Loss Account', 'PLACC', 50002, 'System ledger for profit and loss summary', 'active', NULL, 1, 1, NULL, NULL, NULL, NULL),
+	(5000004, 'UltraTech Cement Limited', 'UltraTech Cement Limited', 20003, NULL, 'active', NULL, 0, 0, 1, 'supplier', '2025-11-05 05:55:55', '2025-11-05 05:55:55');
+
+-- Dumping structure for table aipt.companies
+-- DROP TABLE IF EXISTS `companies`;
+-- CREATE TABLE IF NOT EXISTS `companies` (
+--   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+--   `name` varchar(191) NOT NULL,
+--   `code` varchar(191) NOT NULL,
+--   `mailing_name` varchar(191) NOT NULL,
+--   `address` varchar(191) DEFAULT NULL,
+--   `phone_no` varchar(191) DEFAULT NULL,
+--   `mobile_no` varchar(191) DEFAULT NULL,
+--   `email` varchar(191) DEFAULT NULL,
+--   `website` varchar(191) DEFAULT NULL,
+--   `company_type_id` bigint(20) unsigned NOT NULL,
+--   `cin_no` varchar(191) DEFAULT NULL,
+--   `tin_no` varchar(191) DEFAULT NULL,
+--   `tan_no` varchar(191) DEFAULT NULL,
+--   `gst_no` varchar(191) DEFAULT NULL,
+--   `pan_no` varchar(191) DEFAULT NULL,
+--   `logo` varchar(191) DEFAULT NULL,
+--   `currency_id` bigint(20) unsigned NOT NULL DEFAULT 1,
+--   `country_id` bigint(20) unsigned NOT NULL DEFAULT 76,
+--   `state_id` bigint(20) unsigned DEFAULT NULL,
+--   `city` varchar(191) DEFAULT NULL,
+--   `zip_code` varchar(191) DEFAULT NULL,
+--   `is_group_company` tinyint(1) NOT NULL DEFAULT 0,
+--   `status` enum('active','inactive') NOT NULL DEFAULT 'active',
+--   `created_at` timestamp NULL DEFAULT NULL,
+--   `updated_at` timestamp NULL DEFAULT NULL,
+--   PRIMARY KEY (`id`),
+--   UNIQUE KEY `companies_name_unique` (`name`),
+--   UNIQUE KEY `companies_code_unique` (`code`),
+--   UNIQUE KEY `companies_mailing_name_unique` (`mailing_name`)
+-- ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- Dumping data for table aipt.companies: ~1 rows (approximately)
+INSERT IGNORE INTO `companies` (`id`, `name`, `code`, `mailing_name`, `address`, `phone_no`, `mobile_no`, `email`, `website`, `company_type_id`, `cin_no`, `tin_no`, `tan_no`, `gst_no`, `pan_no`, `logo`, `currency_id`, `country_id`, `state_id`, `city`, `zip_code`, `is_group_company`, `status`, `created_at`, `updated_at`) VALUES
+	(1, 'Sharma Hardware', 'C001', 'Sharma Hardware', 'N.H.-34, MangalBari, Malda', '03512-260342', '9805595288', 'sharma_hardware@gmail.com', 'www.sharma_hardware.com', 1, '1234567890', '1234567890', '1234567890', '19AAACL6442L1Z7', '1234567890', 'logo.png', 1, 76, 36, ' Malda', '732142', 0, 'active', '2025-11-04 11:53:30', '2025-11-04 11:53:30');
+

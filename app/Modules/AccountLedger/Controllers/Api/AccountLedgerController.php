@@ -75,6 +75,11 @@ class AccountLedgerController extends Controller
         $data = $this->service->getPurchaseLedgers();
         return new AccountLedgerCollection($data);
     }
+    public function sale_ledgers(): SuccessCollection
+    {
+        $data = $this->service->getSaleLedgers();
+        return new AccountLedgerCollection($data);
+    }
     public function supplier_ledgers(): SuccessCollection
     {
         $data = $this->service->getSupplierLedgers();

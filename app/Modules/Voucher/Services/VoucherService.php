@@ -2,13 +2,38 @@
 
 namespace App\Modules\Voucher\Services;
 
+use App\Modules\StockJournal\Contracts\StockJournalServiceInterface;
+use App\Modules\StockJournal\Requests\StockJournalRequest;
+use App\Modules\StockJournal\Services\StockJournalService;
 use App\Modules\Voucher\Contracts\VoucherServiceInterface;
 use App\Modules\Voucher\Models\Voucher;
+use App\Modules\VoucherNo\Contracts\VoucherNoServiceInterface;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Support\Facades\Validator;
 
 class VoucherService implements VoucherServiceInterface
 {
-    protected $resource = ['voucher_entries.account_ledger', 'voucher_type'];
+    protected $resource = [
+        'voucher_entries.account_ledger',
+        'voucher_type',
+        'stock_journal.stock_journal_entries.rate_unit',
+        'stock_journal.stock_journal_entries.stock_item.stock_unit',
+        'stock_journal.stock_journal_entries.stock_item.alternate_stock_unit',
+        'stock_journal.stock_journal_entries.alternate_unit',
+        'stock_journal.stock_journal_entries.stock_journal_godown_entries'
+    ];
+    protected $voucherNoService;
+    protected $stockJournalRequest;
+    protected $stockJournalService;
+
+
+    public function __construct(
+        VoucherNoServiceInterface $voucherNoService,
+        StockJournalServiceInterface $stockJournalService
+    ) {
+        $this->voucherNoService = $voucherNoService;
+        $this->stockJournalService = $stockJournalService;
+    }
 
     public function getAll(): Collection
     {
@@ -29,7 +54,50 @@ class VoucherService implements VoucherServiceInterface
 
     public function store(array $data): Voucher
     {
-        return Voucher::create($data);
+
+
+        if (!isset($data['voucher_no']) || empty($data['voucher_no']) || $data['voucher_no'] === 'new') {
+            // $voucher_type = Voucher::where('voucher_type_id', $data['voucher_type_id'])->first();
+
+            $voucher_type_id = $data['voucher_type_id'];
+            $company_id = $data['company_id'] ?? 1;
+            $fiscal_year_id = $data['fiscal_year_id'] ?? 1;
+            $branch_id = $data['branch_id'] ?? null;
+
+            $voucher_no = $this->voucherNoService->getVoucherNo($voucher_type_id, $company_id, $fiscal_year_id, $branch_id);
+            $data['voucher_no'] = $voucher_no;
+        }
+
+        if (isset($data['stock_journal']) && !empty($data['stock_journal'])) {
+            $stock_journal = $data['stock_journal'];
+            $rules = (new StockJournalRequest())->rules();
+            $validatedStockJournal = Validator::make($stock_journal, $rules)->validate();
+            if (!empty($validatedStockJournal)) {
+
+                $stockJournal = $this->stockJournalService->store($validatedStockJournal);
+                //dd("VoucherLevel", $stockJournal);
+                $data['stock_journal_id'] = $stockJournal->id ?? null;
+            }
+        }
+
+        $voucher = Voucher::create($data);
+
+        if (!empty($data['voucher_entries'])) {
+            foreach ($voucher->voucher_entries as $entry) {
+                $entry->update(['voucher_id' => $voucher->id]);
+            }
+
+        }
+        //dd($voucher);
+        return $voucher;
+    }
+
+    protected function generateJournalNo(): string
+    {
+        // Implement your logic to generate a unique journal number
+        $latestJournal = \App\Modules\StockJournal\Models\StockJournal::orderBy('id', 'desc')->first();
+        $nextNumber = $latestJournal ? intval(substr($latestJournal->journal_no, -5)) + 1 : 1;
+        return 'JRN-' . str_pad($nextNumber, 5, '0', STR_PAD_LEFT);
     }
 
     public function update(array $data, int $id): Voucher

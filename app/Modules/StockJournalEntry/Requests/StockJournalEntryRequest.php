@@ -14,17 +14,26 @@ class StockJournalEntryRequest extends FormRequest
     public function rules(): array
     {
         $rules = [
-            'name' => ['required', 'string', 'max:255','unique:stock_journal_entries,name'],
-            'code' => ['sometimes','required', 'string', 'max:255','unique:stock_journal_entries,code'],
-            'description' => ['sometimes','required', 'string', 'max:255'],
-            'status' => ['sometimes','required', 'string', 'max:255'],
+            'stock_journal_id' => ['required', 'numeric', 'exists:stock_journals,id'],
+            'stock_item_id' => ['required', 'numeric', 'exists:stock_items,id'],
+            'stock_unit_id' => ['required', 'numeric', 'exists:stock_units,id'],
+            'alternate_unit_id' => ['sometimes', 'nullable', 'numeric', 'exists:stock_units,id'],
+            'unit_ratio' => ['sometimes', 'numeric'],
+            'item_cost' => ['required', 'numeric'],
+            'actual_quantity' => ['required', 'numeric'],
+            'billing_quantity' => ['required', 'numeric'],
+            'rate' => ['required', 'numeric'],
+            'rate_unit_id' => ['required', 'numeric', 'exists:stock_units,id'],
+            'discount_percentage' => ['required', 'numeric'],
+            'discount' => ['required', 'numeric'],
+            'amount' => ['required', 'numeric'],
+            'movement_type' => ['required', 'string', 'max:255'],
+            'stock_journal_godown_entries' => ['sometimes', 'nullable', 'array'],
+            'status' => ['sometimes', 'required', 'string', 'max:255'],
         ];
 
         // For update requests, make validation more flexible
         if ($this->isMethod('PUT') || $this->isMethod('PATCH')) {
-            $id=$this->route('stock_journal_entry');
-            $rules['name'] = ['sometimes', 'required', 'string', 'max:255', 'unique:stock_journal_entries,name,' . $id,];
-            $rules['code'] = ['sometimes', 'required', 'string', 'max:255', 'unique:stock_journal_entries,code,' . $id,];
 
         }
 

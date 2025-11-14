@@ -9,6 +9,8 @@ Route::apiResource('account_ledgers', AccountLedgerController::class)
 
 Route::get('purchase_ledgers', [AccountLedgerController::class, 'purchase_ledgers'])
     ->middleware('jwt.cookies');
+Route::get('sale_ledgers', [AccountLedgerController::class, 'sale_ledgers'])
+    ->middleware('jwt.cookies');
 Route::get('supplier_ledgers', [AccountLedgerController::class, 'supplier_ledgers'])
     ->middleware('jwt.cookies');
 Route::get('distributor_ledgers', [AccountLedgerController::class, 'distributor_ledgers'])

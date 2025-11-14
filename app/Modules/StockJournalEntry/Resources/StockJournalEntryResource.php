@@ -2,6 +2,9 @@
 
 namespace App\Modules\StockJournalEntry\Resources;
 
+use App\Modules\StockItem\Resources\StockItemResource;
+use App\Modules\StockJournal\Resources\StockJournalResource;
+use App\Modules\StockJournalGodownEntry\Resources\StockJournalGodownEntryResource;
 use App\Modules\StockUnit\Resources\StockUnitResource;
 use Illuminate\Http\Request;
 
@@ -25,11 +28,16 @@ class StockJournalEntryResource extends SuccessResource
             'rateUnitRatio' => $this->rate_unit_ratio,
             'discountPercentage' => $this->discount_percentage,
             'discount' => $this->discount,
+            'amount' => $this->amount,
             'movementType' => $this->movement_type,
             'rateUnit' => StockUnitResource::make($this->whenLoaded('rate_unit')),
-
             'createdAt' => $this->created_at?->toISOString(),
             'updatedAt' => $this->updated_at?->toISOString(),
+            'stockJournalGodownEntries' => StockJournalGodownEntryResource::collection($this->whenLoaded('stock_journal_godown_entries')),
+            'stockJournal' => StockJournalResource::make($this->whenLoaded('stock_journal')),
+            'stockItem' => StockItemResource::make($this->whenLoaded('stock_item')),
+            'stockUnit' => StockUnitResource::make($this->whenLoaded('stock_unit')),
+            'alternateUnit' => StockUnitResource::make($this->whenLoaded('alternate_unit')),
         ];
     }
 }

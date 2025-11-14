@@ -16,10 +16,17 @@ class StockJournalGodownEntryRequest extends FormRequest
         $rules = [
             'stock_journal_entry_id' => ['sometimes', 'required', 'numeric', 'exists:stock_journal_entries,id'],
             'godown_id' => ['required', 'numeric', 'exists:godowns,id'],
-            'movement_type' => ['required', 'in:in,out'],
-            'quantity' => ['required', 'numeric', 'min:0.0001'],
+            'batch_no' => ['sometimes', 'nullable', 'string', 'max:255'],
+            'mfg_date' => ['sometimes', 'nullable', 'date'],
+            'expiry_date' => ['sometimes', 'nullable', 'date'],
+            'serial_no' => ['sometimes', 'nullable', 'string', 'max:255'],
+            'actual_quantity' => ['required', 'numeric', 'min:0.0001'],
+            'billing_quantity' => ['required', 'numeric', 'min:0.0001'],
             'rate' => ['nullable', 'numeric', 'min:0'],
-            'amount' => ['nullable', 'numeric', 'min:0'],
+            'discount_percentage' => ['nullable', 'numeric', 'min:0'],
+            'discount' => ['nullable', 'numeric', 'min:0'],
+            'amount' => ['required', 'numeric', 'min:0'],
+            'movement_type' => ['required', 'in:in,out'],
             'remarks' => ['sometimes', 'nullable', 'string']
         ];
 

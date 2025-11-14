@@ -33,6 +33,8 @@ class StockJournalGodownEntry extends Model
     protected $casts = [
         'created_at' => 'datetime',
         'updated_at' => 'datetime',
+        'mfg_date' => 'date',
+        'expiry_date' => 'date',
         'actual_quantity' => 'decimal:4',
         'billing_quantity' => 'decimal:4',
         'rate' => 'decimal:2',

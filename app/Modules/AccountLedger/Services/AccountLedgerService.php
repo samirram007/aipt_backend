@@ -60,8 +60,14 @@ class AccountLedgerService implements AccountLedgerServiceInterface
     public function getPurchaseLedgers(): Collection
     {
         return AccountLedger::with($this->resource)
-            ->where('account_group_id', 40001)->orderBy('name')->get();
+            ->where('account_group_id', 40004)->orderBy('name')->get();
     }
+    public function getSaleLedgers(): Collection
+    {
+        return AccountLedger::with($this->resource)
+            ->where('account_group_id', 30004)->orderBy('name')->get();
+    }
+
     public function getSupplierLedgers(): Collection
     {
         return AccountLedger::with($this->ledgerable_resource)
@@ -70,6 +76,6 @@ class AccountLedgerService implements AccountLedgerServiceInterface
     public function getDistributorLedgers(): Collection
     {
         return AccountLedger::with($this->ledgerable_resource)
-            ->where('account_group_id', 20003)->orderBy('name')->get();
+            ->where('account_group_id', 10008)->orderBy('name')->get();
     }
 }

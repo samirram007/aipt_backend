@@ -25,7 +25,8 @@ return new class extends Migration {
             $table->decimal('rate', 15, 4)->default(0);
             $table->decimal('discount_percentage', 15, 4)->default(0);
             $table->decimal('discount', 15, 4)->default(0);
-            $table->decimal('amount', 18, 4)->virtualAs('billing_quantity * rate - discount');
+            $table->decimal('amount', 15, 4)->default(0);
+            // $table->decimal('amount', 18, 4)->virtualAs('billing_quantity * rate - discount');
 
             // Movement direction: in / out
             $table->enum('movement_type', ['in', 'out'])->default('in');

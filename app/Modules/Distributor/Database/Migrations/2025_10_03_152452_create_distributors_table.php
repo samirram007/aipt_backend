@@ -11,6 +11,7 @@ return new class extends Migration {
             $table->id();
             $table->string('name');
             $table->string('code')->unique()->nullable();
+            $table->unsignedBigInteger('gst_registration_type_id')->default(1);
             $table->string('gstin')->nullable();
             $table->string('pan')->nullable();
             $table->string('contact_person')->nullable();

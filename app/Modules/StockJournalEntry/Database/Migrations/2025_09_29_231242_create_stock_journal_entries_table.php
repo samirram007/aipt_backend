@@ -23,8 +23,7 @@ return new class extends Migration {
             $table->decimal('discount_percentage', 15, 4)->default(0);
             $table->decimal('discount', 15, 4)->default(0);
 
-            $table->decimal('amount', 18, 4)
-                ->virtualAs('billing_quantity * rate - discount');
+            $table->decimal('amount', 18, 4)->default(0);
             $table->string('movement_type')->default('in'); // 'in', 'out'
 
             $table->timestamps();

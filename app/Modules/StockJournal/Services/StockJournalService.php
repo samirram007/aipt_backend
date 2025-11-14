@@ -4,11 +4,25 @@ namespace App\Modules\StockJournal\Services;
 
 use App\Modules\StockJournal\Contracts\StockJournalServiceInterface;
 use App\Modules\StockJournal\Models\StockJournal;
+use App\Modules\StockJournalEntry\Contracts\StockJournalEntryServiceInterface;
+use App\Modules\StockJournalEntry\Requests\StockJournalEntryRequest;
+use App\Modules\StockJournalEntry\Services\StockJournalEntryService;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Support\Facades\Validator;
 
 class StockJournalService implements StockJournalServiceInterface
 {
-    protected $resource=[];
+
+    protected $resource = [];
+    protected $stockJournalEntryService;
+
+
+    public function __construct(
+        StockJournalEntryServiceInterface $stockJournalEntryService,
+    ) {
+        $this->stockJournalEntryService = $stockJournalEntryService;
+    }
 
     public function getAll(): Collection
     {
@@ -22,9 +36,40 @@ class StockJournalService implements StockJournalServiceInterface
 
     public function store(array $data): StockJournal
     {
-        return StockJournal::create($data);
-    }
+        if (empty($data['journal_no'])) {
+            $data['journal_no'] = $this->generateJournalNo();
+        }
+        if (empty($data['journal_date'])) {
 
+            $data['journal_date'] = Carbon::now();
+
+        }
+        if (empty($data['type'])) {
+            $data['type'] = 'in';
+        }
+
+
+        $stockJournal = StockJournal::create($data);
+
+        if (!empty($data['stock_journal_entries'])) {
+            foreach ($data['stock_journal_entries'] as $key => $entryData) {
+                $entryData['stock_journal_id'] = $stockJournal->id;
+                $rules = (new StockJournalEntryRequest())->rules();
+                $validatedStockJournalEntry = Validator::make($entryData, $rules)->validate();
+
+                $data['stock_journal_entries'][$key] = $this->stockJournalEntryService->store($validatedStockJournalEntry);
+            }
+
+        }
+        return $stockJournal;
+    }
+    protected function generateJournalNo(): string
+    {
+        // Implement your logic to generate a unique journal number
+        $latestJournal = \App\Modules\StockJournal\Models\StockJournal::orderBy('id', 'desc')->first();
+        $nextNumber = $latestJournal ? intval(substr($latestJournal->journal_no, -5)) + 1 : 1;
+        return 'JRN-' . str_pad($nextNumber, 5, '0', STR_PAD_LEFT);
+    }
     public function update(array $data, int $id): StockJournal
     {
         $record = StockJournal::findOrFail($id);

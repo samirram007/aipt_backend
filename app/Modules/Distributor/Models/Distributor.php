@@ -17,6 +17,7 @@ class Distributor extends Model
     protected $fillable = [
         'name',
         'code',
+        'gst_registration_type_id',
         'gstin',
         'pan',
         'contact_person',

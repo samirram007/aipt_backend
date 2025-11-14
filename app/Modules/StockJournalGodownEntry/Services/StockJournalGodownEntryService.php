@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Collection;
 
 class StockJournalGodownEntryService implements StockJournalGodownEntryServiceInterface
 {
-    protected $resource=[];
+    protected $resource = [];
 
     public function getAll(): Collection
     {
@@ -22,7 +22,16 @@ class StockJournalGodownEntryService implements StockJournalGodownEntryServiceIn
 
     public function store(array $data): StockJournalGodownEntry
     {
-        return StockJournalGodownEntry::create($data);
+        try {
+            //code...
+            $stockJournalGodownEntry = StockJournalGodownEntry::create($data);
+        } catch (\Throwable $th) {
+
+            throw $th;
+        }
+
+
+        return $stockJournalGodownEntry;
     }
 
     public function update(array $data, int $id): StockJournalGodownEntry
