@@ -4,6 +4,7 @@ namespace App\Modules\StockItem\Services;
 
 use App\Modules\StockItem\Contracts\StockItemServiceInterface;
 use App\Modules\StockItem\Models\StockItem;
+use App\Modules\StockJournalEntry\Models\StockJournalEntry;
 use Illuminate\Database\Eloquent\Collection;
 
 class StockItemService implements StockItemServiceInterface
@@ -12,11 +13,15 @@ class StockItemService implements StockItemServiceInterface
 
     public function getAll(): Collection
     {
-        return StockItem::with($this->resource)->get();
+        $data = StockItem::with($this->resource)->get();
+        //dd($data);
+
+        return $data;
     }
 
     public function getById(int $id): ?StockItem
     {
+
         return StockItem::with($this->resource)->findOrFail($id);
     }
 
@@ -30,7 +35,8 @@ class StockItemService implements StockItemServiceInterface
     {
         $record = StockItem::findOrFail($id);
         $record->update($data);
-        return $record->fresh();
+        $record->refresh();
+        return $record;
     }
 
     public function delete(int $id): bool

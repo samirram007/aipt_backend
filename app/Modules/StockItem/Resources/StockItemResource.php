@@ -59,6 +59,7 @@ class StockItemResource extends SuccessResource
             'status' => $this->status,
             'createdAt' => $this->created_at,
             'updatedAt' => $this->updated_at,
+            'stockInHand' => $this->stock_in_hand,
 
 
             'stockUnit' => StockUnitResource::make($this->whenLoaded('stock_unit')),

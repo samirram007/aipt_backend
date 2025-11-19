@@ -16,4 +16,5 @@ interface AccountLedgerServiceInterface
     public function getSaleLedgers(): Collection;
     public function getSupplierLedgers(): Collection;
     public function getDistributorLedgers(): Collection;
+    public function getStockInHandLedgers(): Collection;
 }

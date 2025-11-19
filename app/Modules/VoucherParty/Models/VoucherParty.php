@@ -5,9 +5,11 @@ namespace App\Modules\VoucherParty\Models;
 use App\Modules\Country\Models\Country;
 use App\Modules\GstRegistrationType\Models\GstRegistrationType;
 use App\Modules\State\Models\State;
+use App\Modules\Voucher\Models\Voucher;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class VoucherParty extends Model
 {
@@ -16,6 +18,7 @@ class VoucherParty extends Model
     protected $table = 'voucher_parties';
 
     protected $fillable = [
+        'voucher_id',
         'name',
         'mailing_name',
         'address',
@@ -50,5 +53,10 @@ class VoucherParty extends Model
     public function gst_registration_type(): BelongsTo
     {
         return $this->belongsTo(GstRegistrationType::class, 'gst_registration_type_id');
+    }
+
+    public function voucher(): BelongsTo
+    {
+        return $this->belongsTo(Voucher::class, 'voucher_id');
     }
 }

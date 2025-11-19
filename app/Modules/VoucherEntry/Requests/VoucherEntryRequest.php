@@ -16,10 +16,10 @@ class VoucherEntryRequest extends FormRequest
         $rules = [
             'voucher_id' => ['required', 'numeric'],
             'entry_order' => ['sometimes', 'nullable', 'numeric'],
-            'account_ledger_id' => ['required', 'numeric'],
+            'account_ledger_id' => ['required', 'numeric', 'exists:account_ledgers,id'],
             'debit' => ['sometimes', 'nullable', 'numeric'],
             'credit' => ['sometimes', 'nullable', 'numeric'],
-            'remarks' => ['sometimes', 'required', 'string', 'max:255'],
+            'remarks' => ['sometimes', 'nullable', 'string', 'max:255'],
 
         ];
 

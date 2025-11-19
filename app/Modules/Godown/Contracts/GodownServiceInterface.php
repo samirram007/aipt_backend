@@ -2,8 +2,9 @@
 
 namespace App\Modules\Godown\Contracts;
 
-use Illuminate\Database\Eloquent\Collection;
+
 use App\Modules\Godown\Models\Godown;
+use Illuminate\Support\Collection;
 
 interface GodownServiceInterface
 {
@@ -12,4 +13,6 @@ interface GodownServiceInterface
     public function store(array $data): Godown;
     public function update(array $data, int $id): Godown;
     public function delete(int $id): bool;
+    public function getGodownItemStocks(int $item_id): Collection;
+    public function getGodownItemBatches(int $item_id, int $godown_id): Collection;
 }

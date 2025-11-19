@@ -6,13 +6,16 @@ use App\Modules\AccountsJournal\Models\AccountsJournal;
 use App\Modules\Company\Models\Company;
 use App\Modules\FiscalYear\Models\FiscalYear;
 use App\Modules\StockJournal\Models\StockJournal;
+use App\Modules\VoucherDispatchDetail\Models\VoucherDispatchDetail;
 use App\Modules\VoucherEntry\Models\VoucherEntry;
+use App\Modules\VoucherParty\Models\VoucherParty;
 use App\Modules\VoucherType\Models\VoucherType;
 use App\Traits\Blameable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class Voucher extends Model
 {
@@ -60,6 +63,14 @@ class Voucher extends Model
     public function voucher_entries(): HasMany
     {
         return $this->hasMany(VoucherEntry::class);
+    }
+    public function voucher_party(): HasOne
+    {
+        return $this->hasOne(VoucherParty::class, 'voucher_id');
+    }
+    public function voucher_dispatch_detail(): HasOne
+    {
+        return $this->hasOne(VoucherDispatchDetail::class, 'voucher_id');
     }
 
 

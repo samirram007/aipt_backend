@@ -22,7 +22,16 @@ class VoucherEntryService implements VoucherEntryServiceInterface
 
     public function store(array $data): VoucherEntry
     {
-        return VoucherEntry::create($data);
+
+        try {
+            //code...
+            $voucherEntry = VoucherEntry::create($data);
+        } catch (\Throwable $th) {
+
+            throw $th;
+        }
+
+        return $voucherEntry;
     }
 
     public function update(array $data, int $id): VoucherEntry

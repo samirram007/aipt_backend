@@ -3,6 +3,9 @@
 namespace App\Modules\StockJournalGodownEntry\Models;
 
 use App\Enums\MovementType;
+use App\Modules\Godown\Models\Godown;
+use App\Modules\StockItem\Models\StockItem;
+use App\Modules\StockJournalEntry\Models\StockJournalEntry;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -51,16 +54,28 @@ class StockJournalGodownEntry extends Model
 
     public function stock_journal_entry(): BelongsTo
     {
-        return $this->belongsTo(\App\Modules\StockJournalEntry\Models\StockJournalEntry::class, 'stock_journal_entry_id');
+        return $this->belongsTo(StockJournalEntry::class, 'stock_journal_entry_id');
     }
 
     public function godown(): BelongsTo
     {
-        return $this->belongsTo(\App\Modules\Godown\Models\Godown::class, 'godown_id');
+        return $this->belongsTo(Godown::class, 'godown_id');
+    }
+    public function getStockItemAttribute()
+    {
+        return $this->stock_journal_entry?->stock_item;
     }
     public function stock_item(): mixed
     {
-        return $this->stock_journal_entry->stock_item();
+        return $this->hasOneThrough(
+            StockItem::class,
+            StockJournalEntry::class,
+            'id',               // StockJournalEntry.id
+            'id',               // StockItem.id
+            'stock_journal_entry_id', // StockJournalGodownEntry.stock_journal_entry_id
+            'stock_item_id'           // StockJournalEntry.stock_item_id
+        );
+        // return $this->stock_journal_entry->stock_item();
     }
     public function stock_unit(): mixed
     {

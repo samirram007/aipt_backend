@@ -9,6 +9,7 @@ return new class extends Migration {
     {
         Schema::create('voucher_parties', function (Blueprint $table) {
             $table->id();
+            $table->unsignedBigInteger('voucher_id');
             $table->string('name');
             $table->string('mailing_name');
             $table->string('line1')->nullable();

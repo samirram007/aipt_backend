@@ -15,4 +15,6 @@ Route::get('supplier_ledgers', [AccountLedgerController::class, 'supplier_ledger
     ->middleware('jwt.cookies');
 Route::get('distributor_ledgers', [AccountLedgerController::class, 'distributor_ledgers'])
     ->middleware('jwt.cookies');
+Route::get('stock_in_hand_ledgers', [AccountLedgerController::class, 'stock_in_hand_ledgers'])
+    ->middleware('jwt.cookies');
 

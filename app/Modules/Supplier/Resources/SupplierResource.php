@@ -5,6 +5,7 @@ namespace App\Modules\Supplier\Resources;
 use App\Modules\AccountLedger\Models\AccountLedger;
 use App\Modules\AccountLedger\Resources\AccountLedgerResource;
 use App\Modules\Address\Resources\AddressResource;
+use App\Modules\GstRegistrationType\Resources\GstRegistrationTypeResource;
 use Illuminate\Http\Request;
 
 use App\Http\Resources\SuccessResource;
@@ -25,6 +26,8 @@ class SupplierResource extends SuccessResource
             'status' => $this->status,
             'accountLedger' => AccountLedgerResource::make($this->whenLoaded('account_ledger')),
             'address' => AddressResource::make($this->whenLoaded('address')),
+            'gstRegistrationTypeId' => $this->gst_registration_type_id,
+            'gstRegistrationType' => GstRegistrationTypeResource::make($this->whenLoaded('gst_registration_type')),
 
         ];
 

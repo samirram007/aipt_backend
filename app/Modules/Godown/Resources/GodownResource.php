@@ -25,6 +25,8 @@ class GodownResource extends SuccessResource
             'parent' => GodownResource::make($this->whenLoaded('parent')),
             'address' => AddressResource::make($this->whenLoaded('address')),
 
+            // 'stockInHand' => $this->stock_in_hand,
+
 
         ];
     }

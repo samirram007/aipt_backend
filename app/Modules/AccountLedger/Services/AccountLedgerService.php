@@ -78,4 +78,9 @@ class AccountLedgerService implements AccountLedgerServiceInterface
         return AccountLedger::with($this->ledgerable_resource)
             ->where('account_group_id', 10008)->orderBy('name')->get();
     }
+    public function getStockInHandLedgers(): Collection
+    {
+        return AccountLedger::with($this->resource)
+            ->where('account_group_id', 10009)->orderBy('name')->get();
+    }
 }

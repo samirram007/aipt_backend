@@ -6,7 +6,9 @@ use App\Http\Resources\SuccessResource;
 use App\Modules\Company\Resources\CompanyResource;
 use App\Modules\FiscalYear\Resources\FiscalYearResource;
 use App\Modules\StockJournal\Resources\StockJournalResource;
+use App\Modules\VoucherDispatchDetail\Resources\VoucherDispatchDetailResource;
 use App\Modules\VoucherEntry\Resources\VoucherEntryResource;
+use App\Modules\VoucherParty\Resources\VoucherPartyResource;
 use App\Modules\VoucherType\Resources\VoucherTypeResource;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
@@ -38,6 +40,8 @@ class VoucherResource extends SuccessResource
             'fiscalYear' => FiscalYearResource::make($this->whenLoaded('fiscal_year')),
             'stockJournal' => StockJournalResource::make($this->whenLoaded('stock_journal')),
             'voucherEntries' => VoucherEntryResource::collection($this->whenLoaded('voucher_entries')),
+            'party' => VoucherPartyResource::make($this->whenLoaded('voucher_party')),
+            'voucherDispatchDetail' => VoucherDispatchDetailResource::make($this->whenLoaded('voucher_dispatch_detail')),
         ];
     }
 }

@@ -7,7 +7,13 @@ use App\Modules\StockJournal\Requests\StockJournalRequest;
 use App\Modules\StockJournal\Services\StockJournalService;
 use App\Modules\Voucher\Contracts\VoucherServiceInterface;
 use App\Modules\Voucher\Models\Voucher;
+use App\Modules\VoucherDispatchDetail\Contracts\VoucherDispatchDetailServiceInterface;
+use App\Modules\VoucherDispatchDetail\Requests\VoucherDispatchDetailRequest;
+use App\Modules\VoucherEntry\Contracts\VoucherEntryServiceInterface;
+use App\Modules\VoucherEntry\Requests\VoucherEntryRequest;
 use App\Modules\VoucherNo\Contracts\VoucherNoServiceInterface;
+use App\Modules\VoucherParty\Contracts\VoucherPartyServiceInterface;
+use App\Modules\VoucherParty\Requests\VoucherPartyRequest;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\Validator;
 
@@ -20,19 +26,30 @@ class VoucherService implements VoucherServiceInterface
         'stock_journal.stock_journal_entries.stock_item.stock_unit',
         'stock_journal.stock_journal_entries.stock_item.alternate_stock_unit',
         'stock_journal.stock_journal_entries.alternate_unit',
-        'stock_journal.stock_journal_entries.stock_journal_godown_entries'
+        'stock_journal.stock_journal_entries.stock_journal_godown_entries',
+        'voucher_party',
+        'voucher_dispatch_detail',
     ];
     protected $voucherNoService;
     protected $stockJournalRequest;
     protected $stockJournalService;
+    protected $voucherEntryService;
+    protected $voucherDispatchDetailService;
+    protected $voucherPartyService;
 
 
     public function __construct(
         VoucherNoServiceInterface $voucherNoService,
-        StockJournalServiceInterface $stockJournalService
+        StockJournalServiceInterface $stockJournalService,
+        VoucherEntryServiceInterface $voucherEntryService,
+        VoucherDispatchDetailServiceInterface $voucherDispatchDetailService,
+        VoucherPartyServiceInterface $voucherPartyService
     ) {
         $this->voucherNoService = $voucherNoService;
         $this->stockJournalService = $stockJournalService;
+        $this->voucherEntryService = $voucherEntryService;
+        $this->voucherDispatchDetailService = $voucherDispatchDetailService;
+        $this->voucherPartyService = $voucherPartyService;
     }
 
     public function getAll(): Collection
@@ -82,12 +99,31 @@ class VoucherService implements VoucherServiceInterface
 
         $voucher = Voucher::create($data);
 
-        if (!empty($data['voucher_entries'])) {
-            foreach ($voucher->voucher_entries as $entry) {
-                $entry->update(['voucher_id' => $voucher->id]);
-            }
+        // dd($data['voucher_entries']);
 
+        if (!empty($data['voucher_entries'])) {
+            foreach ($data['voucher_entries'] as $key => $voucher_entry) {
+                $voucher_entry['voucher_id'] = $voucher->id;
+                $rules = (new VoucherEntryRequest())->rules();
+                $validatedVoucherEntry = Validator::make($voucher_entry, $rules)->validate();
+                $data['voucher_entries'][$key] = $this->voucherEntryService->store($validatedVoucherEntry);
+            }
         }
+        if (!empty($data['voucher_dispatch_detail'])) {
+            $data['voucher_dispatch_detail']['voucher_id'] = $voucher->id;
+            $rules = (new VoucherDispatchDetailRequest())->rules();
+            $validatedDispatchDetail = Validator::make($data['voucher_dispatch_detail'], $rules)->validate();
+            $this->voucherDispatchDetailService->store($validatedDispatchDetail);
+            // $voucher->voucher_dispatch_detail()->create($data['voucher_dispatch_detail']);
+        }
+        if (!empty($data['party'])) {
+            $data['party']['voucher_id'] = $voucher->id;
+            $rules = (new VoucherPartyRequest())->rules();
+            $validatedParty = Validator::make($data['party'], $rules)->validate();
+            $this->voucherPartyService->store($validatedParty);
+            // $voucher->party()->create($validatedParty);
+        }
+
         //dd($voucher);
         return $voucher;
     }
@@ -120,14 +156,15 @@ class VoucherService implements VoucherServiceInterface
         // Detect party ledger (Customer / Supplier)
         // dd($voucher->voucher_entries->first());
         $partyEntry = $voucher->voucher_entries
-            ->first(fn($entry) => in_array($entry->account_ledger->ledgerable_type, ['customer', 'supplier']));
+            ->first(fn($entry) => in_array($entry->account_ledger->ledgerable_type, ['customer', 'supplier', 'distributor']));
         //dd($partyEntry);
         // Detect transaction ledger using account_group_id
         $purchaseGroupId = 40001; // Purchase group ID
         $salesGroupId = 50001;    // Sales group ID
+        $stockGroupId = 10009;    // Stock group ID
 
         $transactionEntry = $voucher->voucher_entries
-            ->first(fn($entry) => in_array($entry->account_ledger->account_group_id, [$purchaseGroupId, $salesGroupId]));
+            ->first(fn($entry) => in_array($entry->account_ledger->account_group_id, [$purchaseGroupId, $salesGroupId, $stockGroupId]));
 
         // Calculate current balance for party ledger
         $partyCurrentBalance = $partyEntry?->account_ledger

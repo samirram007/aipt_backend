@@ -54,4 +54,18 @@ class GodownController extends Controller
             'message' => $result ? 'Godown deleted successfully' : 'Godown not found',
         ]);
     }
+
+
+    public function godown_item_stocks(int $item_id): SuccessCollection
+    {
+        $data = $this->service->getGodownItemStocks($item_id);
+
+        return new SuccessCollection($data);
+    }
+    public function godown_item_batches(int $item_id, int $godown_id): SuccessCollection
+    {
+        $data = $this->service->getGodownItemBatches($item_id, $godown_id);
+
+        return new SuccessCollection($data);
+    }
 }

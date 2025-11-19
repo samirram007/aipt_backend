@@ -25,6 +25,7 @@ class DistributorRequest extends FormRequest
             'email' => ['sometimes', 'nullable', 'string', 'max:255'],
             'status' => ['sometimes', 'nullable', 'string', 'max:255'],
             'account_group_id' => ['sometimes', 'required', 'exists:account_groups,id'],
+            'gst_registration_type_id' => ['sometimes', 'nullable', 'exists:gst_registration_types,id'],
             // 'address' => ['sometimes', 'required', new AddressRequest()]
         ];
         $addressRules = collect((new AddressRequest())->rules())

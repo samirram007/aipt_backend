@@ -59,4 +59,5 @@ class StockItemController extends Controller
         $data = $this->service->getPurchasableStockItems();
         return new StockItemCollection($data);
     }
+
 }

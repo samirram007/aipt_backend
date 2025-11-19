@@ -9,6 +9,8 @@ use App\Models\BaseModel;
 use App\Modules\StockCategory\Models\StockCategory;
 use App\Modules\StockGroup\Models\StockGroup;
 use App\Modules\StockItemPrice\Models\StockItemPrice;
+use App\Modules\StockJournal\Models\StockJournal;
+use App\Modules\StockJournalEntry\Models\StockJournalEntry;
 use App\Modules\StockUnit\Models\StockUnit;
 use App\Modules\UniqueQuantityCode\Models\UniqueQuantityCode;
 use Illuminate\Database\Eloquent\Model;
@@ -19,6 +21,8 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 class StockItem extends BaseModel
 {
     use HasFactory;
+
+
 
     protected $table = 'stock_items';
 
@@ -119,5 +123,36 @@ class StockItem extends BaseModel
     public function unique_quantity_code(): BelongsTo
     {
         return $this->belongsTo(UniqueQuantityCode::class);
+    }
+
+    public function stockJournalEntries(): HasMany
+    {
+        return $this->hasMany(StockJournalEntry::class, 'stock_item_id');
+    }
+    public function getStockInHandAttribute(): float|int
+    {
+        // use eager-loaded relation if available
+        if ($this->relationLoaded('stockJournalEntries')) {
+            $in = $this->stockJournalEntries
+                ->where('movement_type', 'IN')
+                ->sum('actual_quantity');
+
+            $out = $this->stockJournalEntries
+                ->where('movement_type', 'OUT')
+                ->sum('actual_quantity');
+
+            return $in - $out;
+        }
+
+        // fallback queries
+        $in = $this->stockJournalEntries()
+            ->where('movement_type', 'IN')
+            ->sum('actual_quantity');
+
+        $out = $this->stockJournalEntries()
+            ->where('movement_type', 'OUT')
+            ->sum('actual_quantity');
+
+        return $in - $out;
     }
 }

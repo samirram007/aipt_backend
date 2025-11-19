@@ -90,4 +90,9 @@ class AccountLedgerController extends Controller
         $data = $this->service->getDistributorLedgers();
         return new AccountLedgerCollection($data);
     }
+    public function stock_in_hand_ledgers(): SuccessCollection
+    {
+        $data = $this->service->getStockInHandLedgers();
+        return new AccountLedgerCollection($data);
+    }
 }

@@ -29,6 +29,7 @@ class VoucherRequest extends FormRequest
             'party_ledger' => ['sometimes', 'nullable', 'array'],
             'transaction_ledger' => ['sometimes', 'nullable', 'array'],
             'party' => ['sometimes', 'nullable', 'array'],
+            'voucher_dispatch_detail' => ['sometimes', 'nullable', 'array'],
         ];
 
         // For update requests, make validation more flexible
