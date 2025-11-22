@@ -28,7 +28,7 @@ class FiscalYearRequest extends FormRequest
             'name' => ['required', 'string', 'max:255', 'unique:fiscal_years,name'],
             'start_date' => ['required', 'date'],
             'end_date' => ['sometimes', 'required', 'date', 'after:start_date'],
-            'company_id' => ['sometimes', 'nullable', 'numeric', 'exists:companies,id'],
+            'company_id' => ['sometimes', 'required', 'numeric', 'exists:companies,id'],
             'status' => ['required', Rule::enum(ActiveInactive::class)],
             'assessment_year' => ['sometimes', 'string']
         ];

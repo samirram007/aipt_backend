@@ -9,6 +9,7 @@ use App\Modules\Currency\Database\Seeders\CurrencySeeder;
 use App\Modules\Department\Database\Seeders\DepartmentSeeder;
 use App\Modules\Department\Models\Department;
 use App\Modules\Designation\Database\Seeders\DesignationSeeder;
+use App\Modules\Distributor\Database\Seeders\DistributorSeeder;
 use App\Modules\EmployeeGroup\Database\Seeders\EmployeeGroupSeeder;
 use App\Modules\Grade\Database\Seeders\GradeSeeder;
 use App\Modules\GstRegistrationType\Database\Seeders\GstRegistrationTypeSeeder;
@@ -104,8 +105,9 @@ class DatabaseSeeder extends Seeder
                 // VoucherEntrySeeder::class,
 
             EmployeeGroupSeeder::class,
-                // VoucherDemoSeeder::class,
-            ReceiptNoteSeeder::class,
+            DistributorSeeder::class,
+            // VoucherDemoSeeder::class,
+            // ReceiptNoteSeeder::class,
 
 
         ]);

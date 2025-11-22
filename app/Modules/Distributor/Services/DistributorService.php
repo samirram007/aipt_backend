@@ -6,6 +6,7 @@ use App\Modules\AccountLedger\Models\AccountLedger;
 use App\Modules\Distributor\Contracts\DistributorServiceInterface;
 use App\Modules\Distributor\Models\Distributor;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Support\Arr;
 
 class DistributorService implements DistributorServiceInterface
 {
@@ -23,7 +24,9 @@ class DistributorService implements DistributorServiceInterface
 
     public function store(array $data): Distributor
     {
-        $distributor = Distributor::create($data);
+        //dump($data);
+        $clean = Arr::except($data, ['account_group_id', 'address', 'account_ledger', 'is_edit']);
+        $distributor = Distributor::create($clean);
 
         if ($data['address']) {
 
@@ -36,7 +39,7 @@ class DistributorService implements DistributorServiceInterface
         if ($data['account_group_id']) {
 
             $data['account_ledger']['name'] = $this->verifyUniqueLedgerName($distributor->name, $distributor->id);
-            $data['account_ledger']['code'] = $data['account_ledger']['name'];
+            $data['account_ledger']['code'] = $distributor->code ?? $data['account_ledger']['name'];
             $data['account_ledger']['account_group_id'] = $data['account_group_id'];
             $data['account_ledger']['ledgerable_type'] = 'distributor';
             $data['account_ledger']['ledgerable_id'] = $distributor->id;

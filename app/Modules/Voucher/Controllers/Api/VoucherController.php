@@ -4,6 +4,7 @@ namespace App\Modules\Voucher\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Modules\Voucher\Contracts\VoucherServiceInterface;
+use App\Modules\Voucher\Resources\VoucherPrintResource;
 use App\Modules\Voucher\Resources\VoucherResource;
 use App\Modules\Voucher\Resources\VoucherCollection;
 use App\Modules\Voucher\Requests\VoucherRequest;
@@ -33,6 +34,7 @@ class VoucherController extends Controller
         return new VoucherResource($data);
     }
 
+
     public function store(VoucherRequest $request): SuccessResource
     {
 
@@ -55,5 +57,10 @@ class VoucherController extends Controller
             'code' => 204,
             'message' => $result ? 'Voucher deleted successfully' : 'Voucher not found',
         ]);
+    }
+    public function print(int $id): SuccessResource
+    {
+        $data = $this->service->getById($id);
+        return new VoucherPrintResource($data);
     }
 }

@@ -18,7 +18,7 @@ class StockUnitRequest extends FormRequest
             'code' => ['sometimes', 'required', 'string', 'max:255', 'unique:stock_units,code'],
             'unit_type' => ['sometimes', 'required', 'string', 'max:255',],
             'quantity_type' => ['sometimes', 'required', 'string', 'max:255',],
-            'unique_quantity_code_id' => ['sometimes', 'nullable', 'numeric', 'exists:unique_quantity_code,id',],
+            'unique_quantity_code_id' => ['sometimes', 'nullable', 'numeric', 'exists:unique_quantity_codes,id',],
             'primary_stock_unit_id' => ['sometimes', 'nullable', 'numeric', 'exists:stock_units,id',],
             'secondary_stock_unit_id' => ['sometimes', 'nullable', 'numeric', 'exists:stock_units,id',],
             'conversion_factor' => ['sometimes', 'nullable', 'numeric',],

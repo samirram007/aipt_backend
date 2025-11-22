@@ -12,6 +12,7 @@ class FiscalYearService implements FiscalYearServiceInterface
 
     public function getAll(): Collection
     {
+        // dd(FiscalYear::with($this->resource)->get());
         return FiscalYear::with($this->resource)->get();
     }
 
@@ -22,14 +23,19 @@ class FiscalYearService implements FiscalYearServiceInterface
 
     public function store(array $data): FiscalYear
     {
+        //dd($data);
+        // $data['start_date'] = date('Y-m-d', strtotime($data['start_date']));
+        // $data['end_date'] = date('Y-m-d', strtotime($data['end_date']));
         return FiscalYear::create($data);
     }
 
     public function update(array $data, int $id): FiscalYear
     {
+        // dd($data);
         $record = FiscalYear::findOrFail($id);
         $record->update($data);
-        return $record->fresh();
+        $record->fresh();
+        return $record->load($this->resource);
     }
 
     public function delete(int $id): bool

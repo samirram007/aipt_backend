@@ -39,6 +39,8 @@ class Voucher extends Model
     protected $casts = [
         'created_at' => 'datetime',
         'updated_at' => 'datetime',
+        'voucher_date' => 'date',
+        'reference_date' => 'date',
     ];
     public function stock_journal(): BelongsTo
     {

@@ -55,9 +55,7 @@ class VoucherService implements VoucherServiceInterface
     public function getAll(): Collection
     {
         // return Voucher::with($this->resource)->get();
-        $vouchers = Voucher::with($this->resource)->get();
-        //dd($vouchers);
-        // Optionally map each voucher to include party/transaction detection
+        $vouchers = Voucher::with($this->resource)->orderByDesc('created_at')->get();
         return $vouchers->map(fn($voucher) => $this->attachLedgerInfo($voucher));
     }
 

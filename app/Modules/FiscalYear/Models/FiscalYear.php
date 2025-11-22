@@ -29,6 +29,8 @@ class FiscalYear extends Model
     protected $casts = [
         'created_at' => 'datetime',
         'updated_at' => 'datetime',
+        'start_date' => 'date',
+        'end_date' => 'date',
         'status' => ActiveInactive::class
     ];
 

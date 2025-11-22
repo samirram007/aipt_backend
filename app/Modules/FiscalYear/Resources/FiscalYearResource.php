@@ -23,8 +23,8 @@ class FiscalYearResource extends SuccessResource
         return [
             'id' => $this->id,
             'name' => $this->name,
-            'startDate' => $this->start_date,
-            'endDate' => $this->end_date,
+            'startDate' => $this->start_date?->format('Y-m-d'),
+            'endDate' => $this->end_date?->format('Y-m-d'),
             'companyId' => $this->company_id,
             'company' => new CompanyResource($this->whenLoaded('company')),
             'status' => $this->status

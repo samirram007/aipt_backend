@@ -25,7 +25,9 @@ class FiscalYearController extends Controller
     public function index(): SuccessCollection
     {
         $data = $this->service->getAll();
-        return new FiscalYearCollection($data);
+        $resource = new FiscalYearCollection($data);
+        //dd($resource);
+        return $resource;
     }
 
     public function show(int $id): SuccessResource
@@ -49,11 +51,11 @@ class FiscalYearController extends Controller
     public function destroy(int $id): JsonResponse
     {
 
-        $result=$this->service->delete($id);
+        $result = $this->service->delete($id);
         return new JsonResponse([
             'status' => $result,
             'code' => 204,
-            'message' => $result?'FiscalYear deleted successfully':'FiscalYear not found',
+            'message' => $result ? 'FiscalYear deleted successfully' : 'FiscalYear not found',
         ]);
     }
 }
