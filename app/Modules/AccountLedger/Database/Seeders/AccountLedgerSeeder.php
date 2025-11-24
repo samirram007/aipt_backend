@@ -208,6 +208,15 @@ class AccountLedgerSeeder extends Seeder
                 'is_system' => true,
                 'is_hidden' => true,
             ],
+            [
+                'id' => 3000005,
+                'name' => 'Sales Return',
+                'code' => 'SALER',
+                'account_group_id' => 30001,
+                'description' => 'Gain on currency revaluation',
+                'is_system' => true,
+                'is_hidden' => false,
+            ],
 
             // ==============================
             // 🔹 EXPENSES (4000001–)
@@ -243,7 +252,7 @@ class AccountLedgerSeeder extends Seeder
                 'id' => 4000004,
                 'name' => 'Rounding Off',
                 'code' => 'ROUND',
-                'account_group_id' => 40002,
+                'account_group_id' => 40003,
                 'description' => 'Minor rounding adjustments',
                 'is_system' => true,
                 'is_hidden' => true,
@@ -314,7 +323,7 @@ class AccountLedgerSeeder extends Seeder
 
         $patients = Patient::all();
 
-        foreach ($patients as $index => $patient){
+        foreach ($patients as $index => $patient) {
             $accountLedger = [
                 'name' => $patient->name,
                 'code' => 'P-' . str_pad($patient->id, 4, '0', STR_PAD_LEFT),
@@ -333,7 +342,7 @@ class AccountLedgerSeeder extends Seeder
 
         $employees = Employee::all();
 
-        foreach($employees as $index => $employee){
+        foreach ($employees as $index => $employee) {
             $employeeAccountLedger = [
                 'name' => $employee->name,
                 'code' => 'P-' . str_pad($employee->id, 4, '0', STR_PAD_LEFT),

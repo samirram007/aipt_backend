@@ -2,7 +2,9 @@
 
 namespace App\Modules\TestBooking\Requests;
 
+use App\Enums\JobStatus;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rules\Enum;
 
 class TestConfirmRequest extends FormRequest
 {
@@ -11,18 +13,18 @@ class TestConfirmRequest extends FormRequest
         return true;
     }
 
-    public function rules():array
+    public function rules(): array
     {
         $rules = [
-            'voucher_id'=> ['required','numeric','exists:vouchers,id'],
-            'amount'=> ['required','numeric'],
-            'patient_id' => ['required','numeric','exists:patients,id'],
-            "payment_mode" => ['required','numeric','exists:account_ledgers,id']
+            'voucher_id' => ['required', 'numeric', 'exists:vouchers,id'],
+            'amount' => ['required', 'numeric'],
+            'patient_id' => ['required', 'numeric', 'exists:patients,id'],
+            "payment_mode" => ['required', 'numeric', 'exists:account_ledgers,id'],
         ];
         return $rules;
     }
 
-    public function messages():array
+    public function messages(): array
     {
         return [
             'stock_journal_id.required' => 'Stock Journal ID is required.',

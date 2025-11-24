@@ -21,21 +21,21 @@ class VoucherEntry extends Model
         'debit',
         'credit',
         'remarks',
+        'rate'
     ];
 
     protected $casts = [
- 'created_at' => 'datetime',
+        'created_at' => 'datetime',
         'updated_at' => 'datetime',
     ];
 
     public function account_ledger(): BelongsTo
     {
-        return $this->belongsTo(AccountLedger::class,'account_ledger_id','id');
+        return $this->belongsTo(AccountLedger::class, 'account_ledger_id', 'id');
     }
 
     public function voucher(): BelongsTo
     {
-        return $this->belongsTo(Voucher::class,'voucher_id','id');
+        return $this->belongsTo(Voucher::class, 'voucher_id', 'id');
     }
-
 }

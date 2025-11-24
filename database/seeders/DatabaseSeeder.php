@@ -43,6 +43,7 @@ use App\Modules\AccountLedger\Database\Seeders\AccountLedgerSeeder;
 use App\Modules\AccountNature\Database\Seeders\AccountNatureSeeder;
 use App\Modules\Address\Database\Seeders\AddressSeeder;
 use App\Modules\Agent\Database\Seeders\AgentSeeder;
+use App\Modules\BusinessReport\Database\Seeders\BusinessReportSeeder;
 use App\Modules\Discipline\Database\Seeders\DisciplineSeeder;
 use App\Modules\DiscountType\Database\Seeders\DiscountTypeSeeder;
 use App\Modules\Employee\Database\Seeders\EmployeeSeeder;
@@ -88,10 +89,10 @@ class DatabaseSeeder extends Seeder
             StockCategorySeeder::class,
 
             StockItemSeeder::class,
-                // PurchaseSeeder::class
+            // PurchaseSeeder::class
             GodownSeeder::class,
             GradeSeeder::class,
-                // ShiftSeeder::class,
+            // ShiftSeeder::class,
 
             // VoucherSeeder::class,
             // VoucherEntrySeeder::class,
@@ -106,6 +107,7 @@ class DatabaseSeeder extends Seeder
             EmployeeGroupSeeder::class,
             DiscountTypeSeeder::class,
             AccountLedgerSeeder::class,
+            BusinessReportSeeder::class
 
         ]);
         // User::factory(10)->create();

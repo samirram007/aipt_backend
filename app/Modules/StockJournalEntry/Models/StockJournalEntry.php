@@ -31,8 +31,13 @@ class StockJournalEntry extends Model
         'movement_type',
         'godown_id',
         'start_date',
-        'end_date'
-
+        'end_date',
+        'discount_percentage',
+        'discount_value',
+        'amount',
+        'is_cancelled',
+        'cancelled_by',
+        'cancellation_reason'
     ];
 
     protected $casts = [
@@ -42,23 +47,28 @@ class StockJournalEntry extends Model
         'end_date' => 'datetime'
     ];
 
-    public function stock_journal():BelongsTo{
-        return $this->belongsTo(StockJournal::class,'stock_journal_id','id');
+    public function stock_journal(): BelongsTo
+    {
+        return $this->belongsTo(StockJournal::class, 'stock_journal_id', 'id');
     }
 
-    public function stock_item():BelongsTo{
-        return $this->belongsTo(StockItem::class,'stock_item_id','id');
+    public function stock_item(): BelongsTo
+    {
+        return $this->belongsTo(StockItem::class, 'stock_item_id', 'id');
     }
 
-    public function stock_unit():BelongsTo{
-        return $this->belongsTo(StockUnit::class,'stock_unit_id','id');
+    public function stock_unit(): BelongsTo
+    {
+        return $this->belongsTo(StockUnit::class, 'stock_unit_id', 'id');
     }
 
-    public function job_order():HasOne{
-        return $this->hasOne(JobOrder::class,'stock_journal_entry_id','id');
+    public function job_order(): HasOne
+    {
+        return $this->hasOne(JobOrder::class, 'stock_journal_entry_id', 'id');
     }
 
-    public function job_orders():HasMany{
-        return $this->hasMany(JobOrder::class,'stock_journal_entry_id','id');
+    public function job_orders(): HasMany
+    {
+        return $this->hasMany(JobOrder::class, 'stock_journal_entry_id', 'id');
     }
 }

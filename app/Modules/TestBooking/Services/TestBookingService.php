@@ -3,7 +3,9 @@
 namespace App\Modules\TestBooking\Services;
 
 use App\Enums\CalculationType;
+use App\Enums\JobStatus;
 use App\Modules\AccountLedger\Models\AccountLedger;
+use App\Modules\JobOrder\Models\JobOrder;
 use App\Modules\Patient\Models\Patient;
 use App\Modules\StockItem\Models\StockItem;
 use App\Modules\StockJournal\Models\StockJournal;
@@ -16,6 +18,7 @@ use App\Modules\VoucherPatient\Models\VoucherPatient;
 use App\Modules\VoucherReference\Models\VoucherReference;
 use Illuminate\Database\Eloquent\Collection;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
@@ -88,6 +91,7 @@ class TestBookingService implements TestBookingServiceInterface
             foreach ($data['tests'] as $journalEntry) {
                 $stockItem = StockItem::findOrFail($journalEntry['test_id']);
 
+                $discountValue = ($journalEntry['rate'] / 100) * $stockItem->standard_selling_price;
 
                 StockJournalEntry::create([
                     'stock_journal_id' => $stockJournal->id,
@@ -100,6 +104,8 @@ class TestBookingService implements TestBookingServiceInterface
                     'item_cost' => $stockItem->mrp,
                     'quantity' => 1,
                     'rate' => $stockItem->standard_selling_price,
+                    'discount_percentage' => $journalEntry['rate'],
+                    'discount_value' => $discountValue,
                     'movement_type' => 'out',
                 ]);
 
@@ -131,48 +137,48 @@ class TestBookingService implements TestBookingServiceInterface
             ]);
 
             // calaulation of rate and discount
-            $discountRate = $data['rate'] == 100 ? 0 : $data['rate'];
+            $discountRate = $data['rate'] === 100 ? 0 : $data['rate'];
             $discountAmount = ($totalAmount * $discountRate) / 100;
-            $cashReceived = $totalAmount - $discountAmount;
+            $receivableAmount = $totalAmount - $discountAmount;
+
 
             $entryOrder = 1;
 
 
-
+            // To Sales A/C
             VoucherEntry::create([
                 'voucher_id' => $voucher->id,
                 'entry_order' => $entryOrder++,
-                'account_ledger_id' => $accountLedger->id,
+                'account_ledger_id' => 3000001,
                 'debit' => 0,
                 'credit' => $totalAmount,
                 'rate' => 100,
-                'calculation_type' => CalculationType::currentTotal->value
+                'calculation_type' => CalculationType::currentTotal->value,
             ]);
 
             if (!empty($data['discount_type_id']) && $data['discount_type_id'] != 1) {
+
                 VoucherEntry::create([
                     'voucher_id' => $voucher->id,
                     'entry_order' => $entryOrder++,
                     'account_ledger_id' => 4000007,
                     'debit' => $discountAmount,
                     'credit' => 0,
-                    'rate' => $discountRate,
+                    'rate' => $data['rate'],
                     'calculation_type' => CalculationType::currentTotal->value,
                 ]);
             }
 
+            // By Account Receivable A/C
             VoucherEntry::create([
                 'voucher_id' => $voucher->id,
                 'entry_order' => $entryOrder++,
-                'account_ledger_id' => 3000001,
-                'debit' => $cashReceived,
+                'account_ledger_id' => $accountLedger->id,
+                'debit' => $receivableAmount,
                 'credit' => 0,
-                'rate' => 100 - $discountRate,
-                'calculation_type' => CalculationType::currentTotal->value,
+                'rate' => 100,
+                'calculation_type' => CalculationType::currentTotal->value
             ]);
-
-
-
 
             $testBooking = TestBooking::find($voucher->id);
 
@@ -192,6 +198,31 @@ class TestBookingService implements TestBookingServiceInterface
         try {
             DB::beginTransaction();
 
+            $orderExists = VoucherReference::where('voucher_reference_id', $data['voucher_id'])->exists();
+
+            // if voucher reference table has id means payment has already been done so its not the first time payment
+            if ($orderExists === false) {
+                // get stock journal id to get the entries of item and stock journal entries
+                $stockJournalId = Voucher::where('id', $data['voucher_id'])->first()['stock_journal_id'];
+                $stockJournalEntries = StockJournalEntry::where('stock_journal_id', $stockJournalId)->get();
+
+                // // creating job order to keep status for every item
+                foreach ($stockJournalEntries as $stockJournalEntry) {
+                    JobOrder::create([
+                        "voucher_id" => $data['voucher_id'],
+                        "stock_jorunal_id" => $stockJournalEntry['stock_journal_id'],
+                        "stock_journal_entry_id" => $stockJournalEntry->id,
+                        "expected_start_date" => Carbon::today()->toDateString(),
+                        "expected_end_date" => Carbon::today()->toDateString(),
+                        "actual_start_date" => Carbon::today()->toDateString(),
+                        "actual_end_date" => Carbon::today()->toDateString(),
+                        "status" => JobStatus::CollectSpecimen->value,
+                        "stock_item_id" => $stockJournalEntry['stock_item_id'],
+                    ]);
+                }
+            }
+
+
             $accountLedger = AccountLedger::where('ledgerable_id', $data['patient_id'])
                 ->where('ledgerable_type', 'patient')
                 ->firstOrFail();
@@ -205,6 +236,7 @@ class TestBookingService implements TestBookingServiceInterface
                 'voucher_type_id' => 1002,
             ]);
 
+            // Cash A/C
             VoucherEntry::create([
                 'voucher_id' => $voucher->id,
                 'entry_order' => 1,
@@ -213,6 +245,7 @@ class TestBookingService implements TestBookingServiceInterface
                 'credit' => 0
             ]);
 
+            // To Customer A/C
             VoucherEntry::create([
                 'voucher_id' => $voucher->id,
                 'entry_order' => 2,
@@ -225,7 +258,6 @@ class TestBookingService implements TestBookingServiceInterface
                 'voucher_id' => $voucher->id,
                 'voucher_reference_id' => $data['voucher_id']
             ]);
-
             $testBooking = TestBooking::with($this->resource)
                 ->findOrFail($data['voucher_id']);
 
@@ -262,27 +294,81 @@ class TestBookingService implements TestBookingServiceInterface
         return $prefix . $newNumber;
     }
 
-    public function test_cancellation(int $id): bool
+    public function test_cancellation(array $data, int $id): bool
     {
         try {
             DB::beginTransaction();
+
+
+            // to find if the requested item is last on the list
             $stockJournalEntry = StockJournalEntry::findOrFail($id);
+            /***
+             * checking if it is the last item
+             * if lastitem == true
+             *  then delete the journal entries and voucher entries and post stock journal and voucher as cancelled
+             * else
+             *  only delete the entries need to be deleted
+             */
+            $stockJournalEntryLastItem = StockJournalEntry::where('stock_journal_id', '=', $stockJournalEntry->stock_journal_id)->count() == 1;
+            // searching for item details need to be removed
             $stockItem = StockItem::findOrFail($stockJournalEntry->stock_item_id);
+            // voucher details need to be updated
             $voucher = Voucher::where('stock_journal_id', '=', $stockJournalEntry->stock_journal_id)->first();
+            // entries need to be deleted
             $voucherEntries = VoucherEntry::where('voucher_id', '=', $voucher->id)->orderBy('entry_order', 'asc')->get();
 
-
-            // calcualtion of total amount by getting the voucher entries
+            /**
+             * if hasDiscount
+             *    adjust the discount record too
+             */
+            $hasDiscount = $voucherEntries->count() == 3;
+            // rate of item
             $itemAmount = (int)$stockItem->standard_selling_price;
-            $totalAmount = 0;
+
+            // searching for total amount of voucher entered means the total rate of selected items
+            $totalCreditAmount = 0;
             foreach ($voucherEntries as $voucherEntry) {
-                $totalAmount = $totalAmount + $voucherEntry->credit;
+                $totalCreditAmount = $totalCreditAmount + $voucherEntry->credit;
             }
 
-            // calcualtion of remaining amount after test cancelled and payment not done
-            $remainingTotalAmount = $totalAmount - $itemAmount;
 
-            // -----------------------data updation process started---------------------
+            $remainingTotalAmount = 0;
+            $remainingDiscountTotalAmount = 0;
+            $oldDiscountAmount = $voucherEntries->firstWhere('account_ledger_id', 4000007)['debit'];
+            // calculation of discount again to adjust the balance and discount amount
+            $newDiscountAmount = $oldDiscountAmount - ($stockJournalEntry->discount_percentage / 100) * $stockJournalEntry->rate;
+
+            if ($voucherEntries->count() > 2) {
+                // calculation of remaining amount with discount and payment not done
+                $itemTotalAmount = ($totalCreditAmount - $itemAmount);
+                $remainingDiscountTotalAmount = $itemTotalAmount - $oldDiscountAmount;
+                $remainingTotalAmount = $totalCreditAmount - $itemAmount;
+            } else {
+                // calcualtion of remaining amount after test cancelled and payment not done without discount
+                $remainingTotalAmount = $totalCreditAmount - $itemAmount;
+            }
+
+            // -----------------------voucher / voucher entry updation process started---------------------
+
+            // ------------- voucher update process -------------------
+            if ($stockJournalEntryLastItem === true) {
+                $userId = Auth::id();
+                $voucher->update([
+                    'is_cancelled' => true,
+                    'cancelled_by' => $userId,
+                    'remarks' => $data['remark'] ? $data['remark'] : null
+                ]);
+
+
+                $stockJournal = StockJournal::where('id', '=', $stockJournalEntry->stock_journal_id)->first();
+                $stockJournal->update([
+                    'is_cancelled' => true,
+                    'cancelled_by' => $userId,
+                    'cancellation_reason' => $data['remark'] ? $data['remark'] : null
+                ]);
+            }
+
+
             // voucher entries updated
             foreach ($voucherEntries as $voucherEntry) {
                 $record = VoucherEntry::findOrFail($voucherEntry->id);
@@ -290,9 +376,13 @@ class TestBookingService implements TestBookingServiceInterface
                     $record->update([
                         'credit' => $remainingTotalAmount
                     ]);
-                } else if ($voucherEntry->entry_order === 2) {
+                } else if ($hasDiscount && $voucherEntry->entry_order == 2) {
                     $record->update([
-                        'debit' => $remainingTotalAmount
+                        'debit' => $newDiscountAmount
+                    ]);
+                } else {
+                    $record->update([
+                        'debit' => $hasDiscount ? $remainingDiscountTotalAmount : $remainingTotalAmount
                     ]);
                 }
             }
@@ -303,6 +393,140 @@ class TestBookingService implements TestBookingServiceInterface
             return true;
         } catch (\Exception $e) {
             Log::error('Test cancellation error: ' . $e->getMessage(), ['trace' => $e->getTraceAsString()]);
+            DB::rollBack();
+            return false;
+        }
+    }
+
+    public function test_refund_request(array $data, int $id): bool
+    {
+        try {
+            DB::beginTransaction();
+
+            $userId = Auth::id();
+
+            $stockJournalEntry = StockJournalEntry::findOrFail($id);
+            $stockParentJournal = StockJournal::where('id', '=', $stockJournalEntry->stock_journal_id)->first();
+            $voucher = Voucher::where('stock_journal_id', '=', $stockParentJournal->id)->first();
+            $voucherEntries = VoucherEntry::where('voucher_id', '=', $voucher->id)->orderBy('entry_order', 'asc')->get();
+
+
+            $lastJournalId = StockJournal::orderBy('journal_no', 'desc')->value('journal_no');
+            $newJournalNo = $lastJournalId ? (string)((int)$lastJournalId + 1) : '1';
+
+
+
+            $stockJournal = StockJournal::create([
+                'journal_no' => $newJournalNo,
+                'journal_date' => Carbon::today()->toDateString(),
+                'type' => 'in',
+            ]);
+
+            //  create new entry to record the movement of returned stock
+            StockJournalEntry::create([
+                'stock_journal_id' => $stockJournal->id,
+                'stock_item_id' => $stockJournalEntry->stock_item_id,
+                'stock_unit_id' => $stockJournalEntry->stock_unit_id,
+                'alternate_unit_id' => $stockJournalEntry->alternate_unit_id,
+                'start_date' => $stockJournalEntry->start_date,
+                'end_date' => $stockJournalEntry->end_date,
+                'unit_ratio' => 1.0,
+                'item_cost' => $stockJournalEntry->item_cost,
+                'quantity' => 1,
+                'rate' => $stockJournalEntry->rate,
+                'discount_percentage' => $stockJournalEntry->discount_percentage,
+                'discount_value' => $stockJournalEntry->discount_value,
+                'is_cancelled' => true,
+                'cancelled_by' => $userId,
+                'cancellation_reason' => $data['remark'] ?? null,
+                'movement_type' => 'in',
+            ]);
+
+            // update the item to be cancelled
+            $stockJournalEntry->update([
+                'is_cancelled' => true,
+                'cancelled_by' => $userId,
+                'cancellation_reason' => $data['remark'] ?? null
+            ]);
+
+            // creating voucher patient with reference
+            // search voucher patient first
+            $voucherPatient = VoucherPatient::where('voucher_id', '=', $voucher->id)->first();
+
+            // creating voucher no with the help of patient id
+            $newVoucherNo = $this->createVoucherNo($voucherPatient->patient_id);
+            $newVoucher = TestBooking::create([
+                'voucher_no' => $newVoucherNo,
+                'voucher_date' => Carbon::today()->toDateString(),
+                'voucher_type_id' => 1008,
+                'stock_journal_id' => $stockParentJournal->id,
+                'remarks' => $data['remark'] ? $data['remark'] : null,
+            ]);
+
+            // voucher reference is used to define th relation of this voucher to previous voucher
+            VoucherReference::create([
+                'voucher_id' => $newVoucher->id,
+                'voucher_reference_id' => $voucher->id
+            ]);
+
+
+            $itemTotalAmount = $stockJournalEntry->rate;
+            $itemDiscountAllowed = $stockJournalEntry->discount_percentage ?? 0;
+            $discountReturn = ($itemDiscountAllowed / 100) * $itemTotalAmount;
+            $totalDiscountedAmount = $itemTotalAmount - $discountReturn;
+
+
+
+
+            $entryOrder = 1;
+
+            $customerLedger = AccountLedger::where('ledgerable_id', '=', $voucherPatient->id)->where('ledgerable_type', 'patient')->firstOrFail();
+
+            // rate in voucher --- confusion
+
+            // Sales Return A/C
+            VoucherEntry::create([
+                'voucher_id' => $newVoucher->id,
+                'entry_order' => $entryOrder++,
+                'account_ledger_id' => 3000005,
+                'debit' => $itemTotalAmount,
+                'credit' => 0,
+                'rate' => 100,
+                'calculation_type' => CalculationType::currentTotal->value
+            ]);
+
+            if ($voucherEntries->count() == 3) {
+                VoucherEntry::create([
+                    'voucher_id' => $newVoucher->id,
+                    'entry_order' => $entryOrder++,
+                    'account_ledger_id' => 4000007,
+                    'debit' => 0,
+                    'credit' => $discountReturn,
+                    'rate' => $itemDiscountAllowed,
+                    'calculation_type' => CalculationType::currentTotal->value
+                ]);
+            }
+
+            // To Customer A/C
+            VoucherEntry::create([
+                'voucher_id' => $newVoucher->id,
+                'entry_order' => $entryOrder,
+                'account_ledger_id' => $customerLedger->id,
+                'debit' => 0,
+                'credit' => $totalDiscountedAmount,
+                'rate' => $itemDiscountAllowed == 0 ? 100 : 100 - $itemDiscountAllowed,
+                'calculation_type' => CalculationType::currentTotal->value
+            ]);
+
+            VoucherReference::create([
+                'voucher_id' => $newVoucher->id,
+                'voucher_reference_id' => $voucher->id
+            ]);
+
+            DB::commit();
+            return true;
+        } catch (\Exception $e) {
+            Log::error('Test Refund error: ' . $e->getMessage(), ['trace' => $e->getTraceAsString()]);
             DB::rollBack();
             return false;
         }

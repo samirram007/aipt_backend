@@ -10,16 +10,17 @@ class DiscountTypeSeeder extends Seeder
     public function run(): void
     {
         $discounts = [
-            ["name" => "None","code" => "NONE","is_percentage" => false,"value" => 0,"account_ledger_id" => null,],
-            ["name" => "Promotional Discount","code"=>"PRD-001","is_percentage"=>true,"value" => 2.34, 'account_ledger_id' => 4000007 ],
-            ["name" => "Festive Discount","code"=>"FES-002","is_percentage"=>false,"value" => 600,'account_ledger_id' => 4000007 ],
-            ["name" => "Loyalty Discount","code"=>"LOY-001","is_percentage"=>true,"value" => 4.34,'account_ledger_id' => 4000007 ],
-            ["name" => "Seasonal Health Discount","code"=>"SHD-001","is_percentage"=>false,"value" => 400,'account_ledger_id' => 4000007 ],
-            ["name" => "Online Discount","code"=>"OND-001","is_percentage"=>true,"value" => 3.34,'account_ledger_id' => 4000007 ],
+            ["name" => "Extempt", "code" => "EXTEMPT", "is_percentage" => true, "value" => 0, "account_ledger_id" => null,],
+            ["name" => "Promotional Discount", "code" => "PRD-001", "is_percentage" => true, "value" => 2.34, 'account_ledger_id' => 4000007],
+            // ["name" => "Festive Discount", "code" => "FES-002", "is_percentage" => false, "value" => 600, 'account_ledger_id' => 4000007],
+            ["name" => "Loyalty Discount", "code" => "LOY-001", "is_percentage" => true, "value" => 4.34, 'account_ledger_id' => 4000007],
+            // ["name" => "Seasonal Health Discount", "code" => "SHD-001", "is_percentage" => false, "value" => 400, 'account_ledger_id' => 4000007],
+            ["name" => "Online Discount", "code" => "OND-001", "is_percentage" => true, "value" => 3.34, 'account_ledger_id' => 4000007],
+            // ["name" => "Test Item Discount", "code" => "TID-001", "is_percentage" => false, "value" => 25, 'account_ledger_id' => 4000007],
         ];
 
 
-        foreach($discounts as $discount){
+        foreach ($discounts as $discount) {
             DiscountType::create($discount);
         };
 

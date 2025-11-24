@@ -13,7 +13,8 @@ interface TestBookingServiceInterface
     public function update(array $data, int $id): TestBooking;
     public function delete(int $id): bool;
     public function confirm_payment(array $data): TestBooking;
-    public function all_bookings(?string $start_date = null, ?string $end_date = null):Collection;
+    public function all_bookings(?string $start_date = null, ?string $end_date = null): Collection;
     public function post_payment_test_cancellation(): TestBooking;
-    public function test_cancellation(int $id): bool;
+    public function test_cancellation(array $data, int $id): bool;
+    public function test_refund_request(array $data, int $id): bool;
 }

@@ -21,7 +21,6 @@ class StockJournal extends Model
         'voucher_id',
         'type',
         'remarks',
-
     ];
 
     protected $casts = [

@@ -33,6 +33,8 @@ class Voucher extends Model
         'fiscal_year_id',
         'company_id',
         'stock_journal_id',
+        'cancelled_by',
+        'is_cancelled'
     ];
 
     protected $casts = [

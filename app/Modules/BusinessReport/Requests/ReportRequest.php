@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Modules\TestBooking\Requests;
+namespace App\Modules\BusinessReport\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class TestBookingRequest extends FormRequest
+class ReportRequest extends FormRequest
 {
     public function authorize(): bool
     {
@@ -14,28 +14,16 @@ class TestBookingRequest extends FormRequest
     public function rules(): array
     {
         $rules = [
-            'booking_date' => ['required', 'date'],
-            'patient_id' => ['required', 'numeric', 'exists:patients,id'],
-            'agent_id' => ['nullable', 'numeric', 'exists:agents,id'],
-            'physician_id' => ['nullable', 'numeric', 'exists:physicians,id'],
-            'discount_type_id' => ['sometimes', 'required', 'numeric', 'exists:discount_types,id'],
-            'sample_collector_id' => ['nullable', 'numeric', 'exists:employees,id'],
-            'rate' => ['sometimes', 'required', 'numeric'],
-
-
-            'tests.*' => ['array'],
-            'tests.*.test_id' => ['required', 'numeric', 'exists:stock_items,id'],
-            'tests.*.test_date' => ['required', 'date'],
-            'tests.*.report_date' => ['required', 'date'],
-            'tests.*.amount' => ['required', 'string'],
-            'tests.*.rate' => ['required', 'numeric']
+            'start_date' => ['required', 'date'],
+            'end_date' => ['required', 'required'],
+            'departmentId' => ['nullable', 'numeric'],
         ];
 
         // For update requests, make validation more flexible
         if ($this->isMethod('PUT') || $this->isMethod('PATCH')) {
-            $id = $this->route('test_booking');
-            $rules['name'] = ['sometimes', 'required', 'string', 'max:255', 'unique:test_bookings,name,' . $id,];
-            $rules['code'] = ['sometimes', 'required', 'string', 'max:255', 'unique:test_bookings,code,' . $id,];
+            $id = $this->route('business_report');
+            $rules['name'] = ['sometimes', 'required', 'string', 'max:255', 'unique:business_reports,name,' . $id,];
+            $rules['code'] = ['sometimes', 'required', 'string', 'max:255', 'unique:business_reports,code,' . $id,];
         }
 
         return $rules;

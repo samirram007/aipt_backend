@@ -14,9 +14,9 @@ class VoucherReferenceResource extends SuccessResource
         return [
             'id' => $this->id,
             'voucherId' => $this->voucher_id,
-            'voucherReferenceId'=> $this->reference_voucher_id,
-            'voucher'=> VoucherResource::make($this->whenLoaded('voucher')),
-            'voucherReference'=> VoucherResource::make($this->whenLoaded('voucher_reference'))
+            'voucherReferenceId' => $this->voucher_reference_id,
+            'voucher' => VoucherResource::make($this->whenLoaded('voucher')),
+            'voucherReference' => VoucherResource::make($this->whenLoaded('voucher_reference'))
         ];
     }
 }

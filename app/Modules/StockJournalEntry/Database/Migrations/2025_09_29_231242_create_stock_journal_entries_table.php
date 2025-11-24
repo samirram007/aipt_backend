@@ -19,6 +19,9 @@ return new class extends Migration {
             $table->date('end_date')->nullable();
             $table->decimal('quantity', 15, 4)->default(1);
             $table->decimal('rate', 15, 2)->default(0);
+            $table->decimal('discount_percentage', 15, 2)->default(0);
+            $table->decimal('discount_value', 15, 2)->default(0);
+            $table->decimal('amount', 15, 2)->virtualAs('quantity * rate - discount_value');
             $table->string('movement_type')->default('in'); // 'in', 'out'
             $table->unsignedBigInteger('godown_id')->nullable();
             $table->boolean('is_cancelled')->default(false);
