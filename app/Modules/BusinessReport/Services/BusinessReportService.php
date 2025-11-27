@@ -5,6 +5,9 @@ namespace App\Modules\BusinessReport\Services;
 use App\Modules\BusinessReport\Contracts\BusinessReportServiceInterface;
 use App\Modules\BusinessReport\Models\BusinessReport;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Resources\JsonResource;
+use Illuminate\Support\Facades\DB;
 
 class BusinessReportService implements BusinessReportServiceInterface
 {
@@ -38,8 +41,34 @@ class BusinessReportService implements BusinessReportServiceInterface
         return $record->delete();
     }
 
-    public function test_summary(string $start_date, string $end_date, int $departmentId): Collection
+    public function test_summary(string $start_date, string $end_date, ?int $departmentId = null): JsonResponse
     {
-        return BusinessReport::all();
+        $allDepartmentTestSummary = DB::select('CALL allDepartmentTestSummaryReport(?,?)', [$start_date, $end_date]);
+        $allDepartmentTestSummaryCount = DB::select('CALL allDepartmentTestSummaryCount(?,?)', [$start_date, $end_date]);
+
+        $testSummaryReport = collect($allDepartmentTestSummary)->groupBy("voucher_no")->map(function ($rows) {
+            $first = $rows->first();
+            return [
+                "voucherNo" => $first->voucher_no,
+                "name" => $first->patient_name,
+                "bookingDate" => $first->booking_date,
+                "tests" => $rows->map(fn($r) => [
+                    "testName" => $r->test_name,
+                    "amount" => $r->amount,
+                    "status" => $r->status
+                ])->values()
+            ];
+        })->values();
+
+        return response()->json([
+            "message" => "Data Feteched successfully",
+            "status" => true,
+            "code" => 201,
+            "success" => true,
+            "data" => [
+                "contents" => $testSummaryReport,
+                "summary" => $allDepartmentTestSummaryCount[0]
+            ]
+        ]);
     }
 }

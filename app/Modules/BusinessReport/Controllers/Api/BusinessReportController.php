@@ -55,10 +55,9 @@ class BusinessReportController extends Controller
         ]);
     }
 
-    public function test_summary(string $start_date, string $end_date, int $departmentId): SuccessCollection
+    public function test_summary(string $start_date, string $end_date, ?int $departmentId = null): JsonResponse
     {
-        dd($start_date, $end_date, $departmentId);
-        $data = $this->service->test_summary($request->validated());
-        return new BusinessReportCollection($data);
+        $data = $this->service->test_summary($start_date, $end_date, $departmentId);
+        return $data;
     }
 }

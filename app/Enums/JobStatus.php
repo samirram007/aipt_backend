@@ -10,6 +10,7 @@ enum JobStatus: string
     case InProcess = 'in_process';
     case Completed = 'completed';
     case DeliverToDesk = 'deliver_to_desk';
+        // case DeskAcknowledged = "desk_acknowledged";
     case Delivered = 'delivered';
     case Cancelled = 'cancelled';
     case Drafted = 'drafted';

@@ -6,6 +6,7 @@ use App\Enums\CalculationType;
 use App\Enums\JobStatus;
 use App\Modules\AccountLedger\Models\AccountLedger;
 use App\Modules\JobOrder\Models\JobOrder;
+use App\Modules\JobOrderHistory\Models\JobOrderHistory;
 use App\Modules\Patient\Models\Patient;
 use App\Modules\StockItem\Models\StockItem;
 use App\Modules\StockJournal\Models\StockJournal;
@@ -76,6 +77,8 @@ class TestBookingService implements TestBookingServiceInterface
         try {
             DB::beginTransaction();
 
+            $userId = Auth::id();
+
             $lastJournalId = StockJournal::orderBy('journal_no', 'desc')->value('journal_no');
             $newJournalNo = $lastJournalId ? (string)((int)$lastJournalId + 1) : '1';
 
@@ -112,10 +115,12 @@ class TestBookingService implements TestBookingServiceInterface
                 $totalAmount = $totalAmount + $stockItem->standard_selling_price;
             }
 
+
+
             $newVoucherNo = $this->createVoucherNo((int) $data['patient_id']);
             $voucher = TestBooking::create([
                 'voucher_no' => $newVoucherNo,
-                'voucher_date' => Carbon::today()->toDateString(),
+                'voucher_date' => explode('T', $data['booking_date'])[0],
                 'voucher_type_id' => 1006,
                 'stock_journal_id' => $stockJournal->id
             ]);
@@ -180,6 +185,31 @@ class TestBookingService implements TestBookingServiceInterface
                 'calculation_type' => CalculationType::currentTotal->value
             ]);
 
+            // job order creation process includes job order history creation process
+
+            foreach ($data['tests'] as $jobOrder) {
+                $stockJournalEntryId = StockJournalEntry::where(["stock_journal_id" => $stockJournal->id, 'stock_item_id' => $jobOrder['test_id']])->first()['id'];
+
+                $newJobOrder = JobOrder::create([
+                    "voucher_id" => $voucher->id,
+                    "stock_journal_id" => $stockJournal->id,
+                    "stock_journal_entry_id" => $stockJournalEntryId,
+                    "expected_start_date" => Carbon::today()->toDateString(),
+                    "expected_end_date" => Carbon::today()->toDateString(),
+                    "actual_start_date" => Carbon::today()->toDateString(),
+                    "actual_end_date" => Carbon::today()->toDateString(),
+                    "status" => JobStatus::Booked->value,
+                    "stock_item_id" => $jobOrder['test_id'],
+                    "process_by" => $userId
+                ]);
+                JobOrderHistory::create([
+                    'job_order_id' => $newJobOrder->id,
+                    'status' => JobStatus::Booked->value,
+                ]);
+            }
+
+
+
             $testBooking = TestBooking::find($voucher->id);
 
             DB::commit();
@@ -202,22 +232,15 @@ class TestBookingService implements TestBookingServiceInterface
 
             // if voucher reference table has id means payment has already been done so its not the first time payment
             if ($orderExists === false) {
-                // get stock journal id to get the entries of item and stock journal entries
-                $stockJournalId = Voucher::where('id', $data['voucher_id'])->first()['stock_journal_id'];
-                $stockJournalEntries = StockJournalEntry::where('stock_journal_id', $stockJournalId)->get();
-
-                // // creating job order to keep status for every item
-                foreach ($stockJournalEntries as $stockJournalEntry) {
-                    JobOrder::create([
-                        "voucher_id" => $data['voucher_id'],
-                        "stock_jorunal_id" => $stockJournalEntry['stock_journal_id'],
-                        "stock_journal_entry_id" => $stockJournalEntry->id,
-                        "expected_start_date" => Carbon::today()->toDateString(),
-                        "expected_end_date" => Carbon::today()->toDateString(),
-                        "actual_start_date" => Carbon::today()->toDateString(),
-                        "actual_end_date" => Carbon::today()->toDateString(),
-                        "status" => JobStatus::CollectSpecimen->value,
-                        "stock_item_id" => $stockJournalEntry['stock_item_id'],
+                // if no payment has been done then job order will be updated as collect specimen
+                $jobOrders = JobOrder::where('voucher_id', $data['voucher_id'])->get();
+                foreach ($jobOrders as $jobOrder) {
+                    $jobOrder->update([
+                        "status" => JobStatus::CollectSpecimen->value
+                    ]);
+                    JobOrderHistory::create([
+                        'job_order_id' => $jobOrder->id,
+                        'status' => JobStatus::CollectSpecimen->value,
                     ]);
                 }
             }
@@ -459,7 +482,7 @@ class TestBookingService implements TestBookingServiceInterface
                 'voucher_no' => $newVoucherNo,
                 'voucher_date' => Carbon::today()->toDateString(),
                 'voucher_type_id' => 1008,
-                'stock_journal_id' => $stockParentJournal->id,
+                'stock_journal_id' => $stockJournal->id,
                 'remarks' => $data['remark'] ? $data['remark'] : null,
             ]);
 
@@ -522,6 +545,19 @@ class TestBookingService implements TestBookingServiceInterface
                 'voucher_id' => $newVoucher->id,
                 'voucher_reference_id' => $voucher->id
             ]);
+
+            $jobOrder = JobOrder::where(['voucher_id' => $voucher->id, "stock_journal_entry_id" => $stockJournalEntry->id])->first();
+
+            $jobOrder->update([
+                "status" => JobStatus::CancelRequest->value
+            ]);
+
+            JobOrderHistory::create([
+                "job_order_id" => $jobOrder->id,
+                "status" => JobStatus::CancelRequest->value
+            ]);
+
+
 
             DB::commit();
             return true;
