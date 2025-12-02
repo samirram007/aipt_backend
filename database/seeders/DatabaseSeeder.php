@@ -16,6 +16,8 @@ use App\Modules\GstRegistrationType\Database\Seeders\GstRegistrationTypeSeeder;
 use App\Modules\GstRegistrationType\Models\GstRegistrationType;
 use App\Modules\Role\Database\Seeders\RoleSeeder;
 use App\Modules\Shift\Database\Seeders\ShiftSeeder;
+use App\Modules\Supplier\Database\Seeders\SupplierSeeder;
+use App\Modules\UserFiscalYear\Database\Seeders\UserFiscalYearSeeder;
 use App\Modules\Voucher\Database\Seeders\ReceiptNoteSeeder;
 use App\Modules\Voucher\Database\Seeders\VoucherDemoSeeder;
 use App\Modules\Voucher\Database\Seeders\VoucherSeeder;
@@ -105,7 +107,9 @@ class DatabaseSeeder extends Seeder
                 // VoucherEntrySeeder::class,
 
             EmployeeGroupSeeder::class,
+            SupplierSeeder::class,
             DistributorSeeder::class,
+            UserFiscalYearSeeder::class,
             // VoucherDemoSeeder::class,
             // ReceiptNoteSeeder::class,
 

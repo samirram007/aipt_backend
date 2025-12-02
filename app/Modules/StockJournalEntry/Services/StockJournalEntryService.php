@@ -12,13 +12,13 @@ use Illuminate\Support\Facades\Validator;
 class StockJournalEntryService implements StockJournalEntryServiceInterface
 {
     protected $resource = ['rate_unit'];
-    protected $stockJournalGodownEntryService;
+
 
 
     public function __construct(
-        StockJournalGodownEntryServiceInterface $stockJournalGodownEntryService,
+        protected StockJournalGodownEntryServiceInterface $stockJournalGodownEntryService,
     ) {
-        $this->stockJournalGodownEntryService = $stockJournalGodownEntryService;
+
     }
     public function getAll(): Collection
     {

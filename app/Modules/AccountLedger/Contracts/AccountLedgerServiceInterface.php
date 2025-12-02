@@ -12,6 +12,7 @@ interface AccountLedgerServiceInterface
     public function store(array $data): AccountLedger;
     public function update(array $data, int $id): AccountLedger;
     public function delete(int $id): bool;
+    public function getLedgerBalance(int $id): ?array;
     public function getPurchaseLedgers(): Collection;
     public function getSaleLedgers(): Collection;
     public function getSupplierLedgers(): Collection;

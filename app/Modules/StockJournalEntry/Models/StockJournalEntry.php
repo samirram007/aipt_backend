@@ -7,6 +7,7 @@ use App\Modules\StockItem\Models\StockItem;
 use App\Modules\StockJournal\Models\StockJournal;
 use App\Modules\StockJournalGodownEntry\Models\StockJournalGodownEntry;
 use App\Modules\StockUnit\Models\StockUnit;
+use App\Modules\Voucher\Models\Voucher;
 use App\Traits\Blameable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -35,8 +36,13 @@ class StockJournalEntry extends Model
         'discount',
         'amount',
         'movement_type',
+        // 'is_cancelled',
 
     ];
+    // protected $appends = [
+    //     'voucher',
+    //     'is_cancelled',
+    // ];
 
     protected $casts = [
         'created_at' => 'datetime',
@@ -68,5 +74,25 @@ class StockJournalEntry extends Model
         return $this->belongsTo(StockUnit::class, 'rate_unit_id');
     }
 
+    public function getVoucherAttribute()
+    {
+        return $this->voucher();
+    }
+    public function getIsCancelledAttribute(): bool
+    {
+        return true;
+    }
+
+    public function voucher()
+    {
+        return $this->hasOneThrough(
+            Voucher::class,
+            StockJournal::class,
+            'id',          // Foreign key on StockJournal table referencing StockJournalEntry? (adjust as needed)
+            'id',          // Foreign key on Voucher table referencing StockJournal? (adjust as needed)
+            'stock_journal_id',
+            'voucher_id'
+        );
+    }
 
 }

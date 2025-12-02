@@ -7,6 +7,7 @@ use App\Modules\AccountLedger\Models\AccountLedger;
 use App\Modules\Supplier\Contracts\SupplierServiceInterface;
 use App\Modules\Supplier\Models\Supplier;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Support\Arr;
 
 class SupplierService implements SupplierServiceInterface
 {
@@ -24,8 +25,8 @@ class SupplierService implements SupplierServiceInterface
 
     public function store(array $data): Supplier
     {
-
-        $supplier = Supplier::create($data);
+        $clean = Arr::except($data, ['account_group_id', 'address', 'account_ledger', 'is_edit']);
+        $supplier = Supplier::create($clean);
 
         if ($data['address']) {
 

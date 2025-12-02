@@ -4,7 +4,11 @@ namespace App\Modules\AccountLedger\Services;
 
 use App\Modules\AccountLedger\Contracts\AccountLedgerServiceInterface;
 use App\Modules\AccountLedger\Models\AccountLedger;
+use App\Modules\User\Models\User;
+use App\Modules\UserFiscalYear\Contracts\UserFiscalYearServiceInterface;
+use App\Modules\UserFiscalYear\Services\UserFiscalYearService;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Support\Facades\DB;
 
 class AccountLedgerService implements AccountLedgerServiceInterface
 {
@@ -17,6 +21,13 @@ class AccountLedgerService implements AccountLedgerServiceInterface
         'ledgerable.address.state',
         'ledgerable.address.country'
     ];
+
+    protected $userFiscalYearService;
+    public function __construct(UserFiscalYearServiceInterface $userFiscalYearService)
+    {
+        $this->userFiscalYearService = $userFiscalYearService;
+    }
+
     // /**
     //  * Define the resources and their relations to be resolved
     //  *
@@ -57,6 +68,62 @@ class AccountLedgerService implements AccountLedgerServiceInterface
         $record = AccountLedger::findOrFail($id);
         return $record->delete();
     }
+
+    public function getLedgerBalance(int $id): ?array
+    {
+
+        $ledger = AccountLedger::with('account_nature')->find($id);
+        // dd($ledger->toArray());
+
+        if (!$ledger) {
+            return null;
+        }
+
+        $balance = $this->calculateLedgerBalance($ledger);
+        $nature = strtolower($ledger->account_nature->accounting_effect); // "debit" or "credit"
+
+        // Default (normal behavior)
+        $drCr = $nature === 'debit' ? 'DR' : 'CR';
+
+        // If balance is negative → reverse the sign & flip DR/CR
+        if ($balance < 0) {
+            $balance = abs($balance);
+            $drCr = $drCr === 'DR' ? 'CR' : 'DR';
+        }
+
+        return [
+            'id' => $ledger->id,
+            'balance' => $balance,
+            'nature' => $drCr,
+        ];
+    }
+
+    private function calculateLedgerBalance(AccountLedger $ledger): float
+    {
+        // dd($ledger->toArray());
+
+        $userFiscalYear = $this->userFiscalYearService->getByUserId(auth()->user()->id);
+
+        $totals = $ledger->voucher_entries()
+            ->whereHas('voucher', function ($q) use ($userFiscalYear) {
+                $q->where('fiscal_year_id', $userFiscalYear->fiscal_year_id);
+            })
+            ->selectRaw('SUM(debit) as debitTotal, SUM(credit) as creditTotal')
+            ->first();
+        //dd($userFiscalYear, $ledger->id);
+        //     $totals = DB::table('voucher_entries')
+        //         ->join('vouchers', 'vouchers.id', '=', 'voucher_entries.voucher_id')
+        //         ->where('voucher_entries.account_ledger_id', $ledger->id)
+        //         ->where('vouchers.fiscal_year_id', $userFiscalYear->fiscal_year_id)
+        //         ->selectRaw('
+        //     SUM(voucher_entries.debit) as debitTotal,
+        //     SUM(voucher_entries.credit) as creditTotal
+        // ')->first();
+
+        //dd($totals);
+        return ($totals->debitTotal ?? 0) - ($totals->creditTotal ?? 0);
+    }
+
     public function getPurchaseLedgers(): Collection
     {
         return AccountLedger::with($this->resource)

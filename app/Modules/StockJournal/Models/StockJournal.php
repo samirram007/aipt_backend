@@ -3,9 +3,11 @@
 namespace App\Modules\StockJournal\Models;
 
 use App\Modules\StockJournalEntry\Models\StockJournalEntry;
+use App\Modules\Voucher\Models\Voucher;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class StockJournal extends Model
 {
@@ -16,7 +18,6 @@ class StockJournal extends Model
     protected $fillable = [
         'journal_no',
         'journal_date',
-        'voucher_id',
         'type',
         'remarks',
 
@@ -29,5 +30,10 @@ class StockJournal extends Model
     public function stock_journal_entries(): HasMany
     {
         return $this->hasMany(StockJournalEntry::class, 'stock_journal_id');
+    }
+
+    public function voucher(): HasOne
+    {
+        return $this->hasOne(Voucher::class, 'stock_journal_id', 'id');
     }
 }

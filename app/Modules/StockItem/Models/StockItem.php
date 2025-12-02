@@ -104,40 +104,42 @@ class StockItem extends BaseModel
     {
         return $this->hasMany(StockItemPrice::class);
     }
-    public function stock_item_category(): BelongsTo
+    public function stock_category(): BelongsTo
     {
-        return $this->belongsTo(StockCategory::class);
+        return $this->belongsTo(StockCategory::class, 'stock_category_id', 'id');
     }
-    public function stock_item_group(): BelongsTo
+    public function stock_group(): BelongsTo
     {
-        return $this->belongsTo(StockGroup::class);
+        return $this->belongsTo(StockGroup::class, 'stock_group_id', 'id');
     }
     public function stock_unit(): BelongsTo
     {
-        return $this->belongsTo(StockUnit::class);
+        return $this->belongsTo(StockUnit::class, 'stock_unit_id', 'id');
     }
     public function alternate_stock_unit(): BelongsTo
     {
-        return $this->belongsTo(StockUnit::class);
+        return $this->belongsTo(StockUnit::class, 'alternate_stock_unit_id', 'id');
     }
     public function unique_quantity_code(): BelongsTo
     {
-        return $this->belongsTo(UniqueQuantityCode::class);
+        return $this->belongsTo(UniqueQuantityCode::class, 'unique_quantity_code_id', 'id');
     }
 
-    public function stockJournalEntries(): HasMany
+    public function stock_journal_entries(): HasMany
     {
         return $this->hasMany(StockJournalEntry::class, 'stock_item_id');
     }
+
     public function getStockInHandAttribute(): float|int
     {
+        // $userFiscalYear = $this->userFiscalYearService->getByUserId(auth()->id());
         // use eager-loaded relation if available
-        if ($this->relationLoaded('stockJournalEntries')) {
-            $in = $this->stockJournalEntries
+        if ($this->relationLoaded('stock_journal_entries')) {
+            $in = $this->stock_journal_entries
                 ->where('movement_type', 'IN')
                 ->sum('actual_quantity');
 
-            $out = $this->stockJournalEntries
+            $out = $this->stock_journal_entries
                 ->where('movement_type', 'OUT')
                 ->sum('actual_quantity');
 
@@ -145,11 +147,11 @@ class StockItem extends BaseModel
         }
 
         // fallback queries
-        $in = $this->stockJournalEntries()
+        $in = $this->stock_journal_entries()
             ->where('movement_type', 'IN')
             ->sum('actual_quantity');
 
-        $out = $this->stockJournalEntries()
+        $out = $this->stock_journal_entries()
             ->where('movement_type', 'OUT')
             ->sum('actual_quantity');
 

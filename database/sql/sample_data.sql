@@ -164,7 +164,7 @@ INSERT IGNORE INTO `account_ledgers` (`id`, `name`, `code`, `account_group_id`, 
 	(1000001, 'Cash', 'CASH', 10001, 'Cash in hand', 'active', NULL, 1, 0, NULL, NULL, NULL, NULL),
 	(1000002, 'Bank Account', 'BANK', 10002, 'Default bank ledger', 'active', NULL, 1, 0, NULL, NULL, NULL, NULL),
 	(1000003, 'Accounts Receivable (Debtors)', 'DEBTORS', 10003, 'Receivable balances from customers', 'active', NULL, 1, 0, NULL, NULL, NULL, NULL),
-	(1000004, 'Stock-in-Hand', 'STOCK', 10004, 'Inventory of goods', 'active', NULL, 1, 0, NULL, NULL, NULL, NULL),
+	(1000004, 'Stock-in-Hand', 'STOCK', 10009, 'Inventory of goods', 'active', NULL, 1, 0, NULL, NULL, NULL, NULL),
 	(1000005, 'Input CGST', 'INCGST', 20002, 'Input Central GST', 'active', NULL, 1, 0, NULL, NULL, NULL, NULL),
 	(1000006, 'Input SGST', 'INSGST', 20002, 'Input State GST', 'active', NULL, 1, 0, NULL, NULL, NULL, NULL),
 	(1000007, 'Input IGST', 'INIGST', 20002, 'Input Integrated GST', 'active', NULL, 1, 0, NULL, NULL, NULL, NULL),
@@ -189,8 +189,8 @@ INSERT IGNORE INTO `account_ledgers` (`id`, `name`, `code`, `account_group_id`, 
 	(4000006, 'Salary Expense', 'SALARY', 40002, 'Employee salary and wages', 'active', NULL, 0, 0, NULL, NULL, NULL, NULL),
 	(5000001, 'Capital Account', 'CAPITAL', 50001, 'Owner’s capital', 'active', NULL, 1, 0, NULL, NULL, NULL, NULL),
 	(5000002, 'Drawings', 'DRAWING', 50001, 'Withdrawals by proprietor', 'active', NULL, 1, 0, NULL, NULL, NULL, NULL),
-	(5000003, 'Profit & Loss Account', 'PLACC', 50002, 'System ledger for profit and loss summary', 'active', NULL, 1, 1, NULL, NULL, NULL, NULL),
-	(5000004, 'UltraTech Cement Limited', 'UltraTech Cement Limited', 20003, NULL, 'active', NULL, 0, 0, 1, 'supplier', '2025-11-05 05:55:55', '2025-11-05 05:55:55');
+	(5000003, 'Profit & Loss Account', 'PLACC', 50002, 'System ledger for profit and loss summary', 'active', NULL, 1, 1, NULL, NULL, NULL, NULL);
+	-- (5000004, 'UltraTech Cement Limited', 'UltraTech Cement Limited', 20003, NULL, 'active', NULL, 0, 0, 1, 'supplier', '2025-11-05 05:55:55', '2025-11-05 05:55:55');
 
 -- Dumping structure for table aipt.companies
 -- DROP TABLE IF EXISTS `companies`;

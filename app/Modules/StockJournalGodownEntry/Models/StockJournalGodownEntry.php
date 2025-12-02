@@ -77,6 +77,7 @@ class StockJournalGodownEntry extends Model
         );
         // return $this->stock_journal_entry->stock_item();
     }
+
     public function stock_unit(): mixed
     {
         return $this->stock_journal_entry->stock_unit();
@@ -99,6 +100,9 @@ class StockJournalGodownEntry extends Model
     {
         return $this->stock_journal_entry->stock_journal();
     }
-
+    public function voucher(): mixed
+    {
+        return $this->stock_journal_entry->voucher();
+    }
 
 }

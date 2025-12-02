@@ -10,6 +10,7 @@ use App\Modules\AccountLedger\Resources\AccountLedgerResource;
 use App\Modules\AccountLedger\Resources\AccountLedgerCollection;
 use App\Modules\AccountLedger\Requests\AccountLedgerRequest;
 use App\Http\Resources\SuccessResource;
+use App\Modules\AccountLedger\Resources\LedgerBalanceResource;
 use App\Traits\ApiResponseTrait;
 use Illuminate\Http\JsonResponse;
 
@@ -38,6 +39,7 @@ class AccountLedgerController extends Controller
             );
 
     }
+
 
     public function store(AccountLedgerRequest $request): SuccessResource
     {
@@ -68,7 +70,17 @@ class AccountLedgerController extends Controller
         ]);
 
     }
+    public function ledger_balance(int $id): ?SuccessResource
+    {
+        $data = $this->service->getLedgerBalance($id);
+        // dd($data);
+        return
+            new LedgerBalanceResource(
+                (object) $data,
+                'AccountLedger Balance retrieved successfully'
+            );
 
+    }
 
     public function purchase_ledgers(): SuccessCollection
     {

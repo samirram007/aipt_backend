@@ -7,6 +7,8 @@ Route::apiResource('account_ledgers', AccountLedgerController::class)
     ->middleware('jwt.cookies');
 
 
+Route::get('ledger_balance/{id}', [AccountLedgerController::class, 'ledger_balance'])
+    ->middleware('jwt.cookies');
 Route::get('purchase_ledgers', [AccountLedgerController::class, 'purchase_ledgers'])
     ->middleware('jwt.cookies');
 Route::get('sale_ledgers', [AccountLedgerController::class, 'sale_ledgers'])

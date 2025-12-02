@@ -38,6 +38,8 @@ class StockJournalEntryResource extends SuccessResource
             'stockItem' => StockItemResource::make($this->whenLoaded('stock_item')),
             'stockUnit' => StockUnitResource::make($this->whenLoaded('stock_unit')),
             'alternateUnit' => StockUnitResource::make($this->whenLoaded('alternate_unit')),
+            'stockInHand' => $this->stock_in_hand,
+
         ];
     }
 }

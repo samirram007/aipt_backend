@@ -14,27 +14,31 @@ use PHPOpenSourceSaver\JWTAuth\Facades\JWTAuth;
 
 class AuthService implements AuthServiceInterface
 {
-    public function login($data): string
+    public function login(array $credentials): string
     {
+        $token = Auth::attempt($credentials);
 
-        $token = Auth::attempt($data);
-        // dd($token);
         if (!$token) {
             throw ValidationException::withMessages([
                 'email' => ['The provided credentials are incorrect.'],
             ]);
         }
 
-        if (!$token) {
-            return response()->json([
-                'status' => 'error',
-                'message' => 'Invalid credentials',
-            ], 404);
+        // Mark as password login (optional, for analytics)
+        $user = Auth::user();
+        if ($user instanceof User) {
+            $user->update(['provider' => 'password']);
         }
+
         return $token;
+    }
 
-
-
+    /**
+     * Social login – generate token for any user (Google, GitHub, etc.)
+     */
+    public function loginWithUser(User $user): string
+    {
+        return JWTAuth::fromUser($user);
     }
 
 
@@ -93,7 +97,7 @@ class AuthService implements AuthServiceInterface
             throw new AuthenticationException('Unauthenticated.');
         }
 
-        return $user;
+        return $user->load('roles', 'user_fiscal_year.fiscal_year');
     }
 
 }

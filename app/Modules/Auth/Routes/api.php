@@ -7,6 +7,12 @@ Route::group(['prefix' => 'auth'], function ($router) {
     Route::post('/register', [AuthController::class, 'register']);
     //  Route::post('/swaggerLogin', [AuthController::class, 'swaggerLogin']);
     Route::post('/login', [AuthController::class, 'login']);
+
+    // Social
+    Route::get('/{provider}', [AuthController::class, 'socialRedirect'])
+        ->where('provider', 'google|github');
+    Route::get('/{provider}/callback', [AuthController::class, 'socialCallback'])
+        ->where('provider', 'google|github');
 });
 Route::middleware(['jwt.cookies'])->group(function () {
     Route::group(['prefix' => 'auth'], function ($router) {

@@ -10,18 +10,22 @@ use App\Modules\Auth\Resources\AuthResource;
 use App\Modules\Auth\Resources\AuthCollection;
 use App\Modules\Auth\Requests\AuthRequest;
 use App\Http\Resources\SuccessResource;
+use App\Modules\User\Contracts\UserServiceInterface;
 use App\Modules\User\Resources\UserResource;
 use App\Traits\ApiResponseTrait;
 use Illuminate\Http\JsonResponse;
+use Laravel\Socialite\Facades\Socialite;
 
 class AuthController extends Controller
 {
 
     protected $domain;
     protected $token_expire_duration;
-    public function __construct(protected AuthServiceInterface $authService)
-    {
-        $this->domain = env('DOMAIN');
+    public function __construct(
+        protected AuthServiceInterface $authService,
+        protected UserServiceInterface $userService
+    ) {
+        $this->domain = env('SESSION_DOMAIN');
         $this->token_expire_duration = env('TOKEN_EXPIRE_DURATION', 30000);
     }
     /**
@@ -63,6 +67,16 @@ class AuthController extends Controller
         $token = $this->authService->login($request->validated());
         return $this->respondWithToken($token, 'Login successful!');
 
+    }
+    public function socialCallback(string $provider)
+    {
+        $socialUser = Socialite::driver($provider)->stateless()->user();
+
+        $user = $this->userService->findOrCreateFromProvider($socialUser, $provider);
+
+        $token = $this->authService->loginWithUser($user); // ← uses same method!
+
+        return $this->respondWithToken($token);
     }
 
     public function register(RegisterRequest $request): JsonResponse

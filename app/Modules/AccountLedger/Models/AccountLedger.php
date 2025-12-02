@@ -57,4 +57,7 @@ class AccountLedger extends Model
             'account_nature_id'       // Foreign key on AccountGroup
         );
     }
+
+
+
 }
