@@ -19,7 +19,8 @@ return new class extends Migration {
             $table->string('email')->nullable();
 
             $table->string('status')->default('active');
-
+            $table->unsignedBigInteger('created_by')->nullable();
+            $table->unsignedBigInteger('updated_by')->nullable();
             $table->timestamps();
         });
     }

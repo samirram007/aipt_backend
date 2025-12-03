@@ -7,13 +7,14 @@ use App\Modules\Agent\Models\Agent;
 use App\Modules\Patient\Models\Patient;
 use App\Modules\Physician\Models\Physician;
 use App\Modules\Voucher\Models\Voucher;
+use App\Traits\Blamable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class VoucherPatient extends Model
 {
-    use HasFactory;
+    use HasFactory, Blamable;
 
     protected $table = 'voucher_patients';
 
@@ -24,24 +25,30 @@ class VoucherPatient extends Model
         'physician_id',
         'status',
         'discount_type_id',
-        'sample_collector_id'
+        'sample_collector_id',
+        'created_by',
+        'updated_by'
     ];
 
     protected $casts = [
- 'created_at' => 'datetime',
+        'created_at' => 'datetime',
         'updated_at' => 'datetime',
     ];
 
-    public function voucher():BelongsTo{
-        return $this->belongsTo(Voucher::class,'voucher_id','id');
+    public function voucher(): BelongsTo
+    {
+        return $this->belongsTo(Voucher::class, 'voucher_id', 'id');
     }
-    public function patient():BelongsTo{
-        return $this->belongsTo(Patient::class,'patient_id','id');
+    public function patient(): BelongsTo
+    {
+        return $this->belongsTo(Patient::class, 'patient_id', 'id');
     }
-    public function agent():BelongsTo{
-        return $this->belongsTo(Agent::class,'agent_id','id');
+    public function agent(): BelongsTo
+    {
+        return $this->belongsTo(Agent::class, 'agent_id', 'id');
     }
-    public function physician():BelongsTo{
-        return $this->belongsTo(Physician::class,'physician_id','id');
+    public function physician(): BelongsTo
+    {
+        return $this->belongsTo(Physician::class, 'physician_id', 'id');
     }
 }

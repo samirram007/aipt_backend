@@ -5,13 +5,14 @@ namespace App\Modules\AccountLedger\Models;
 use Illuminate\Database\Eloquent\Model;
 use App\Modules\AccountGroup\Models\AccountGroup;
 use App\Modules\AccountNature\Models\AccountNature;
+use App\Traits\Blamable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasOneThrough;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
 
 class AccountLedger extends Model
 {
-    use HasFactory;
+    use HasFactory, Blamable;
 
     protected $table = 'account_ledgers';
     protected $fillable = [
@@ -22,7 +23,9 @@ class AccountLedger extends Model
         'status',
         'icon',
         'ledgerable_id',
-        'ledgerable_type'
+        'ledgerable_type',
+        'created_by',
+        'updated_by'
     ];
     public static function ledgerNameExists(string $name): bool
     {

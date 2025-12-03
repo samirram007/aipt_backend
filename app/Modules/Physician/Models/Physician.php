@@ -6,11 +6,12 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use App\Modules\AccountLedger\Models\AccountLedger;
 use App\Modules\Discipline\Models\Discipline;
+use App\Traits\Blamable;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Physician extends Model
 {
-    use HasFactory;
+    use HasFactory, Blamable;
 
     protected $table = 'physicians';
 
@@ -20,18 +21,22 @@ class Physician extends Model
         'email',
         'contact_no',
         'discipline_id',
-        'is_active'
+        'is_active',
+        'created_by',
+        'updated_by'
     ];
 
     protected $casts = [
- 'created_at' => 'datetime',
+        'created_at' => 'datetime',
         'updated_at' => 'datetime',
     ];
 
-    public function account_ledger(): BelongsTo{
+    public function account_ledger(): BelongsTo
+    {
         return $this->belongsTo(AccountLedger::class);
     }
-    public function discipline(): BelongsTo{
+    public function discipline(): BelongsTo
+    {
         return $this->belongsTo(Discipline::class);
     }
 }

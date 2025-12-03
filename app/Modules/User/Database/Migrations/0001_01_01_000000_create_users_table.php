@@ -25,9 +25,9 @@ return new class extends Migration {
             $table->timestamps();
 
             $table->index(['userable_id', 'userable_type']);
+            $table->unsignedBigInteger('created_by')->nullable();
+            $table->unsignedBigInteger('updated_by')->nullable();
         });
-
-
     }
 
     /**

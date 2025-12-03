@@ -28,6 +28,8 @@ return new class extends Migration {
             $table->decimal('conversion_factor', 15, 6)->nullable()->comment('Conversion from primary unit to secondary unit');
             $table->integer('no_of_decimal_places')->default(0);
             $table->boolean('is_base')->default(false)->comment('Mark this as base unit for the item');
+            $table->unsignedBigInteger('created_by')->nullable();
+            $table->unsignedBigInteger('updated_by')->nullable();
             $table->timestamps();
         });
     }

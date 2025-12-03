@@ -34,6 +34,9 @@ return new class extends Migration {
              */
             $table->unsignedBigInteger('cancelled_by')->nullable();
             $table->boolean('is_cancelled')->default(false);
+
+            $table->unsignedBigInteger('created_by')->nullable();
+            $table->unsignedBigInteger('updated_by')->nullable();
             $table->timestamps();
         });
     }

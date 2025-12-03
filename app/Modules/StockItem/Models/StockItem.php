@@ -10,6 +10,7 @@ use App\Modules\StockGroup\Models\StockGroup;
 use App\Modules\StockItemPrice\Models\StockItemPrice;
 use App\Modules\StockUnit\Models\StockUnit;
 use App\Modules\UniqueQuantityCode\Models\UniqueQuantityCode;
+use App\Traits\Blamable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -17,7 +18,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class StockItem extends Model
 {
-    use HasFactory;
+    use HasFactory, Blamable;
 
     protected $table = 'stock_items';
 
@@ -70,11 +71,12 @@ class StockItem extends Model
         'sample_name',
         'process_duration',
         'process_type',
-
+        'created_by',
+        'updated_by'
     ];
 
     protected $casts = [
- 'created_at' => 'datetime',
+        'created_at' => 'datetime',
         'updated_at' => 'datetime',
         'is_negative_sales_allow' => 'boolean',
         'is_maintain_batch' => 'boolean',
@@ -103,27 +105,26 @@ class StockItem extends Model
 
     public function stock_item_prices(): HasMany
     {
-        return $this->hasMany(StockItemPrice::class,'stock_price_id','id');
+        return $this->hasMany(StockItemPrice::class, 'stock_price_id', 'id');
     }
     public function stock_category(): BelongsTo
     {
-        return $this->belongsTo(StockCategory::class,'stock_category_id','id');
+        return $this->belongsTo(StockCategory::class, 'stock_category_id', 'id');
     }
     public function stock_group(): BelongsTo
     {
-        return $this->belongsTo(StockGroup::class,'stock_group_id','id');
+        return $this->belongsTo(StockGroup::class, 'stock_group_id', 'id');
     }
     public function stock_unit(): BelongsTo
     {
-        return $this->belongsTo(StockUnit::class,'stock_unit_id','id');
+        return $this->belongsTo(StockUnit::class, 'stock_unit_id', 'id');
     }
     public function alternate_stock_unit(): BelongsTo
     {
-        return $this->belongsTo(StockUnit::class,'alternate_stock_unit_id','id');
+        return $this->belongsTo(StockUnit::class, 'alternate_stock_unit_id', 'id');
     }
     public function unique_quantity_code(): BelongsTo
     {
-        return $this->belongsTo(UniqueQuantityCode::class,'unique_quantity_id','id');
+        return $this->belongsTo(UniqueQuantityCode::class, 'unique_quantity_id', 'id');
     }
-
 }

@@ -7,6 +7,7 @@ use App\Modules\Country\Models\Country;
 use App\Modules\Currency\Models\Currency;
 use App\Modules\FiscalYear\Models\FiscalYear;
 use App\Modules\State\Models\State;
+use App\Traits\Blamable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -14,7 +15,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Company extends Model
 {
-    use HasFactory;
+    use HasFactory, Blamable;
 
     protected $table = 'companies';
 
@@ -41,10 +42,12 @@ class Company extends Model
         'zip_code',
         'status',
         'is_group_company',
+        'created_by',
+        'updated_by'
     ];
 
     protected $casts = [
- 'created_at' => 'datetime',
+        'created_at' => 'datetime',
         'updated_at' => 'datetime',
         'is_group_company' => 'boolean',
     ];

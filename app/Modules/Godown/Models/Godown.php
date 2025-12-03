@@ -2,13 +2,14 @@
 
 namespace App\Modules\Godown\Models;
 
+use App\Traits\Blamable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Godown extends Model
 {
-    use HasFactory;
+    use HasFactory, Blamable;
 
     protected $table = 'godowns';
 
@@ -20,12 +21,13 @@ class Godown extends Model
         'parent_id',
         'address',
         'our_stock_with_third_party',
-        'third_party_stock_with_us'
-
+        'third_party_stock_with_us',
+        'created_by',
+        'updated_by'
     ];
 
     protected $casts = [
- 'created_at' => 'datetime',
+        'created_at' => 'datetime',
         'updated_at' => 'datetime',
         'our_stock_with_third_party' => 'boolean',
         'third_party_stock_with_us' => 'boolean',

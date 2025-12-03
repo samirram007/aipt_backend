@@ -47,7 +47,7 @@ return new class extends Migration {
             $table->boolean('is_sample_required')->default(true);
             $table->string('sample_name')->default('blood');
             $table->integer('process_duration')->default(1)->comment('This will be in days');
-            $table->enum('process_type',ProcessType::getValues())->default(ProcessType::InHouse->value);
+            $table->enum('process_type', ProcessType::getValues())->default(ProcessType::InHouse->value);
             $table->boolean('is_raw_material')->default(false);
             $table->boolean('is_unfinished_goods')->default(false);
 
@@ -88,6 +88,8 @@ return new class extends Migration {
             // Metadata
             $table->string('icon')->nullable();
             $table->enum('status', ['active', 'inactive'])->default('active');
+            $table->unsignedBigInteger('created_by')->nullable();
+            $table->unsignedBigInteger('updated_by')->nullable();
             $table->timestamps();
         });
 

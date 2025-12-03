@@ -4,13 +4,14 @@ namespace App\Modules\TestItemReportTemplate\Models;
 
 use App\Modules\Doctor\Models\Doctor;
 use App\Modules\TestItem\Models\TestItem;
+use App\Traits\Blamable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class TestItemReportTemplate extends Model
 {
-    use HasFactory;
+    use HasFactory, Blamable;
 
     protected $table = 'test_item_report_templates';
 
@@ -18,7 +19,8 @@ class TestItemReportTemplate extends Model
         'test_item_id',
         'doctor_id',
         'report_template_name',
-
+        'created_by',
+        'updated_by'
     ];
 
     protected $casts = [
@@ -28,11 +30,10 @@ class TestItemReportTemplate extends Model
 
     public function doctor(): BelongsTo
     {
-        return $this->belongsTo(Doctor::class,'doctor_id','id');
+        return $this->belongsTo(Doctor::class, 'doctor_id', 'id');
     }
     public function test_item(): BelongsTo
     {
-        return $this->belongsTo(TestItem::class,'test_item_id','id');
+        return $this->belongsTo(TestItem::class, 'test_item_id', 'id');
     }
-
 }

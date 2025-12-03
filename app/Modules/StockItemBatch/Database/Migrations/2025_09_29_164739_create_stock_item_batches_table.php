@@ -20,6 +20,8 @@ return new class extends Migration {
 
             $table->foreign('stock_item_id')->references('id')->on('stock_items')->onDelete('cascade');
             $table->foreign('stock_unit_id')->references('id')->on('stock_units')->onDelete('restrict');
+            $table->unsignedBigInteger('created_by')->nullable();
+            $table->unsignedBigInteger('updated_by')->nullable();
             $table->timestamps();
         });
     }

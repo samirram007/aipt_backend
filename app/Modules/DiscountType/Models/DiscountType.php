@@ -3,13 +3,14 @@
 namespace App\Modules\DiscountType\Models;
 
 use App\Modules\AccountLedger\Models\AccountLedger;
+use App\Traits\Blamable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class DiscountType extends Model
 {
-    use HasFactory;
+    use HasFactory, Blamable;
 
     protected $table = 'discount_types';
 
@@ -18,7 +19,9 @@ class DiscountType extends Model
         'code',
         'is_percentage',
         'value',
-        'account_ledger_id'
+        'account_ledger_id',
+        'created_by',
+        'updated_by'
     ];
 
     protected $casts = [
@@ -27,7 +30,8 @@ class DiscountType extends Model
         'is_percentage' => 'boolean'
     ];
 
-    public function account_ledger():BelongsTo{
-        return $this->belongsTo(AccountLedger::class,'account_ledger_id','id');
+    public function account_ledger(): BelongsTo
+    {
+        return $this->belongsTo(AccountLedger::class, 'account_ledger_id', 'id');
     }
 }

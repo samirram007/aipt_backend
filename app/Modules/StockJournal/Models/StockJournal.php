@@ -4,6 +4,7 @@ namespace App\Modules\StockJournal\Models;
 
 use App\Modules\StockJournalEntry\Models\StockJournalEntry;
 use App\Modules\Voucher\Models\Voucher;
+use App\Traits\Blamable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -11,7 +12,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class StockJournal extends Model
 {
-    use HasFactory;
+    use HasFactory, Blamable;
 
     protected $table = 'stock_journals';
 
@@ -21,6 +22,8 @@ class StockJournal extends Model
         'voucher_id',
         'type',
         'remarks',
+        'created_by',
+        'updated_by'
     ];
 
     protected $casts = [

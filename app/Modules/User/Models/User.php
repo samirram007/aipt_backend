@@ -2,6 +2,7 @@
 
 namespace App\Modules\User\Models;
 
+use App\Traits\Blamable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Notifications\Notifiable;
@@ -11,7 +12,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 class User extends Authenticatable implements JWTSubject
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
-    use HasFactory, Notifiable;
+    use HasFactory, Notifiable, Blamable;
 
     /**
      * The attributes that are mass assignable.
@@ -24,7 +25,9 @@ class User extends Authenticatable implements JWTSubject
         'username',
         'user_type',
         'password',
-        'status'
+        'status',
+        'created_by',
+        'updated_by'
     ];
 
     /**
@@ -58,7 +61,7 @@ class User extends Authenticatable implements JWTSubject
 
         Get the identifier that will be stored in the subject claim of the JWT.
         @return mixed
-    */
+     */
     public function getJWTIdentifier(): mixed
     {
         return $this->getKey();
@@ -68,7 +71,7 @@ class User extends Authenticatable implements JWTSubject
 
     Return a key value array, containing any custom claims to be added to the JWT.
     @return array
-    */
+     */
     public function getJWTCustomClaims(): array
     {
         return [];

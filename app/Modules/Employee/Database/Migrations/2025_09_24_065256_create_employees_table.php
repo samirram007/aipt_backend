@@ -25,7 +25,8 @@ return new class extends Migration {
 
             $table->string('status')->default('active');
             $table->string('image')->nullable();
-
+            $table->unsignedBigInteger('created_by')->nullable();
+            $table->unsignedBigInteger('updated_by')->nullable();
             $table->timestamps();
         });
     }

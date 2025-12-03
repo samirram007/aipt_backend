@@ -5,12 +5,13 @@ namespace App\Modules\Address\Models;
 use App\Enums\AddressType;
 use App\Modules\Country\Models\Country;
 use App\Modules\State\Models\State;
+use App\Traits\Blamable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Address extends Model
 {
-    use HasFactory;
+    use HasFactory, Blamable;
 
     protected $table = 'addresses';
 
@@ -31,11 +32,13 @@ class Address extends Model
         'addressable_id',
         'addressable_type',
         'post_office',
-        'district'
+        'district',
+        'created_by',
+        'updated_by'
     ];
 
     protected $casts = [
- 'created_at' => 'datetime',
+        'created_at' => 'datetime',
         'updated_at' => 'datetime',
         'is_primary' => 'boolean',
         // 'address_type' => AddressType::class,
@@ -58,6 +61,4 @@ class Address extends Model
     {
         return $this->belongsTo(Country::class);
     }
-
-
 }

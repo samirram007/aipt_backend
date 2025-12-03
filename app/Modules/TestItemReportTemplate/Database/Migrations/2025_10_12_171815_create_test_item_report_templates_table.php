@@ -18,6 +18,8 @@ return new class extends Migration
                 ['test_item_id', 'doctor_id', 'report_template_name'],
                 'unique_test_item_doctor_template_name'
             );
+            $table->unsignedBigInteger('created_by')->nullable();
+            $table->unsignedBigInteger('updated_by')->nullable();
             $table->timestamps();
         });
     }

@@ -16,15 +16,15 @@ return new class extends Migration
         //     $table->id();
         //     $table->timestamps();
         // });
-        $procedure = "
-            DROP PROCEDURE IF EXISTS `allUsers`;
-            create procedure allUsers()
-            begin
-                select * from users;
-            end
-        ";
+        // $procedure = "
+        //     DROP PROCEDURE IF EXISTS `allUsers`;
+        //     create procedure allUsers()
+        //     begin
+        //         select * from users;
+        //     end
+        // ";
 
-        DB::unprepared($procedure);
+        // DB::unprepared($procedure);
     }
 
     /**

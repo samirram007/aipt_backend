@@ -10,6 +10,7 @@ use App\Modules\EmployeeGroup\Models\EmployeeGroup;
 use App\Modules\Grade\Models\Grade;
 use App\Modules\Shift\Models\Shift;
 use App\Modules\User\Models\User;
+use App\Traits\Blamable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -17,7 +18,7 @@ use Illuminate\Database\Eloquent\Relations\MorphOne;
 
 class Employee extends Model
 {
-    use HasFactory;
+    use HasFactory, Blamable;
 
     protected $table = 'employees';
 
@@ -37,11 +38,12 @@ class Employee extends Model
         'grade_id',
         'status',
         'image',
-
+        'created_by',
+        'updated_by'
     ];
 
     protected $casts = [
- 'created_at' => 'datetime',
+        'created_at' => 'datetime',
         'updated_at' => 'datetime',
         'dob' => 'date',
         'doj' => 'date',

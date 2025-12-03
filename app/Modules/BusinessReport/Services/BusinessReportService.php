@@ -48,13 +48,17 @@ class BusinessReportService implements BusinessReportServiceInterface
 
         $testSummaryReport = collect($allDepartmentTestSummary)->groupBy("voucher_no")->map(function ($rows) {
             $first = $rows->first();
+            $totalAmount = $rows->sum(fn($r) => $r->amount);
             return [
                 "voucherNo" => $first->voucher_no,
                 "name" => $first->patient_name,
                 "bookingDate" => $first->booking_date,
+                "totalAmount" => $totalAmount,
                 "tests" => $rows->map(fn($r) => [
                     "testName" => $r->test_name,
                     "amount" => $r->amount,
+                    "printName" => $r->print_name,
+                    "code" => $r->code,
                     "status" => $r->status
                 ])->values()
             ];

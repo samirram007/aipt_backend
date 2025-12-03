@@ -23,6 +23,8 @@ return new class extends Migration
 
             // to continue data in the list
             $table->boolean('status')->default(true);
+            $table->unsignedBigInteger('created_by')->nullable();
+            $table->unsignedBigInteger('updated_by')->nullable();
             $table->timestamps();
         });
     }

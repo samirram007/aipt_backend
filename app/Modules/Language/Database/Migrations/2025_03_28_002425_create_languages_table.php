@@ -19,6 +19,8 @@ return new class extends Migration
             $table->string('direction')->default('ltr'); // 'ltr' or 'rtl'
             $table->string('flag')->nullable(); // URL or path to the flag image
             $table->boolean('is_default')->default(false); // Indicates if this is the default language
+            $table->unsignedBigInteger('created_by')->nullable();
+            $table->unsignedBigInteger('updated_by')->nullable();
             $table->timestamps();
         });
     }

@@ -2,12 +2,13 @@
 
 namespace App\Modules\JobOrderHistory\Models;
 
+use App\Traits\Blamable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class JobOrderHistory extends Model
 {
-    use HasFactory;
+    use HasFactory, Blamable;
 
     protected $table = 'job_order_histories';
 
@@ -16,7 +17,9 @@ class JobOrderHistory extends Model
         'status',
         'changed_at',
         'process_by',
-        'remarks'
+        'remarks',
+        'created_by',
+        'updated_by'
     ];
 
     protected $casts = [

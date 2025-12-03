@@ -13,6 +13,8 @@ return new class extends Migration
             $table->string('stock_journal_id');
             $table->string('stock_journal_reference_id');
             $table->primary(['stock_journal_id', 'stock_journal_reference_id']);
+            $table->unsignedBigInteger('created_by')->nullable();
+            $table->unsignedBigInteger('updated_by')->nullable();
             $table->timestamps();
         });
     }

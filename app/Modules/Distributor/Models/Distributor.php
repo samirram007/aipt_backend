@@ -5,12 +5,13 @@ namespace App\Modules\Distributor\Models;
 use App\Modules\Address\Models\Address;
 use Illuminate\Database\Eloquent\Model;
 use App\Modules\AccountLedger\Models\AccountLedger;
+use App\Traits\Blamable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\MorphOne;
 
 class Distributor extends Model
 {
-    use HasFactory;
+    use HasFactory, Blamable;
 
     protected $table = 'distributors';
 
@@ -24,11 +25,12 @@ class Distributor extends Model
         'phone',
         'email',
         'status',
-
+        'created_by',
+        'updated_by'
     ];
 
     protected $casts = [
- 'created_at' => 'datetime',
+        'created_at' => 'datetime',
         'updated_at' => 'datetime',
     ];
 

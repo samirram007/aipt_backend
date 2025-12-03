@@ -2,12 +2,13 @@
 
 namespace App\Modules\Discipline\Models;
 
+use App\Traits\Blamable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Discipline extends Model
 {
-    use HasFactory;
+    use HasFactory, Blamable;
 
     protected $table = 'disciplines';
 
@@ -16,11 +17,12 @@ class Discipline extends Model
         'code',
         'description',
         'status',
-
+        'created_by',
+        'updated_by'
     ];
 
     protected $casts = [
- 'created_at' => 'datetime',
+        'created_at' => 'datetime',
         'updated_at' => 'datetime',
     ];
 }

@@ -21,6 +21,8 @@ return new class extends Migration
 
             // status of agent is active or deactive
             $table->boolean('is_active')->default(true);
+            $table->unsignedBigInteger('created_by')->nullable();
+            $table->unsignedBigInteger('updated_by')->nullable();
 
             $table->timestamps();
         });

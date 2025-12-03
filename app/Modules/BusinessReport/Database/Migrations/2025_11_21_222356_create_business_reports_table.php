@@ -15,6 +15,8 @@ return new class extends Migration
             $table->string('code')->unique();
             $table->string('description')->nullable();
             $table->string('status')->default('active');
+            $table->unsignedBigInteger('created_by')->nullable();
+            $table->unsignedBigInteger('updated_by')->nullable();
             $table->timestamps();
         });
 
@@ -23,7 +25,7 @@ return new class extends Migration
             drop procedure if exists allDepartmentTestSummaryReport;
             create procedure allDepartmentTestSummaryReport(In `startDate` date, In `endDate` date)
             begin
-                select  v.voucher_no as voucher_no , p.name as patient_name, sti.print_name as code, sti.name as test_name, sti.standard_selling_price as amount, v.voucher_date as booking_date , jo.status
+                select  v.voucher_no as voucher_no , p.name as patient_name, sti.code as code, sti.print_name as print_name, sti.name as test_name, sti.standard_selling_price as amount, v.voucher_date as booking_date , jo.status
                 from vouchers v
                 inner join voucher_patients vp on vp.voucher_id = v.id
                 inner join patients p on p.id = vp.patient_id
@@ -38,7 +40,7 @@ return new class extends Migration
         // get allDepartmentTestSummaryReportCount --------- Procedure
         $allDepartmentTestSummaryCountProcedure = "
             drop procedure if exists allDepartmentTestSummaryCount;
-            create procedure allDepartmentTestSummaryCount(In `startDate` date, In `endDate` date)
+            create procedure allDepartmentTestSummaryCount(In `start_date` date, In `end_date` date)
             begin
                 select count(stje.id) as total_test ,
                 sum(case when jo.status = 'cancelled' then 1 else 0 end) as cancelled_test,
@@ -51,7 +53,7 @@ return new class extends Migration
                 from stock_journal_entries stje
                 left join job_orders jo on jo.stock_journal_entry_id = stje.id
                 left join vouchers v on v.id = jo.voucher_id where stje.movement_type = 'out' and v.voucher_date between start_date and end_date;
-            code
+            end
         ";
 
         DB::unprepared($allDepartmentTestSummaryCountProcedure);

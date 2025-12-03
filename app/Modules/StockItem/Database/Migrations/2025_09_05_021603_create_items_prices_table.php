@@ -39,7 +39,8 @@ return new class extends Migration {
             // Effective dates
             $table->date('effective_from');
             $table->date('effective_to')->nullable();
-
+            $table->unsignedBigInteger('created_by')->nullable();
+            $table->unsignedBigInteger('updated_by')->nullable();
             $table->timestamps();
         });
         // Apply all foreign key constraints at the end

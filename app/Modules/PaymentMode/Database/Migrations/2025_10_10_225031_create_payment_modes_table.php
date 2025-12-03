@@ -14,6 +14,8 @@ return new class extends Migration
             $table->string('code')->unique();
             $table->unsignedBigInteger('account_ledger_id')->nullable();
             $table->unsignedBigInteger('account_group_id')->nullable();
+            $table->unsignedBigInteger('created_by')->nullable();
+            $table->unsignedBigInteger('updated_by')->nullable();
             $table->timestamps();
         });
     }

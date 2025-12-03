@@ -8,6 +8,7 @@ use App\Modules\TestBooking\Models\TestBooking;
 interface TestBookingServiceInterface
 {
     public function getAll(): Collection;
+    public function getAllCancelledBooking(): Collection;
     public function getById(int $id): ?TestBooking;
     public function store(array $data): TestBooking;
     public function update(array $data, int $id): TestBooking;

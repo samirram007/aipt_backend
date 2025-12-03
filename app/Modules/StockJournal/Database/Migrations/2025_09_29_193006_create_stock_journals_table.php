@@ -14,6 +14,8 @@ return new class extends Migration {
             $table->unsignedBigInteger('voucher_id')->nullable();
             $table->string('type'); // 'in', 'out', 'transfer', 'production'
             $table->text('remarks')->nullable();
+            $table->unsignedBigInteger('created_by')->nullable();
+            $table->unsignedBigInteger('updated_by')->nullable();
             $table->timestamps();
         });
     }

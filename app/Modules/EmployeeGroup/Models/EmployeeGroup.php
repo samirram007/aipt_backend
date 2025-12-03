@@ -3,13 +3,14 @@
 namespace App\Modules\EmployeeGroup\Models;
 
 use App\Modules\Employee\Models\Employee;
+use App\Traits\Blamable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class EmployeeGroup extends Model
 {
-    use HasFactory;
+    use HasFactory, Blamable;
 
     protected $table = 'employee_groups';
 
@@ -18,7 +19,8 @@ class EmployeeGroup extends Model
         'code',
         'description',
         'status',
-
+        'created_by',
+        'updated_by'
     ];
 
     protected $casts = [
@@ -29,6 +31,5 @@ class EmployeeGroup extends Model
     public function employees(): HasMany
     {
         return $this->hasMany(Employee::class, 'employee_group_id', 'id');
-
     }
 }

@@ -16,6 +16,8 @@ return new class extends Migration {
             $table->date('end_date');
             $table->enum('period_type', array_column(PeriodType::cases(), 'value'));
             $table->boolean('is_closed')->default(false);
+            $table->unsignedBigInteger('created_by')->nullable();
+            $table->unsignedBigInteger('updated_by')->nullable();
             $table->timestamps();
         });
     }

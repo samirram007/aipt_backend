@@ -10,6 +10,7 @@ use App\Modules\VoucherEntry\Models\VoucherEntry;
 use App\Modules\VoucherPatient\Models\VoucherPatient;
 use App\Modules\VoucherReference\Models\VoucherReference;
 use App\Modules\VoucherType\Models\VoucherType;
+use App\Traits\Blamable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -18,7 +19,7 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class Voucher extends Model
 {
-    use HasFactory;
+    use HasFactory, Blamable;
 
     protected $table = 'vouchers';
 
@@ -34,13 +35,17 @@ class Voucher extends Model
         'company_id',
         'stock_journal_id',
         'cancelled_by',
-        'is_cancelled'
+        'is_cancelled',
+        'created_by',
+        'updated_by'
     ];
 
     protected $casts = [
         'created_at' => 'datetime',
         'updated_at' => 'datetime',
     ];
+
+
     public function stock_journal(): BelongsTo
     {
         return $this->belongsTo(StockJournal::class);

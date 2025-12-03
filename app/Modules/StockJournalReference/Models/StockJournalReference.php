@@ -2,12 +2,13 @@
 
 namespace App\Modules\StockJournalReference\Models;
 
+use App\Traits\Blamable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class StockJournalReference extends Model
 {
-    use HasFactory;
+    use HasFactory, Blamable;
 
     protected $table = 'stock_journal_references';
 
@@ -16,7 +17,8 @@ class StockJournalReference extends Model
         'code',
         'description',
         'status',
-
+        'created_by',
+        'updated_by'
     ];
 
     protected $casts = [

@@ -14,8 +14,10 @@ return new class extends Migration
             $table->string('name')->unique();
             $table->string('code')->unique()->nullable();
             $table->boolean('is_percentage')->default(true);
-            $table->decimal('value',10,2)->default(0.00);
+            $table->decimal('value', 10, 2)->default(0.00);
             $table->unsignedBigInteger('account_ledger_id')->nullable();
+            $table->unsignedBigInteger('created_by')->nullable();
+            $table->unsignedBigInteger('updated_by')->nullable();
             $table->timestamps();
         });
     }

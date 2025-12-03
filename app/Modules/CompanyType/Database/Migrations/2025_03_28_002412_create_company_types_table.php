@@ -18,6 +18,8 @@ return new class extends Migration {
             $table->string('description')->nullable();
             $table->enum('status', array_column(ActiveInactive::cases(), 'value'))
                 ->default(ActiveInactive::Active->value);
+            $table->unsignedBigInteger('created_by')->nullable();
+            $table->unsignedBigInteger('updated_by')->nullable();
             $table->timestamps();
         });
     }

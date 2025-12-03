@@ -24,6 +24,8 @@ return new class extends Migration {
                 array_map(fn($case) => $case->value, ActiveInactive::cases())
             )
                 ->default(ActiveInactive::Active->value);
+            $table->unsignedBigInteger('created_by')->nullable();
+            $table->unsignedBigInteger('updated_by')->nullable();
             $table->timestamps();
         });
     }
@@ -35,5 +37,4 @@ return new class extends Migration {
     {
         Schema::dropIfExists('fiscal_years');
     }
-
 };

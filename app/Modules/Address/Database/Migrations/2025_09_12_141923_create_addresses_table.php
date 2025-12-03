@@ -42,6 +42,8 @@ return new class extends Migration {
             // $table->morphs('addressable'); // creates addressable_id + addressable_type
             $table->timestamps();
             $table->index(['addressable_id', 'addressable_type']);
+            $table->unsignedBigInteger('created_by')->nullable();
+            $table->unsignedBigInteger('updated_by')->nullable();
         });
     }
 

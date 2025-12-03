@@ -17,7 +17,8 @@ return new class extends Migration {
             $table->string('contact_no')->nullable();
             $table->string('phone')->nullable();
             $table->string('email')->nullable();
-
+            $table->unsignedBigInteger('created_by')->nullable();
+            $table->unsignedBigInteger('updated_by')->nullable();
             $table->string('status')->default('active');
 
 

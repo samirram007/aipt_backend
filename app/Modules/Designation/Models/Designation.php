@@ -2,12 +2,13 @@
 
 namespace App\Modules\Designation\Models;
 
+use App\Traits\Blamable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Designation extends Model
 {
-    use HasFactory;
+    use HasFactory, Blamable;
 
     protected $table = 'designations';
 
@@ -15,7 +16,8 @@ class Designation extends Model
         'name',
         'code',
         'status',
-
+        'created_by',
+        'updated_by'
     ];
 
     protected $casts = [

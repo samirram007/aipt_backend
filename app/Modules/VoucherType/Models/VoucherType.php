@@ -3,13 +3,14 @@
 namespace App\Modules\VoucherType\Models;
 
 use App\Modules\VoucherCategory\Models\VoucherCategory;
+use App\Traits\Blamable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class VoucherType extends Model
 {
-    use HasFactory;
+    use HasFactory, Blamable;
 
     protected $table = 'voucher_types';
 
@@ -26,11 +27,12 @@ class VoucherType extends Model
         'is_system',
         'status',
         'icon',
-
+        'created_by',
+        'updated_by'
     ];
 
     protected $casts = [
- 'created_at' => 'datetime',
+        'created_at' => 'datetime',
         'updated_at' => 'datetime',
     ];
 

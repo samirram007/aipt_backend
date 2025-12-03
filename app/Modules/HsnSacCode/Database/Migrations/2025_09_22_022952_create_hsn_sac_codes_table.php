@@ -19,7 +19,8 @@ return new class extends Migration {
             $table->foreignId('gst_category_id');
             $table->enum('gst_type', ['cgst_sgst', 'igst'])->nullable(); // default GST type
             $table->boolean('is_gst_inclusive')->default(false);
-
+            $table->unsignedBigInteger('created_by')->nullable();
+            $table->unsignedBigInteger('updated_by')->nullable();
             $table->timestamps();
         });
     }

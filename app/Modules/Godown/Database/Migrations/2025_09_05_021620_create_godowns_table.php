@@ -19,6 +19,8 @@ return new class extends Migration {
             $table->boolean('our_stock_with_third_party')->default(false);
             $table->boolean('third_party_stock_with_us')->default(false);
             $table->json('address')->nullable();
+            $table->unsignedBigInteger('created_by')->nullable();
+            $table->unsignedBigInteger('updated_by')->nullable();
 
             $table->timestamps();
         });

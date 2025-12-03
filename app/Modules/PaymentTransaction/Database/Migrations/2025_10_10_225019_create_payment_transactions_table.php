@@ -17,6 +17,8 @@ return new class extends Migration
             $table->string('cheque_no');
             $table->string('tid_no')->nullable();
             $table->string('transaction_no')->nullable();
+            $table->unsignedBigInteger('created_by')->nullable();
+            $table->unsignedBigInteger('updated_by')->nullable();
             $table->timestamps();
         });
     }

@@ -11,7 +11,8 @@ return new class extends Migration {
             $table->id();
             $table->unsignedBigInteger('voucher_id');
             $table->unsignedBigInteger('voucher_reference_id');
-
+            $table->unsignedBigInteger('created_by')->nullable();
+            $table->unsignedBigInteger('updated_by')->nullable();
             $table->timestamps();
         });
     }

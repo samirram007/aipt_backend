@@ -4,12 +4,13 @@ namespace App\Modules\StockItem\Models;
 
 use App\Enums\CostingMethod;
 use App\Enums\TypeOfSupply;
+use App\Traits\Blamable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class ItemPrice extends Model
 {
-    use HasFactory;
+    use HasFactory, Blamable;
 
     protected $table = 'item_prices';
 
@@ -57,12 +58,13 @@ class ItemPrice extends Model
         'standard_cost',
         'icon',
         'status',
-
+        'created_by',
+        'updated_by'
 
     ];
 
     protected $casts = [
- 'created_at' => 'datetime',
+        'created_at' => 'datetime',
         'updated_at' => 'datetime',
         'is_negative_sales_allow' => 'boolean',
         'is_maintain_batch' => 'boolean',

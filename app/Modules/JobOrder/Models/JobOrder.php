@@ -8,13 +8,14 @@ use App\Modules\StockJournalEntry\Models\StockJournalEntry;
 use App\Modules\TestBooking\Models\TestBooking;
 use App\Modules\TestItem\Models\TestItem;
 use App\Modules\Voucher\Models\Voucher;
+use App\Traits\Blamable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class JobOrder extends Model
 {
-    use HasFactory;
+    use HasFactory, Blamable;
 
     protected $table = 'job_orders';
 
@@ -28,6 +29,8 @@ class JobOrder extends Model
         "actual_end_date",
         "status",
         "stock_item_id",
+        'created_by',
+        'updated_by'
     ];
 
     protected $casts = [
@@ -37,21 +40,20 @@ class JobOrder extends Model
 
     public function stock_item(): BelongsTo
     {
-        return $this->belongsTo(StockItem::class, 'stock_item_id','id');
+        return $this->belongsTo(StockItem::class, 'stock_item_id', 'id');
     }
     public function test_item(): BelongsTo
     {
-        return $this->belongsTo(TestItem::class, 'stock_item_id','id');
+        return $this->belongsTo(TestItem::class, 'stock_item_id', 'id');
     }
 
     public function stock_journal_entry(): BelongsTo
     {
-        return $this->belongsTo(StockJournalEntry::class, 'stock_journal_entry_id','id');
+        return $this->belongsTo(StockJournalEntry::class, 'stock_journal_entry_id', 'id');
     }
 
-    public function test_booking():BelongsTo
+    public function test_booking(): BelongsTo
     {
         return $this->belongsTo(TestBooking::class, 'voucher_id', 'id');
     }
-
 }

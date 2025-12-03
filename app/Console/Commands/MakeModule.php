@@ -219,7 +219,8 @@ class {$name} extends Model
         'code',
         'description',
         'status',
-
+        'created_by',
+        'updated_by'
     ];
 
     protected \$casts = [
@@ -464,7 +465,8 @@ return new class extends Migration
             \$table->string('description')->nullable();
             \$table->string('status')->default('active');
             \$table->string('icon')->nullable();
-
+            \$table->unsignedBigInteger('created_by')->nullable();
+            \$table->unsignedBigInteger('updated_by')->nullable();
             \$table->timestamps();
         });
     }

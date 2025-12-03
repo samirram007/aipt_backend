@@ -18,6 +18,8 @@ return new class extends Migration {
             $table->foreignId('account_ledger_id');
             $table->decimal('debit_amount', 18, 6)->nullable();
             $table->decimal('credit_amount', 18, 6)->nullable();
+            $table->unsignedBigInteger('created_by')->nullable();
+            $table->unsignedBigInteger('updated_by')->nullable();
             $table->timestamps();
         });
     }

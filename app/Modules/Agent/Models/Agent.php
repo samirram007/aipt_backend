@@ -5,13 +5,14 @@ namespace App\Modules\Agent\Models;
 use App\Modules\AccountLedger\Models\AccountLedger;
 use App\Modules\Address\Models\Address;
 use App\Modules\User\Models\User;
+use App\Traits\Blamable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\MorphOne;
 
 class Agent extends Model
 {
-    use HasFactory;
+    use HasFactory, Blamable;
 
     protected $table = 'agents';
 
@@ -20,7 +21,9 @@ class Agent extends Model
         'email',
         'contact_no',
         'commission_percent',
-        'is_active'
+        'is_active',
+        'created_by',
+        'updated_by'
     ];
 
     protected $casts = [

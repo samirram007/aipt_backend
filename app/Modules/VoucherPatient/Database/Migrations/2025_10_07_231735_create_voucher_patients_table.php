@@ -17,7 +17,8 @@ return new class extends Migration
             $table->unsignedBigInteger('discount_type_id')->nullable();
             $table->unsignedBigInteger('sample_collector_id')->nullable();
             $table->string('status')->default('active');
-
+            $table->unsignedBigInteger('created_by')->nullable();
+            $table->unsignedBigInteger('updated_by')->nullable();
             $table->timestamps();
         });
     }

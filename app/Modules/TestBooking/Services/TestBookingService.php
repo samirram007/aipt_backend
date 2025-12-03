@@ -568,6 +568,11 @@ class TestBookingService implements TestBookingServiceInterface
         }
     }
 
+    public function getAllCancelledBooking(): Collection
+    {
+        return TestBooking::where('voucher_type_id', 1008)->with($this->resource)->get();
+    }
+
     public function update(array $data, int $id): TestBooking
     {
         $record = TestBooking::findOrFail($id);

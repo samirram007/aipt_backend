@@ -86,6 +86,12 @@ class TestBookingController extends Controller
         ]);
     }
 
+    public function getAllCancelledBooking(): SuccessCollection
+    {
+        $data = $this->service->getAllCancelledBooking();
+        return new TestBookingCollection($data, $messages = "Data fectched successfully");
+    }
+
 
     public function destroy(int $id): JsonResponse
     {

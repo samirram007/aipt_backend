@@ -2,12 +2,13 @@
 
 namespace App\Modules\Department\Models;
 
+use App\Traits\Blamable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Department extends Model
 {
-    use HasFactory;
+    use HasFactory, Blamable;
 
     protected $table = 'departments';
 
@@ -15,7 +16,8 @@ class Department extends Model
         'name',
         'code',
         'status',
-
+        'created_by',
+        'updated_by'
     ];
 
     protected $casts = [

@@ -22,6 +22,8 @@ return new class extends Migration
             $table->enum('status', JobStatus::getValues())->default(JobStatus::Booked->value);
             $table->unsignedBigInteger('stock_item_id')->nullable();
             $table->string('report_file_name')->nullable();
+            $table->unsignedBigInteger('created_by')->nullable();
+            $table->unsignedBigInteger('updated_by')->nullable();
             $table->timestamps();
         });
     }

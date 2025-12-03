@@ -23,6 +23,8 @@ return new class extends Migration {
             $table->string('thousands_separator')->default(','); // Thousands separator (e.g., , or .)
             $table->string('decimal_separator')->default('.'); // Decimal separator (e.g., . or ,)
             $table->enum('symbol_position', ['before', 'after'])->default('before'); // Position of the symbol (e.g., before or after the amount)
+            $table->unsignedBigInteger('created_by')->nullable();
+            $table->unsignedBigInteger('updated_by')->nullable();
             $table->timestamps();
         });
     }

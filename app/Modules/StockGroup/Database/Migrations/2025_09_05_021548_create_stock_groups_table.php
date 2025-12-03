@@ -18,6 +18,8 @@ return new class extends Migration {
 
             $table->boolean('should_quantities_of_items_be_added')->default(true)
                 ->comment('for Service: false, goods: true');
+            $table->unsignedBigInteger('created_by')->nullable();
+            $table->unsignedBigInteger('updated_by')->nullable();
 
             $table->timestamps();
         });

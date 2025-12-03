@@ -37,6 +37,8 @@ return new class extends Migration {
             $table->index('voucher_category_id');
             $table->index('status');
             $table->index(['is_financial', 'is_hidden']);
+            $table->unsignedBigInteger('created_by')->nullable();
+            $table->unsignedBigInteger('updated_by')->nullable();
             // $table->index('morphable_type');
         });
     }

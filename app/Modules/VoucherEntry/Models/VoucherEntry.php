@@ -4,13 +4,14 @@ namespace App\Modules\VoucherEntry\Models;
 
 use App\Modules\AccountLedger\Models\AccountLedger;
 use App\Modules\Voucher\Models\Voucher;
+use App\Traits\Blamable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class VoucherEntry extends Model
 {
-    use HasFactory;
+    use HasFactory, Blamable;
 
     protected $table = 'voucher_entries';
 
@@ -21,7 +22,9 @@ class VoucherEntry extends Model
         'debit',
         'credit',
         'remarks',
-        'rate'
+        'rate',
+        'created_by',
+        'updated_by'
     ];
 
     protected $casts = [

@@ -25,6 +25,8 @@ return new class extends Migration {
             // Indexes for performance
             $table->index('name');
             $table->index('voucher_type_id');
+            $table->unsignedBigInteger('created_by')->nullable();
+            $table->unsignedBigInteger('updated_by')->nullable();
         });
     }
 

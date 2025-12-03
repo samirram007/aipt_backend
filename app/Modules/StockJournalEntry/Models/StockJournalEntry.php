@@ -7,6 +7,7 @@ use App\Modules\StockItem\Models\StockItem;
 use App\Modules\StockJournal\Models\StockJournal;
 use App\Modules\StockUnit\Models\StockUnit;
 use App\Modules\TestItem\Models\TestItem;
+use App\Traits\Blamable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -15,7 +16,7 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class StockJournalEntry extends Model
 {
-    use HasFactory;
+    use HasFactory, Blamable;
 
     protected $table = 'stock_journal_entries';
 
@@ -37,7 +38,9 @@ class StockJournalEntry extends Model
         'amount',
         'is_cancelled',
         'cancelled_by',
-        'cancellation_reason'
+        'cancellation_reason',
+        'created_by',
+        'updated_by'
     ];
 
     protected $casts = [
