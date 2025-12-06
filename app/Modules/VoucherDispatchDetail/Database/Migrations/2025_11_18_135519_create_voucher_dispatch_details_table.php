@@ -27,6 +27,22 @@ return new class extends Migration {
             $table->string('bill_of_lading_no')->nullable();                // Bill of Lading/LR-RR No
             $table->date('bill_of_lading_date')->nullable();                // Date
             $table->string('motor_vehicle_no')->nullable();                 // Motor Vehicle No
+            $table->decimal('distance', 15, 4)->nullable();            // Distance
+            $table->decimal('rate', 15, 2)->nullable();            // Rate
+            $table->unsignedBigInteger('distance_unit_id')->nullable();          // Distance Unit
+            $table->unsignedBigInteger('rate_unit_id')->nullable();            // Freight Unit
+            $table->decimal('quantity', 15, 4)->nullable();            // Quantity
+            $table->decimal('weight', 15, 4)->nullable();            // Weight
+            $table->decimal('volume', 15, 4)->nullable();            // Volume
+
+
+            $table->decimal('loading_charges', 15, 2)->nullable();            // Loading Charges
+            $table->decimal('unloading_charges', 15, 2)->nullable();            // Unloading Charges
+            $table->decimal('packing_charges', 15, 2)->nullable();            // Packing Charges
+            $table->decimal('insurance_charges', 15, 2)->nullable();            // Insurance Charges
+            $table->decimal('other_charges', 15, 2)->nullable();            // Other Charges
+            $table->decimal('freight_charges', 15, 2)->nullable();            // Freight Charges
+            $table->decimal('total_fare', 15, 4)->nullable();            // Total Fare
 
             $table->timestamps();
         });

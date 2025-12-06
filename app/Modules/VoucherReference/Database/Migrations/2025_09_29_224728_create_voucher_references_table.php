@@ -11,8 +11,10 @@ return new class extends Migration {
             $table->id();
             $table->unsignedBigInteger('voucher_id');
             $table->unsignedBigInteger('ref_voucher_id');
+            $table->string('type')->nullable();
 
             $table->timestamps();
+            $table->unique(['voucher_id', 'ref_voucher_id', 'type'], 'unique_voucher_reference');
         });
     }
 

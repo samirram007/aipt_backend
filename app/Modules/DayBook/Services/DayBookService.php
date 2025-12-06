@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Collection;
 
 class DayBookService implements DayBookServiceInterface
 {
-    protected $resource = ['voucher_entries.account_ledger', 'voucher_type'];
+    protected $resource = ['voucher_entries.account_ledger', 'voucher_type', 'company'];
 
     public function getAll(): Collection
     {

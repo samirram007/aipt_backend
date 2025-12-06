@@ -10,7 +10,7 @@ return new class extends Migration {
     {
         Schema::create('accounting_periods', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('fiscal_year_id')->constrained()->onDelete('cascade');
+            $table->unsignedBigInteger('fiscal_year_id');
             $table->string('name'); // e.g. "April 2025", "Q1 2025"
             $table->date('start_date');
             $table->date('end_date');

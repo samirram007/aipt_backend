@@ -14,6 +14,8 @@ use App\Modules\VoucherEntry\Requests\VoucherEntryRequest;
 use App\Modules\VoucherNo\Contracts\VoucherNoServiceInterface;
 use App\Modules\VoucherParty\Contracts\VoucherPartyServiceInterface;
 use App\Modules\VoucherParty\Requests\VoucherPartyRequest;
+use App\Modules\VoucherReference\Contracts\VoucherReferenceServiceInterface;
+use App\Modules\VoucherReference\Requests\VoucherReferenceRequest;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\Validator;
 
@@ -27,8 +29,11 @@ class VoucherService implements VoucherServiceInterface
         'stock_journal.stock_journal_entries.stock_item.alternate_stock_unit',
         'stock_journal.stock_journal_entries.alternate_unit',
         'stock_journal.stock_journal_entries.stock_journal_godown_entries',
-        'voucher_party',
+        'voucher_party.state',
+        'voucher_party.country',
         'voucher_dispatch_detail',
+        'company',
+        'fiscal_year',
     ];
     protected $voucherNoService;
     protected $stockJournalRequest;
@@ -56,6 +61,22 @@ class VoucherService implements VoucherServiceInterface
     {
         // return Voucher::with($this->resource)->get();
         $vouchers = Voucher::with($this->resource)->orderByDesc('created_at')->get();
+        return $vouchers->map(fn($voucher) => $this->attachLedgerInfo($voucher));
+    }
+    public function getByModule(string $module): Collection
+    {
+        $vouchers = Voucher::with($this->resource)
+            ->where('module', $module)
+            ->orderByDesc('created_at')
+            ->get();
+        return $vouchers->map(fn($voucher) => $this->attachLedgerInfo($voucher));
+    }
+    public function getByVoucherType(int $voucherTypeId): Collection
+    {
+        $vouchers = Voucher::with($this->resource)
+            ->where('voucher_type_id', $voucherTypeId)
+            ->orderByDesc('created_at')
+            ->get();
         return $vouchers->map(fn($voucher) => $this->attachLedgerInfo($voucher));
     }
 
@@ -118,8 +139,18 @@ class VoucherService implements VoucherServiceInterface
             $data['party']['voucher_id'] = $voucher->id;
             $rules = (new VoucherPartyRequest())->rules();
             $validatedParty = Validator::make($data['party'], $rules)->validate();
+            //dump($validatedParty);
             $this->voucherPartyService->store($validatedParty);
             // $voucher->party()->create($validatedParty);
+        }
+        if (!empty($data['voucher_reference'])) {
+
+            $data['voucher_reference']['voucher_id'] = $voucher->id;
+            $rules = (new VoucherReferenceRequest())->rules();
+            $validatedVoucherReference = Validator::make($data['voucher_reference'], $rules)->validate();
+            $data['voucher_reference'] = app(VoucherReferenceServiceInterface::class)
+                ->store($validatedVoucherReference);
+
         }
 
         //dd($voucher);

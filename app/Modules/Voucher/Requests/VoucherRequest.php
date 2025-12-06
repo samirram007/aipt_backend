@@ -19,6 +19,8 @@ class VoucherRequest extends FormRequest
             'reference_no' => ['sometimes', 'nullable', 'string', 'max:255'],
             'reference_date' => ['sometimes', 'nullable', 'date'],
             'voucher_type_id' => ['sometimes', 'required', 'numeric', 'exists:voucher_types,id'],
+            'voucher_class_id' => ['sometimes', 'nullable', 'numeric', 'exists:voucher_classifications,id'],
+            'module' => ['sometimes', 'nullable', 'string', 'max:255'],
             'remarks' => ['sometimes', 'nullable', 'string', 'max:255'],
             'status' => ['sometimes', 'required', 'string', 'max:255'],
             'fiscal_year_id' => ['sometimes', 'required', 'numeric', 'exists:fiscal_years,id'],
@@ -30,6 +32,11 @@ class VoucherRequest extends FormRequest
             'transaction_ledger' => ['sometimes', 'nullable', 'array'],
             'party' => ['sometimes', 'nullable', 'array'],
             'voucher_dispatch_detail' => ['sometimes', 'nullable', 'array'],
+            'voucher_reference' => ['sometimes', 'nullable', 'array'],
+            'is_effecting' => ['sometimes', 'nullable', 'boolean'],
+            'is_optional' => ['sometimes', 'nullable', 'boolean'],
+            'effects_account' => ['sometimes', 'nullable', 'boolean'],
+            'effects_stock' => ['sometimes', 'nullable', 'boolean'],
         ];
 
         // For update requests, make validation more flexible

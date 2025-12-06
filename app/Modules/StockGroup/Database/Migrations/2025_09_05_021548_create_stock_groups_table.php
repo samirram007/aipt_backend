@@ -14,7 +14,7 @@ return new class extends Migration {
             $table->string('description')->nullable();
             $table->string('status')->default('active');
             $table->string('icon')->nullable();
-            $table->foreignId('parent_id')->nullable()->constrained('stock_groups')->onDelete('set null');
+            $table->unsignedBigInteger('parent_id')->nullable();
 
             $table->boolean('should_quantities_of_items_be_added')->default(true)
                 ->comment('for Service: false, goods: true');

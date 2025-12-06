@@ -26,6 +26,20 @@ class VoucherDispatchDetailRequest extends FormRequest
             'bill_of_lading_no' => ['sometimes', 'nullable', 'string', 'max:255'],
             'bill_of_lading_date' => ['sometimes', 'nullable', 'date'],
             'motor_vehicle_no' => ['sometimes', 'nullable', 'string', 'max:255'],
+            'distance' => ['sometimes', 'nullable', 'numeric'],
+            'rate' => ['sometimes', 'nullable', 'numeric'],
+            'distance_unit_id' => ['sometimes', 'nullable', 'numeric', 'exists:stock_units,id'],
+            'rate_unit_id' => ['sometimes', 'nullable', 'numeric', 'exists:stock_units,id'],
+            'quantity' => ['sometimes', 'nullable', 'numeric'],
+            'weight' => ['sometimes', 'nullable', 'numeric'],
+            'volume' => ['sometimes', 'nullable', 'numeric'],
+            'loading_charges' => ['sometimes', 'nullable', 'numeric'],
+            'unloading_charges' => ['sometimes', 'nullable', 'numeric'],
+            'packing_charges' => ['sometimes', 'nullable', 'numeric'],
+            'insurance_charges' => ['sometimes', 'nullable', 'numeric'],
+            'other_charges' => ['sometimes', 'nullable', 'numeric'],
+            'freight_charges' => ['sometimes', 'nullable', 'numeric'],
+            'total_fare' => ['sometimes', 'nullable', 'numeric'],
         ];
 
         // For update requests, make validation more flexible

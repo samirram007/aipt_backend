@@ -12,10 +12,6 @@ class Freight extends Model
     protected $table = 'freights';
 
     protected $fillable = [
-        'name',
-        'code',
-        'description',
-        'status',
 
     ];
 

@@ -1,21 +1,7 @@
 <?php
 
-use App\Http\Controllers\Api\AccountGroupController;
-use App\Http\Controllers\Api\AccountLedgerController;
-use App\Http\Controllers\Api\AccountTypeController;
-use App\Http\Controllers\APi\AuthController;
-use App\Http\Controllers\Api\CompanyController;
-use App\Http\Controllers\Api\CompanyTypeController;
-use App\Http\Controllers\Api\CountryController;
-use App\Http\Controllers\Api\EnumController;
-use App\Http\Controllers\Api\FileController;
-use App\Http\Controllers\Api\FiscalYearController;
-use App\Http\Controllers\Api\JournalController;
-use App\Http\Controllers\Api\StateController;
-use App\Http\Controllers\Api\UserController;
-use App\Http\Controllers\Api\VoucherController;
-use App\Http\Controllers\Api\VoucherTypeController;
-use Illuminate\Http\Request;
+
+
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Route;
 

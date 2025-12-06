@@ -11,8 +11,7 @@ return new class extends Migration {
             $table->id();
             $table->string('name')->unique();
             $table->string('code')->unique();
-            // $table->foreignIdFor('account_types');
-            $table->foreignId('account_group_id')->nullable();
+            $table->unsignedBigInteger('account_group_id')->nullable();
 
             $table->string('description')->nullable();
             $table->string('status')->default('active');

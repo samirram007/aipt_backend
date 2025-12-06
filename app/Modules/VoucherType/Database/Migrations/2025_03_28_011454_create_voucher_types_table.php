@@ -12,11 +12,11 @@ return new class extends Migration {
     {
         Schema::create('voucher_types', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('parent_id')->nullable();
+            $table->unsignedBigInteger('parent_id')->nullable();
             $table->string('name')->unique()->comment("e.g., 'Purchase Voucher', 'Payment Voucher'");
             $table->string('code')->unique()->nullable();
             $table->string('print_name')->nullable();
-            $table->foreignId('voucher_category_id')->comment('Link to categories');
+            $table->unsignedBigInteger('voucher_category_id')->comment('Link to categories');
             $table->boolean('is_financial')->default(true)->comment('Indicates if it affects ledger');
             $table->boolean('is_effecting')->default(true)->comment('Effecting the sub entries');
             $table->boolean('is_hidden')->default(false)->comment('Indicates if it is hidden');

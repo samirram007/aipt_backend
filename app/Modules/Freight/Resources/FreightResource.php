@@ -11,9 +11,21 @@ class FreightResource extends SuccessResource
     {
         return [
             'id' => $this->id,
-            'name' => $this->name,
-            'created_at' => $this->created_at?->toISOString(),
-            'updated_at' => $this->updated_at?->toISOString(),
+            'deliveryNoteId' => $this->delivery_note_id,
+            'distance' => $this->distance,
+            'rate' => $this->rate,
+            'distanceUnitId' => $this->distance_unit_id,
+            'rateUnitId' => $this->rate_unit_id,
+            'quantity' => $this->quantity,
+            'weight' => $this->weight,
+            'volume' => $this->volume,
+            'loadingCharges' => $this->loading_charges,
+            'unloadingCharges' => $this->unloading_charges,
+            'packingCharges' => $this->packing_charges,
+            'insuranceCharges' => $this->insurance_charges,
+            'otherCharges' => $this->other_charges,
+            'freightCharges' => $this->freight_charges,
+            'totalFare' => $this->total_fare,
         ];
     }
 }

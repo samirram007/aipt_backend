@@ -13,7 +13,7 @@ return new class extends Migration {
     {
         Schema::create('fiscal_years', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('company_id');
+            $table->unsignedBigInteger('company_id');
             $table->string('name'); // e.g. "FY 2025-26"
             $table->date('start_date'); // e.g. 2025-04-01
             $table->date('end_date');   // e.g. 2026-03-31

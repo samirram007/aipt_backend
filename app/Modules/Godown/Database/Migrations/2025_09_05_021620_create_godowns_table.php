@@ -12,7 +12,7 @@ return new class extends Migration {
             $table->string('name')->unique();
             $table->string('code')->unique();
             // $table->unsignedBigInteger('parent_id')->nullable();
-            $table->foreignId('parent_id')->nullable()->constrained('godowns')->onDelete('set null');
+            $table->unsignedBigInteger('parent_id')->nullable();
             $table->string('description')->nullable();
             $table->string('status')->default('active');
             $table->string('icon')->nullable();

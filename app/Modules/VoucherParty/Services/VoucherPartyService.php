@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Collection;
 
 class VoucherPartyService implements VoucherPartyServiceInterface
 {
-    protected $resource=[];
+    protected $resource = [];
 
     public function getAll(): Collection
     {
@@ -22,6 +22,7 @@ class VoucherPartyService implements VoucherPartyServiceInterface
 
     public function store(array $data): VoucherParty
     {
+
         return VoucherParty::create($data);
     }
 

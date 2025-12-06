@@ -2,6 +2,8 @@
 
 namespace App\Modules\VoucherParty\Resources;
 
+use App\Modules\Country\Resources\CountryResource;
+use App\Modules\State\Resources\StateResource;
 use App\Modules\Voucher\Resources\VoucherResource;
 use Illuminate\Http\Request;
 
@@ -18,7 +20,9 @@ class VoucherPartyResource extends SuccessResource
             'line2' => $this->line2,
             'line3' => $this->line3,
             'stateId' => $this->state_id,
+            'state' => StateResource::make($this->whenLoaded('state')),
             'countryId' => $this->country_id,
+            'country' => CountryResource::make($this->whenLoaded('country')),
             'gstRegistrationTypeId' => $this->gst_registration_type_id,
             'gstin' => $this->gstin,
             'placeOfSupplyStateId' => $this->place_of_supply_state_id,

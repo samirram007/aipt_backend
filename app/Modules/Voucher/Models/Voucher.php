@@ -9,6 +9,7 @@ use App\Modules\StockJournal\Models\StockJournal;
 use App\Modules\VoucherDispatchDetail\Models\VoucherDispatchDetail;
 use App\Modules\VoucherEntry\Models\VoucherEntry;
 use App\Modules\VoucherParty\Models\VoucherParty;
+use App\Modules\VoucherReference\Models\VoucherReference;
 use App\Modules\VoucherType\Models\VoucherType;
 use App\Traits\Blameable;
 use Illuminate\Database\Eloquent\Model;
@@ -34,6 +35,11 @@ class Voucher extends Model
         'fiscal_year_id',
         'company_id',
         'stock_journal_id',
+        'module',
+        'is_effecting',
+        'is_optional',
+        'effects_account',
+        'effects_stock',
     ];
 
     protected $casts = [
@@ -41,6 +47,10 @@ class Voucher extends Model
         'updated_at' => 'datetime',
         'voucher_date' => 'date',
         'reference_date' => 'date',
+        'is_effecting' => 'boolean',
+        'is_optional' => 'boolean',
+        'effects_account' => 'boolean',
+        'effects_stock' => 'boolean',
     ];
     public function stock_journal(): BelongsTo
     {
@@ -78,6 +88,16 @@ class Voucher extends Model
 
 
     protected $appends = ['party_ledger', 'transaction_ledger', 'amount'];
+
+
+    public function voucher_references(): HasMany
+    {
+        return $this->hasMany(VoucherReference::class, 'voucher_id', 'id');
+    }
+    public function referenced_by(): HasMany
+    {
+        return $this->hasMany(VoucherReference::class, 'ref_voucher_id', 'id');
+    }
 
     public function getPartyLedgerAttribute()
     {

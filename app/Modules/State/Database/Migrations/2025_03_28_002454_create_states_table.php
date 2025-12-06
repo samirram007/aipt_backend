@@ -14,7 +14,7 @@ return new class extends Migration {
             $table->id();
             $table->string('name');
             $table->string('code')->unique();
-            $table->foreignId('country_id')->nullable();
+            $table->unsignedBigInteger('country_id')->nullable();
             $table->string('gst_code')->nullable();
 
             $table->timestamps();

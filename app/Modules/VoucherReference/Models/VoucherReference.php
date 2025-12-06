@@ -5,6 +5,7 @@ namespace App\Modules\VoucherReference\Models;
 use App\Modules\Voucher\Models\Voucher;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class VoucherReference extends Model
@@ -15,7 +16,8 @@ class VoucherReference extends Model
 
     protected $fillable = [
         'voucher_id',
-        'ref_voucher_id'
+        'ref_voucher_id',
+        'type',
 
     ];
 
@@ -24,12 +26,12 @@ class VoucherReference extends Model
         'updated_at' => 'datetime',
     ];
 
-    public function vouchers(): HasMany
+    public function voucher(): BelongsTo
     {
-        return $this->hasMany(Voucher::class);
+        return $this->belongsTo(Voucher::class, 'voucher_id', 'id');
     }
-    public function reference_vouchers(): HasMany
+    public function reference_voucher(): BelongsTo
     {
-        return $this->hasMany(Voucher::class, 'ref_voucher_id');
+        return $this->belongsTo(Voucher::class, 'ref_voucher_id', 'id');
     }
 }

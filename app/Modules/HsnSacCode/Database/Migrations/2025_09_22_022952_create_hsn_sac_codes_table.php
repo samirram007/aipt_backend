@@ -15,8 +15,8 @@ return new class extends Migration {
             $table->enum('type', ['hsn', 'sac'])->default('hsn')
                 ->comment('Type of code: HSN or SAC');
             // GST related
-            $table->foreignId('gst_slab_id');
-            $table->foreignId('gst_category_id');
+            $table->unsignedBigInteger('gst_slab_id');
+            $table->unsignedBigInteger('gst_category_id');
             $table->enum('gst_type', ['cgst_sgst', 'igst'])->nullable(); // default GST type
             $table->boolean('is_gst_inclusive')->default(false);
 

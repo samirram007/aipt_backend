@@ -9,7 +9,7 @@ return new class extends Migration {
     {
         Schema::create('stock_item_prices', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('stock_item_id')->constrained('stock_items')->cascadeOnDelete();
+            $table->unsignedBigInteger('stock_item_id');
 
             // Pricing type
             $table->enum('pricing_method', [
@@ -27,9 +27,9 @@ return new class extends Migration {
             $table->string('currency', 10)->default('INR');
 
             // Multi-level context
-            $table->foreignId('customer_id')->nullable();
-            $table->foreignId('customer_group_id')->nullable();
-            $table->foreignId('region_id')->nullable();
+            $table->unsignedBigInteger('customer_id')->nullable();
+            $table->unsignedBigInteger('customer_group_id')->nullable();
+            $table->unsignedBigInteger('region_id')->nullable();
             $table->enum('channel', ['retail', 'wholesale', 'online', 'export'])->nullable();
 
             // Effective dates

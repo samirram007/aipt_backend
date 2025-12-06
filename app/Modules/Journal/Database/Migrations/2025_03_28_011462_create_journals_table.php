@@ -15,7 +15,7 @@ return new class extends Migration {
             $table->unsignedBigInteger('voucher_id');
             $table->integer('entry_index');
             // $table->foreignIdFor('account_types');
-            $table->foreignId('account_ledger_id');
+            $table->unsignedBigInteger('account_ledger_id');
             $table->decimal('debit_amount', 18, 6)->nullable();
             $table->decimal('credit_amount', 18, 6)->nullable();
             $table->timestamps();

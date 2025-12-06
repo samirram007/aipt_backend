@@ -18,8 +18,10 @@ return new class extends Migration {
             $table->string('reference_no')->nullable();
             $table->date('reference_date')->nullable();
 
-            // $table->foreignIdFor('account_types');
-            $table->foreignId('voucher_type_id');
+
+            $table->unsignedBigInteger('voucher_type_id');
+            $table->unsignedBigInteger('voucher_class_id')->nullable();
+            $table->string('module')->nullable();
             $table->boolean('is_effecting')->default(true);
             $table->boolean('is_optional')->default(false);
             $table->boolean('effects_account')->default(true);
@@ -27,7 +29,7 @@ return new class extends Migration {
 
             $table->text('remarks')->nullable();
             $table->string('status')->default('active');
-            $table->unsignedBigInteger('fiscal_year_id')->default(2025);
+            $table->unsignedBigInteger('fiscal_year_id')->default(1);
             $table->unsignedBigInteger('company_id')->default(1);
             $table->unsignedBigInteger('stock_journal_id')->nullable();
 

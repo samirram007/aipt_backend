@@ -11,9 +11,11 @@ class VoucherReferenceResource extends SuccessResource
     {
         return [
             'id' => $this->id,
-            'name' => $this->name,
-            'created_at' => $this->created_at?->toISOString(),
-            'updated_at' => $this->updated_at?->toISOString(),
+            'voucher_id' => $this->voucher_id,
+            'ref_voucher_id' => $this->ref_voucher_id,
+            'voucher' => $this->whenLoaded('voucher'),
+            'reference_voucher' => $this->whenLoaded('reference_voucher'),
+            'type' => $this->type,
         ];
     }
 }

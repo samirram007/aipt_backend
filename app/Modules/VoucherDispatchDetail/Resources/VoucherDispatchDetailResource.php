@@ -23,7 +23,20 @@ class VoucherDispatchDetailResource extends SuccessResource
             'billOfLadingNo' => $this->bill_of_lading_no,
             'billOfLadingDate' => $this->bill_of_lading_date,
             'motorVehicleNo' => $this->motor_vehicle_no,
-
+            'distance' => $this->distance,
+            'rate' => $this->rate,
+            'distanceUnitId' => $this->distance_unit_id,
+            'rateUnitId' => $this->rate_unit_id,
+            'quantity' => $this->quantity,
+            'weight' => $this->weight,
+            'volume' => $this->volume,
+            'loadingCharges' => $this->loading_charges,
+            'unloadingCharges' => $this->unloading_charges,
+            'packingCharges' => $this->packing_charges,
+            'insuranceCharges' => $this->insurance_charges,
+            'otherCharges' => $this->other_charges,
+            'freightCharges' => $this->freight_charges,
+            'totalFare' => $this->total_fare,
         ];
     }
 }

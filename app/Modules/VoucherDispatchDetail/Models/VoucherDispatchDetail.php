@@ -2,6 +2,7 @@
 
 namespace App\Modules\VoucherDispatchDetail\Models;
 
+use App\Modules\StockUnit\Models\StockUnit;
 use App\Modules\Voucher\Models\Voucher;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -26,15 +27,53 @@ class VoucherDispatchDetail extends Model
         'bill_of_lading_no',
         'bill_of_lading_date',
         'motor_vehicle_no',
+        'distance',
+        'rate',
+        'distance_unit_id',
+        'rate_unit_id',
+        'quantity',
+        'weight',
+        'volume',
+        'loading_charges',
+        'unloading_charges',
+        'packing_charges',
+        'insurance_charges',
+        'other_charges',
+        'freight_charges',
+        'total_fare',
     ];
+    protected $casts = [
+        'created_at' => 'datetime',
+        'updated_at' => 'datetime',
+        'bill_of_lading_date' => 'date',
+        'distance' => 'decimal:4',
+        'rate' => 'decimal:2',
+        'quantity' => 'decimal:4',
+        'weight' => 'decimal:4',
+        'volume' => 'decimal:4',
+        'loading_charges' => 'decimal:2',
+        'unloading_charges' => 'decimal:2',
+        'packing_charges' => 'decimal:2',
+        'insurance_charges' => 'decimal:2',
+        'other_charges' => 'decimal:2',
+        'freight_charges' => 'decimal:2',
+        'total_fare' => 'decimal:2',
 
+    ];
     public function voucher(): BelongsTo
     {
         return $this->belongsTo(Voucher::class, 'voucher_id');
     }
 
-    protected $casts = [
-        'created_at' => 'datetime',
-        'updated_at' => 'datetime',
-    ];
+
+
+    public function distanceUnit(): BelongsTo
+    {
+        return $this->belongsTo(StockUnit::class, 'distance_unit_id');
+    }
+
+    public function rateUnit(): BelongsTo
+    {
+        return $this->belongsTo(StockUnit::class, 'rate_unit_id');
+    }
 }

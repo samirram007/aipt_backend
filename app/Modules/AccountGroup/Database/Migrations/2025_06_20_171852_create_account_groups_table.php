@@ -12,7 +12,7 @@ return new class extends Migration {
             $table->string('name')->unique();
             $table->string('code')->nullable();
             $table->unsignedBigInteger('parent_id')->nullable();
-            $table->foreignId('account_nature_id')->nullable();
+            $table->unsignedBigInteger('account_nature_id')->nullable();
             $table->text('description')->nullable();
             $table->string('status')->default('active');
             $table->string('icon')->nullable();

@@ -9,6 +9,7 @@ use App\Modules\StockJournal\Resources\StockJournalResource;
 use App\Modules\VoucherDispatchDetail\Resources\VoucherDispatchDetailResource;
 use App\Modules\VoucherEntry\Resources\VoucherEntryResource;
 use App\Modules\VoucherParty\Resources\VoucherPartyResource;
+use App\Modules\VoucherReference\Resources\VoucherReferenceResource;
 use App\Modules\VoucherType\Resources\VoucherTypeResource;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
@@ -24,6 +25,8 @@ class VoucherResource extends SuccessResource
             'referenceNo' => $this->reference_no,
             'referenceDate' => $this->reference_date,
             'voucherTypeId' => $this->voucher_type_id,
+            'voucherClassId' => $this->voucher_class_id,
+            'module' => $this->module,
             'remarks' => $this->remarks,
             'status' => $this->status,
             'fiscalYearId' => $this->fiscal_year_id,
@@ -31,7 +34,7 @@ class VoucherResource extends SuccessResource
             'stockJournalId' => $this->stock_journal_id,
             'createdAt' => $this->created_at?->toISOString(),
             'updatedAt' => $this->updated_at?->toISOString(),
-            // 'partyLedger' => $this->whenLoaded('party_ledger'),
+
             'partyLedger' => PartyLedgerResource::make($this->whenLoaded('party_ledger')),
             'transactionLedger' => TransactionLedgerResource::make($this->whenLoaded('transaction_ledger')),
             'amount' => $this->amount,
@@ -42,6 +45,8 @@ class VoucherResource extends SuccessResource
             'voucherEntries' => VoucherEntryResource::collection($this->whenLoaded('voucher_entries')),
             'party' => VoucherPartyResource::make($this->whenLoaded('voucher_party')),
             'voucherDispatchDetail' => VoucherDispatchDetailResource::make($this->whenLoaded('voucher_dispatch_detail')),
+            'voucherReferences' => VoucherReferenceResource::collection($this->whenLoaded('voucher_references')),
+            'referencedBy' => VoucherReferenceResource::collection($this->whenLoaded('referenced_by')),
         ];
     }
 }
