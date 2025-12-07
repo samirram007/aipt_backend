@@ -60,4 +60,9 @@ class BusinessReportController extends Controller
         $data = $this->service->test_summary($start_date, $end_date, $departmentId);
         return $data;
     }
+    public function daily_collection(): JsonResponse
+    {
+        $data = $this->service->daily_collection();
+        return $data;
+    }
 }

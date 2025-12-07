@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Collection;
 
 class PatientService implements PatientServiceInterface
 {
-    protected $resource=['agent','physician','address','discount_type'];
+    protected $resource = ['agent', 'physician', 'address', 'discount_type'];
 
     public function getAll(): Collection
     {
@@ -26,7 +26,7 @@ class PatientService implements PatientServiceInterface
         $address = $data['address'];
         unset($data['address']);
         $patient = Patient::create($data);
-        if($address){
+        if ($address) {
             $address['addressable_id'] = $patient->id;
             $address['addressable_type'] = 'patient';
             $patient->addresses()->create($address);
@@ -40,6 +40,7 @@ class PatientService implements PatientServiceInterface
             $data['account_ledger']['account_group_id'] = $data['account_group_id'];
             $data['account_ledger']['ledgerable_type'] = 'patient';
             $data['account_ledger']['ledgerable_id'] = $patient->id;
+            $data['account_ledger']['description'] = 'patient';
             $patient->account_ledger()->create($data['account_ledger']);
         }
 
@@ -66,7 +67,6 @@ class PatientService implements PatientServiceInterface
         }
 
         return $uniqueName;
-
     }
 
 
@@ -74,12 +74,12 @@ class PatientService implements PatientServiceInterface
     {
         $record = Patient::findOrFail($id);
 
-        if(isset($data['address'])){
+        if (isset($data['address'])) {
             $addressData = $data['address'];
             unset($data['address']);
-            if($record->address){
+            if ($record->address) {
                 $record->address()->update($addressData);
-            }else{
+            } else {
                 $addressData['addressable_id'] = $record->id;
                 $addressData['addressable_type'] = 'patient';
                 $record->address()->create($addressData);

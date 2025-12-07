@@ -67,12 +67,25 @@ class BusinessReportService implements BusinessReportServiceInterface
         return response()->json([
             "message" => "Data Feteched successfully",
             "status" => true,
-            "code" => 201,
+            "code" => 200,
             "success" => true,
             "data" => [
                 "contents" => $testSummaryReport,
                 "summary" => $allDepartmentTestSummaryCount[0]
             ]
+        ]);
+    }
+
+    public function daily_collection(): JsonResponse
+    {
+        $dailyCollectionReport = DB::select('CALL dailyCollectionSummaryReport()');
+
+        return response()->json([
+            "message" => "Data Feteched successfully",
+            "status" => true,
+            "code" => 200,
+            "success" => true,
+            "data" => $dailyCollectionReport
         ]);
     }
 }

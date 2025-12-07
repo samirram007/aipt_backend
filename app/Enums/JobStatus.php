@@ -10,11 +10,13 @@ enum JobStatus: string
     case InProcess = 'in_process';
     case Completed = 'completed';
     case DeliverToDesk = 'deliver_to_desk';
-        // case DeskAcknowledged = "desk_acknowledged";
     case Delivered = 'delivered';
     case Cancelled = 'cancelled';
+    case CancellationApproved = "cancellation_approved";
     case Drafted = 'drafted';
     case CancelRequest = "cancellation_requested";
+    case MoneyRefunded = "money_refunded";
+    // case DeskAcknowledged = "desk_acknowledged";
 
     public static function getValues(): array
     {

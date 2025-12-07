@@ -14,6 +14,7 @@ use App\Modules\TestBooking\Requests\TestConfirmRequest;
 use App\Modules\VoucherPatient\Resources\VoucherPatientCollection;
 use App\Traits\ApiResponseTrait;
 use Illuminate\Http\JsonResponse;
+use App\Modules\TestBooking\Requests\TestRefundConfirmRequest;
 
 class TestBookingController extends Controller
 {
@@ -86,10 +87,16 @@ class TestBookingController extends Controller
         ]);
     }
 
-    public function getAllCancelledBooking(): SuccessCollection
+    public function test_refund_confirm(TestRefundConfirmRequest $request): SuccessResource
+    {
+        $data = $this->service->test_refund_confirm($request->validated());
+        return new TestBookingResource($data, $messages = "Payment confirmed successfully");
+    }
+
+    public function getAllCancelledBooking(): JsonResponse
     {
         $data = $this->service->getAllCancelledBooking();
-        return new TestBookingCollection($data, $messages = "Data fectched successfully");
+        return $data;
     }
 
 

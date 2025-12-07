@@ -206,11 +206,12 @@ class {$name}Service implements {$name}ServiceInterface
 namespace App\Modules\\{$name}\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use App\Traits\Blamable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class {$name} extends Model
 {
-    use HasFactory;
+    use HasFactory,Blamable;
 
     protected \$table = '{$plural}';
 

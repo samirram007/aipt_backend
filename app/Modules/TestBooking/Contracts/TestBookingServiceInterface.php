@@ -4,11 +4,12 @@ namespace App\Modules\TestBooking\Contracts;
 
 use Illuminate\Database\Eloquent\Collection;
 use App\Modules\TestBooking\Models\TestBooking;
+use Illuminate\Http\JsonResponse;
 
 interface TestBookingServiceInterface
 {
     public function getAll(): Collection;
-    public function getAllCancelledBooking(): Collection;
+    public function getAllCancelledBooking(): JsonResponse;
     public function getById(int $id): ?TestBooking;
     public function store(array $data): TestBooking;
     public function update(array $data, int $id): TestBooking;
@@ -18,4 +19,5 @@ interface TestBookingServiceInterface
     public function post_payment_test_cancellation(): TestBooking;
     public function test_cancellation(array $data, int $id): bool;
     public function test_refund_request(array $data, int $id): bool;
+    public function test_refund_confirm(array $data): TestBooking;
 }

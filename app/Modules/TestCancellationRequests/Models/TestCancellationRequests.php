@@ -1,24 +1,23 @@
 <?php
 
-namespace App\Modules\StockJournalReference\Models;
+namespace App\Modules\TestCancellationRequests\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use App\Traits\Blamable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
-class StockJournalReference extends Model
+class TestCancellationRequests extends Model
 {
-    use HasFactory,Blamable;
+    use HasFactory;
 
-    protected $table = 'stock_journal_references';
+    protected $table = 'test_cancellation_requests';
 
     protected $fillable = [
         'name',
         'code',
         'description',
         'status',
-        'created_by',
-        'updated_by'
+        'cancelled_by',
     ];
 
     protected $casts = [

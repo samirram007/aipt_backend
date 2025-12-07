@@ -16,4 +16,5 @@ interface BusinessReportServiceInterface
 
     // business reports
     public function test_summary(string $start_date, string $end_date, ?int $departmentId = null): JsonResponse;
+    public function daily_collection(): JsonResponse;
 }

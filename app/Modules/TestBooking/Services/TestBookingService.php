@@ -19,6 +19,7 @@ use App\Modules\VoucherPatient\Models\VoucherPatient;
 use App\Modules\VoucherReference\Models\VoucherReference;
 use Illuminate\Database\Eloquent\Collection;
 use Carbon\Carbon;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
@@ -43,7 +44,8 @@ class TestBookingService implements TestBookingServiceInterface
     // This is the list of all bookings for patient only
     public function all_bookings(?string $start_date = null, ?string $end_date = null): Collection
     {
-        $query = VoucherPatient::with($this->voucherPatientResource);
+        $userId = Auth::id();
+        $query = VoucherPatient::where('created_by', $userId)->with($this->voucherPatientResource);
 
         if ($start_date && $end_date) {
             $start = Carbon::parse($start_date)->startOfDay();
@@ -433,7 +435,6 @@ class TestBookingService implements TestBookingServiceInterface
             $voucher = Voucher::where('stock_journal_id', '=', $stockParentJournal->id)->first();
             $voucherEntries = VoucherEntry::where('voucher_id', '=', $voucher->id)->orderBy('entry_order', 'asc')->get();
 
-
             $lastJournalId = StockJournal::orderBy('journal_no', 'desc')->value('journal_no');
             $newJournalNo = $lastJournalId ? (string)((int)$lastJournalId + 1) : '1';
 
@@ -444,6 +445,7 @@ class TestBookingService implements TestBookingServiceInterface
                 'journal_date' => Carbon::today()->toDateString(),
                 'type' => 'in',
             ]);
+
 
             //  create new entry to record the movement of returned stock
             StockJournalEntry::create([
@@ -472,6 +474,8 @@ class TestBookingService implements TestBookingServiceInterface
                 'cancellation_reason' => $data['remark'] ?? null
             ]);
 
+
+
             // creating voucher patient with reference
             // search voucher patient first
             $voucherPatient = VoucherPatient::where('voucher_id', '=', $voucher->id)->first();
@@ -486,11 +490,12 @@ class TestBookingService implements TestBookingServiceInterface
                 'remarks' => $data['remark'] ? $data['remark'] : null,
             ]);
 
+
             // voucher reference is used to define th relation of this voucher to previous voucher
-            VoucherReference::create([
-                'voucher_id' => $newVoucher->id,
-                'voucher_reference_id' => $voucher->id
-            ]);
+            // VoucherReference::create([
+            //     'voucher_id' => $newVoucher->id,
+            //     'voucher_reference_id' => $voucher->id
+            // ]);
 
 
             $itemTotalAmount = $stockJournalEntry->rate;
@@ -502,8 +507,7 @@ class TestBookingService implements TestBookingServiceInterface
 
 
             $entryOrder = 1;
-
-            $customerLedger = AccountLedger::where('ledgerable_id', '=', $voucherPatient->id)->where('ledgerable_type', 'patient')->firstOrFail();
+            $customerLedger = AccountLedger::where('ledgerable_id', $voucherPatient->patient_id)->where('ledgerable_type', 'patient')->firstOrFail();
 
             // rate in voucher --- confusion
 
@@ -568,9 +572,108 @@ class TestBookingService implements TestBookingServiceInterface
         }
     }
 
-    public function getAllCancelledBooking(): Collection
+    public function test_refund_confirm(array $data): TestBooking
     {
-        return TestBooking::where('voucher_type_id', 1008)->with($this->resource)->get();
+        try {
+            DB::beginTransaction();
+
+
+            // calling referenced voucher for amount
+
+            $accountLedger = AccountLedger::where('ledgerable_id', $data['patient_id'])
+                ->where('ledgerable_type', 'patient')
+                ->firstOrFail();
+            $redundAmount = VoucherEntry::where('voucher_id', $data['voucher_id'])->where('account_ledger_id', $accountLedger->id)->first()['credit'];
+            $voucherReferenceId = VoucherReference::where('voucher_id', $data['voucher_id'])->first()['voucher_reference_id'];
+
+            $lastVoucherNo = Voucher::orderBy('voucher_no', 'desc')->value('voucher_no');
+            $newVoucherNo = $lastVoucherNo ? (string)((int)$lastVoucherNo + 1) : '1';
+
+            $voucher = Voucher::create([
+                'voucher_no' => $newVoucherNo,
+                'voucher_date' => Carbon::today()->toDateString(),
+                'voucher_type_id' => 1002,
+            ]);
+
+
+            // To Customer A/C
+            VoucherEntry::create([
+                'voucher_id' => $voucher->id,
+                'entry_order' => 1,
+                'account_ledger_id' => $accountLedger->id,
+                'debit' => $redundAmount,
+                'credit' => 0
+            ]);
+
+            // Cash A/C
+            VoucherEntry::create([
+                'voucher_id' => $voucher->id,
+                'entry_order' => 2,
+                'account_ledger_id' => $data['payment_mode'],
+                'debit' => 0,
+                'credit' => $redundAmount
+            ]);
+
+            VoucherReference::create([
+                'voucher_id' => $voucher->id,
+                'voucher_reference_id' => $data['voucher_id']
+            ]);
+
+            $jobOrder = JobOrder::where('voucher_id', $voucherReferenceId)->where('stock_journal_entry_id', $data['stock_journal_entry_id'])->first();
+            $jobOrder->update([
+                "status" => JobStatus::Cancelled->value
+            ]);
+            JobOrderHistory::create([
+                'job_order_id' => $jobOrder->id,
+                'status' => JobStatus::Cancelled->value,
+            ]);
+            $testBooking = TestBooking::with($this->resource)
+                ->findOrFail($data['voucher_id']);
+
+            DB::commit();
+            return $testBooking;
+        } catch (\Exception $e) {
+            DB::rollBack();
+            throw $e;
+        }
+    }
+
+    public function getAllCancelledBooking(): JsonResponse
+    {
+        $refundRequests = DB::select('CALL refundRequests()');
+
+        $refundData = collect($refundRequests)->groupBy("voucher_parent_id")->map(function ($rows) {
+            $first = $rows->first();
+            return [
+                "booking_no" => $first->booking_no,
+                "booking_date" => $first->booking_date,
+                "patient_name" => $first->patient_name,
+                "tests" => $rows->map(fn($r) => [
+                    "voucher_id" => $r->voucher_id,
+                    "booking_no" => $r->booking_no,
+                    "booking_date" => $r->booking_date,
+                    "test_name" => $r->test_name,
+                    "test_date" => $r->test_date,
+                    "report_date" => $r->report_date,
+                    "amount" => $r->amount,
+                    "remarks" => $r->remarks,
+                    "patient_name" => $r->patient_name,
+                    "patient_age" => $r->patient_age,
+                    "patient_gender" => $r->patient_gender,
+                    "patient_contact" => $r->patient_contact,
+                    "agent_name" => $r->agent_name,
+                    "physician_name" => $r->physician_name
+                ])
+            ];
+        })->values();
+
+        return response()->json([
+            "message" => "Data fetched successfully",
+            "status" => true,
+            "code" => 200,
+            "success" => true,
+            "data" => $refundData
+        ]);
     }
 
     public function update(array $data, int $id): TestBooking

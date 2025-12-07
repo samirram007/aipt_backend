@@ -4,7 +4,7 @@ namespace App\Modules\TestBooking\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class TestConfirmRequest extends FormRequest
+class TestRefundConfirmRequest extends FormRequest
 {
     public function authorize(): bool
     {
@@ -15,9 +15,9 @@ class TestConfirmRequest extends FormRequest
     {
         $rules = [
             'voucher_id' => ['required', 'numeric', 'exists:vouchers,id'],
-            'amount' => ['required', 'numeric'],
             'patient_id' => ['required', 'numeric', 'exists:patients,id'],
             "payment_mode" => ['required', 'numeric', 'exists:account_ledgers,id'],
+            'stock_journal_entry_id' => ['required', 'numeric', 'exists:stock_journal_entries,id'],
         ];
         return $rules;
     }
