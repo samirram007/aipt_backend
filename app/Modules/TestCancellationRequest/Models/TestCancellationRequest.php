@@ -15,6 +15,7 @@ class TestCancellationRequest extends Model
     protected $fillable = [
         'stock_journal_entry_id',
         'status',
+        'remarks',
         'requested_by',
         'cancelled_by',
         'approved_by',

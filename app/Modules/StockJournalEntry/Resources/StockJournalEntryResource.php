@@ -31,6 +31,7 @@ class StockJournalEntryResource extends SuccessResource
             'movementType' => $this->movement_type,
             'godownId' => $this->godown_id,
             'isCancelled' => $this->is_cancelled,
+            'isApproved' => $this->is_approved,
             'stockJournal' => new StockJournalResource($this->whenLoaded('stock_journal')),
             'stockItem' => new StockItemResource($this->whenLoaded('stock_item')),
             'stockUnit' => new StockUnitResource($this->whenLoaded('stock_unit')),

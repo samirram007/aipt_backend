@@ -596,29 +596,30 @@ class TestBookingService implements TestBookingServiceInterface
 
     public function getAllCancelledBooking(): JsonResponse
     {
-        $refundRequests = DB::select('CALL refundRequests()');
+        $refundRequests = DB::select('CALL refundRequestList()');
 
-        $refundData = collect($refundRequests)->groupBy("voucher_parent_id")->map(function ($rows) {
+        $refundData = collect($refundRequests)->groupBy("booking_no")->map(function ($rows) {
             $first = $rows->first();
             return [
-                "booking_no" => $first->booking_no,
-                "booking_date" => $first->booking_date,
-                "patient_name" => $first->patient_name,
-                "patient_name" => $first->patient_name,
-                "patient_age" => $first->patient_age,
-                "patient_gender" => $first->patient_gender,
-                "patient_contact" => $first->patient_contact,
-                "agent_name" => $first->agent_name,
-                "physician_name" => $first->physician_name,
+                "bookingNo" => $first->booking_no,
+                "bookingDate" => $first->booking_date,
+                "patientName" => $first->patient_name,
+                "patientName" => $first->patient_name,
+                "patientAge" => $first->patient_age,
+                "patientGender" => $first->patient_gender,
+                "patientContact" => $first->patient_contact,
+                "agentName" => $first->agent_name,
+                "physicianName" => $first->physician_name,
                 "tests" => $rows->map(fn($r) => [
-                    "voucher_id" => $r->voucher_id,
-                    "booking_no" => $r->booking_no,
-                    "booking_date" => $r->booking_date,
-                    "test_name" => $r->test_name,
-                    "test_date" => $r->test_date,
-                    "report_date" => $r->report_date,
+                    "stockJournalEntryId" => $r->id,
+                    "bookingNo" => $r->booking_no,
+                    "bookingDate" => $r->booking_date,
+                    "testName" => $r->test_name,
+                    "testDate" => $r->test_date,
+                    "reportDate" => $r->report_date,
                     "amount" => $r->amount,
                     "remarks" => $r->remarks,
+                    "status" => $r->status
                 ])
             ];
         })->values();

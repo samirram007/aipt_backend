@@ -23,10 +23,10 @@ class TestCancellationRequestService implements TestCancellationRequestServiceIn
 
     public function store(array $data): TestCancellationRequest
     {
-
         return TestCancellationRequest::create([
             'stock_journal_entry_id' => $data['stock_journal_entry_id'],
             'status' => $data['status'],
+            'remarks' => $data['remarks'],
             'requested_by' => Auth::id()
         ]);
     }
