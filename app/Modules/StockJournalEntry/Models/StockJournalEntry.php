@@ -6,7 +6,7 @@ use App\Modules\JobOrder\Models\JobOrder;
 use App\Modules\StockItem\Models\StockItem;
 use App\Modules\StockJournal\Models\StockJournal;
 use App\Modules\StockUnit\Models\StockUnit;
-use App\Modules\TestItem\Models\TestItem;
+use App\Modules\TestCancellationRequest\Models\TestCancellationRequest;
 use App\Traits\Blamable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -49,6 +49,12 @@ class StockJournalEntry extends Model
         'start_date' => 'datetime',
         'end_date' => 'datetime'
     ];
+
+    public function getIsCancelledAttribute()
+    {
+        $data = TestCancellationRequest::where('stock_journal_entry_id', $this->id)->whereIn('status', ['request', 'confirm'])->exists();
+        return $data ? true : false;
+    }
 
     public function stock_journal(): BelongsTo
     {

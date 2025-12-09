@@ -187,31 +187,6 @@ class TestBookingService implements TestBookingServiceInterface
                 'calculation_type' => CalculationType::currentTotal->value
             ]);
 
-            // job order creation process includes job order history creation process
-
-            foreach ($data['tests'] as $jobOrder) {
-                $stockJournalEntryId = StockJournalEntry::where(["stock_journal_id" => $stockJournal->id, 'stock_item_id' => $jobOrder['test_id']])->first()['id'];
-
-                $newJobOrder = JobOrder::create([
-                    "voucher_id" => $voucher->id,
-                    "stock_journal_id" => $stockJournal->id,
-                    "stock_journal_entry_id" => $stockJournalEntryId,
-                    "expected_start_date" => Carbon::today()->toDateString(),
-                    "expected_end_date" => Carbon::today()->toDateString(),
-                    "actual_start_date" => Carbon::today()->toDateString(),
-                    "actual_end_date" => Carbon::today()->toDateString(),
-                    "status" => JobStatus::Booked->value,
-                    "stock_item_id" => $jobOrder['test_id'],
-                    "process_by" => $userId
-                ]);
-                JobOrderHistory::create([
-                    'job_order_id' => $newJobOrder->id,
-                    'status' => JobStatus::Booked->value,
-                ]);
-            }
-
-
-
             $testBooking = TestBooking::find($voucher->id);
 
             DB::commit();
@@ -229,25 +204,6 @@ class TestBookingService implements TestBookingServiceInterface
     {
         try {
             DB::beginTransaction();
-
-            $orderExists = VoucherReference::where('voucher_reference_id', $data['voucher_id'])->exists();
-
-            // if voucher reference table has id means payment has already been done so its not the first time payment
-            if ($orderExists === false) {
-                // if no payment has been done then job order will be updated as collect specimen
-                $jobOrders = JobOrder::where('voucher_id', $data['voucher_id'])->get();
-                foreach ($jobOrders as $jobOrder) {
-                    $jobOrder->update([
-                        "status" => JobStatus::CollectSpecimen->value
-                    ]);
-                    JobOrderHistory::create([
-                        'job_order_id' => $jobOrder->id,
-                        'status' => JobStatus::CollectSpecimen->value,
-                    ]);
-                }
-            }
-
-
             $accountLedger = AccountLedger::where('ledgerable_id', $data['patient_id'])
                 ->where('ledgerable_type', 'patient')
                 ->firstOrFail();
@@ -648,6 +604,12 @@ class TestBookingService implements TestBookingServiceInterface
                 "booking_no" => $first->booking_no,
                 "booking_date" => $first->booking_date,
                 "patient_name" => $first->patient_name,
+                "patient_name" => $first->patient_name,
+                "patient_age" => $first->patient_age,
+                "patient_gender" => $first->patient_gender,
+                "patient_contact" => $first->patient_contact,
+                "agent_name" => $first->agent_name,
+                "physician_name" => $first->physician_name,
                 "tests" => $rows->map(fn($r) => [
                     "voucher_id" => $r->voucher_id,
                     "booking_no" => $r->booking_no,
@@ -657,12 +619,6 @@ class TestBookingService implements TestBookingServiceInterface
                     "report_date" => $r->report_date,
                     "amount" => $r->amount,
                     "remarks" => $r->remarks,
-                    "patient_name" => $r->patient_name,
-                    "patient_age" => $r->patient_age,
-                    "patient_gender" => $r->patient_gender,
-                    "patient_contact" => $r->patient_contact,
-                    "agent_name" => $r->agent_name,
-                    "physician_name" => $r->physician_name
                 ])
             ];
         })->values();
