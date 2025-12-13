@@ -1,17 +1,17 @@
 <?php
 
-namespace App\Modules\PaymentTransaction\Providers;
+namespace App\Modules\TransactionInstrument\Providers;
 
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\Route;
-use App\Modules\PaymentTransaction\Contracts\PaymentTransactionServiceInterface;
-use App\Modules\PaymentTransaction\Services\PaymentTransactionService;
+use App\Modules\TransactionInstrument\Contracts\TransactionInstrumentServiceInterface;
+use App\Modules\TransactionInstrument\Services\TransactionInstrumentService;
 
-class PaymentTransactionServiceProvider extends ServiceProvider
+class TransactionInstrumentServiceProvider extends ServiceProvider
 {
     public function register(): void
     {
-        $this->app->bind(PaymentTransactionServiceInterface::class, PaymentTransactionService::class);
+        $this->app->bind(TransactionInstrumentServiceInterface::class, TransactionInstrumentService::class);
     }
 
     public function boot(): void

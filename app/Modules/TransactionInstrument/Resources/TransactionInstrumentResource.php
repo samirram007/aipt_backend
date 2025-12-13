@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Modules\PaymentTransaction\Resources;
+namespace App\Modules\TransactionInstrument\Resources;
 
 use Illuminate\Http\Request;
 
 use App\Http\Resources\SuccessResource;
-class PaymentTransactionResource extends SuccessResource
+class TransactionInstrumentResource extends SuccessResource
 {
     public function toArray(Request $request): array
     {

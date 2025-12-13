@@ -8,13 +8,12 @@ return new class extends Migration
 {
     public function up(): void
     {
-        Schema::create('payment_transactions', function (Blueprint $table) {
+        Schema::create('transaction_instruments', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('voucher_entry_id');
+            $table->unsignedBigInteger('voucher_id');
             $table->unsignedBigInteger('payment_mode_id');
-            $table->unsignedBigInteger('account_ledger_id');
-            $table->string('payment_card_no');
-            $table->string('cheque_no');
+            $table->string('payment_card_no')->nullable();
+            $table->string('cheque_no')->nullable();
             $table->string('tid_no')->nullable();
             $table->string('transaction_no')->nullable();
             $table->unsignedBigInteger('created_by')->nullable();
@@ -25,6 +24,6 @@ return new class extends Migration
 
     public function down(): void
     {
-        Schema::dropIfExists('payment_transactions');
+        Schema::dropIfExists('transaction_instruments');
     }
 };

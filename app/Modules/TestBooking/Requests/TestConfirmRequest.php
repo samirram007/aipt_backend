@@ -18,6 +18,7 @@ class TestConfirmRequest extends FormRequest
             'amount' => ['required', 'numeric'],
             'patient_id' => ['required', 'numeric', 'exists:patients,id'],
             "payment_mode" => ['required', 'numeric', 'exists:account_ledgers,id'],
+            'transaction_no' => ['sometimes', 'nullable', 'string', 'max:255']
         ];
         return $rules;
     }

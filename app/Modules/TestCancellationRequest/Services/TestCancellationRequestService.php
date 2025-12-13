@@ -34,7 +34,11 @@ class TestCancellationRequestService implements TestCancellationRequestServiceIn
     public function update(array $data, int $id): TestCancellationRequest
     {
         $record = TestCancellationRequest::findOrFail($id);
-        $record->update($data);
+        $record->update([
+            'status' => $data['status'],
+            'remarks' => $data['remarks'],
+            'cancelled_by' => Auth::id()
+        ]);
         return $record->fresh();
     }
 

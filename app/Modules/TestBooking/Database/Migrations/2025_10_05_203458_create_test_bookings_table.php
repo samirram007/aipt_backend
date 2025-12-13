@@ -21,35 +21,34 @@ return new class extends Migration
         });
 
         $refundRequests = "
-            drop procedure if exists refundRequests;
-            create procedure refundRequests()
+            drop procedure if exists refundRequestList;
+            create procedure refundRequestList(in booking_no varchar(255))
             begin
-                select v.voucher_no as booking_no,
-                any_value(v.id) as voucher_id,
-                any_value(vr.voucher_reference_id) as voucher_parent_id,
-                any_value(v.voucher_date) as booking_date,
-                any_value(v.remarks) as remarks,
-                any_value(sje.amount) as amount,
-                any_value(sje.start_date) as test_date,
-                any_value(sje.end_date) as report_date,
-                any_value(sti.print_name) as test_name,
-                any_value(p.name) as patient_name,
-                any_value(p.age) as patient_age,
-                any_value(p.gender) as patient_gender,
-                any_value(p.contact_no) as patient_contact,
-                any_value(a.name) as agent_name,
-                any_value(phy.name) as physician_name
-                from vouchers v
-                left join voucher_references vr on vr.voucher_id = v.id
-                left join voucher_patients vp on vp.voucher_id = vr.voucher_reference_id
-                left join patients p on p.id = vp.patient_id
-                left join agents a on a.id = vp.agent_id
-                left join physicians phy on phy.id = vp.physician_id
-                left join voucher_entries ve on ve.voucher_id = v.id
-                left join account_ledgers al on al.id = ve.account_ledger_id
-                left join stock_journal_entries sje on sje.stock_journal_id = v.stock_journal_id
-                left join stock_items sti on sti.id = sje.stock_item_id
-                where v.voucher_type_id = 1008 and al.ledgerable_type = 'patient' group by v.voucher_no;
+                if length(booking_no) = 0 or booking_no is null then
+                    select tcr.id as id, sje.id as stock_journal_entry_id, tcr.status as status, v.voucher_no as booking_no, v.voucher_date as booking_date, coalesce(tcr.remarks,'No remarks provided') as remarks, sje.amount as amount,
+                    sje.start_date as test_date, sje.end_date as report_date, sti.print_name as test_name, p.name as patient_name,
+                    p.age as patient_age, p.gender as patient_gender, p.contact_no as patient_contact, a.name as agent_name, phy.name as physician_name
+                    from
+                    stock_journal_entries sje inner join test_cancellation_requests tcr on tcr.stock_journal_entry_id = sje.id
+                    left join vouchers v on v.stock_journal_id = sje.stock_journal_id
+                    left join stock_items sti on sti.id = sje.stock_item_id
+                    left join voucher_patients vp on vp.voucher_id = v.id
+                    left join patients p on p.id = vp.patient_id
+                    left join agents a on a.id = vp.agent_id
+                    left join physicians phy on phy.id = vp.physician_id;
+                else
+                    select tcr.id as id, sje.id as stock_journal_entry_id, tcr.status as status, v.voucher_no as booking_no, v.voucher_date as booking_date, coalesce(tcr.remarks,'No remarks provided') as remarks, sje.amount as amount,
+                    sje.start_date as test_date, sje.end_date as report_date, sti.print_name as test_name, p.name as patient_name,
+                    p.age as patient_age, p.gender as patient_gender, p.contact_no as patient_contact, a.name as agent_name, phy.name as physician_name
+                    from
+                    stock_journal_entries sje inner join test_cancellation_requests tcr on tcr.stock_journal_entry_id = sje.id
+                    left join vouchers v on v.stock_journal_id = sje.stock_journal_id
+                    left join stock_items sti on sti.id = sje.stock_item_id
+                    left join voucher_patients vp on vp.voucher_id = v.id
+                    left join patients p on p.id = vp.patient_id
+                    left join agents a on a.id = vp.agent_id
+                    left join physicians phy on phy.id = vp.physician_id where v.voucher_no collate utf8mb4_0900_ai_ci = booking_no;
+                end if;
             end
         ";
         DB::unprepared($refundRequests);
@@ -58,6 +57,6 @@ return new class extends Migration
     public function down(): void
     {
         Schema::dropIfExists('test_bookings');
-        DB::unprepared("DROP PROCEDURE IF EXISTS `refundRequests`");
+        DB::unprepared("DROP PROCEDURE IF EXISTS `refundRequestList`");
     }
 };

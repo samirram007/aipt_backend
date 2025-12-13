@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Modules\PaymentTransaction\Requests;
+namespace App\Modules\TransactionInstrument\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class PaymentTransactionRequest extends FormRequest
+class TransactionInstrumentRequest extends FormRequest
 {
     public function authorize(): bool
     {
@@ -14,18 +14,16 @@ class PaymentTransactionRequest extends FormRequest
     public function rules(): array
     {
         $rules = [
-            'name' => ['required', 'string', 'max:255','unique:payment_transactions,name'],
-            'code' => ['sometimes','required', 'string', 'max:255','unique:payment_transactions,code'],
-            'description' => ['sometimes','required', 'string', 'max:255'],
-            'status' => ['sometimes','required', 'string', 'max:255'],
+            'voucher_id' => ['required', 'numeric', 'exists:vouchers,id'],
+            'payment_mode_id' => ['required', 'numeric', 'exists:account_ledgers,id'],
+            'transaction_no' => ['required', 'string', 'max:255']
         ];
 
         // For update requests, make validation more flexible
         if ($this->isMethod('PUT') || $this->isMethod('PATCH')) {
-            $id=$this->route('payment_transaction');
-            $rules['name'] = ['sometimes', 'required', 'string', 'max:255', 'unique:payment_transactions,name,' . $id,];
-            $rules['code'] = ['sometimes', 'required', 'string', 'max:255', 'unique:payment_transactions,code,' . $id,];
-
+            $id = $this->route('transaction_instrument');
+            $rules['name'] = ['sometimes', 'required', 'string', 'max:255', 'unique:transaction_instruments,name,' . $id,];
+            $rules['code'] = ['sometimes', 'required', 'string', 'max:255', 'unique:transaction_instruments,code,' . $id,];
         }
 
         return $rules;

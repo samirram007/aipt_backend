@@ -18,6 +18,7 @@ class TestCancelRequest extends FormRequest
     {
         $rules =  [
             'remark' => ['nullable', 'string', 'max:500'],
+            'cancellation_remark' => ['nullable', 'string', 'max:255']
         ];
 
         return $rules;

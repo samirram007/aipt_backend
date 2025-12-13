@@ -24,8 +24,9 @@ class TestCancellationRequestRequest extends FormRequest
         // For update requests, make validation more flexible
         if ($this->isMethod('PUT') || $this->isMethod('PATCH')) {
             $id = $this->route('test_cancellation_request');
-            $rules['name'] = ['sometimes', 'required', 'string', 'max:255', 'unique:test_cancellation_requests,name,' . $id,];
-            $rules['code'] = ['sometimes', 'required', 'string', 'max:255', 'unique:test_cancellation_requests,code,' . $id,];
+            $rules['stock_journal_entry_id'] = ['nullable', 'numeric'];
+            $rules['status'] = ['required', Rule::enum(TestCancellation::class)];
+            $rules['remarks'] = ['nullable', 'string', 'max:255'];
         }
 
         return $rules;

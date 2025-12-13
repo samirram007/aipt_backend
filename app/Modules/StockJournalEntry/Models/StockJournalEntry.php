@@ -52,7 +52,13 @@ class StockJournalEntry extends Model
 
     public function getIsCancelledAttribute()
     {
-        $data = TestCancellationRequest::where('stock_journal_entry_id', $this->id)->where('status', ['request', 'approved'])->exists();
+        $data = TestCancellationRequest::where('stock_journal_entry_id', $this->id)->where('status', 'approved')->exists();
+        return $data ? true : false;
+    }
+
+    public function getIsRequestedAttribute()
+    {
+        $data = TestCancellationRequest::where('stock_journal_entry_id', $this->id)->where('status', 'request')->exists();
         return $data ? true : false;
     }
 

@@ -4,6 +4,7 @@ namespace App\Modules\TestBooking\Services;
 
 use App\Enums\CalculationType;
 use App\Enums\JobStatus;
+use App\Enums\TestCancellation;
 use App\Modules\AccountLedger\Models\AccountLedger;
 use App\Modules\JobOrder\Models\JobOrder;
 use App\Modules\JobOrderHistory\Models\JobOrderHistory;
@@ -13,6 +14,8 @@ use App\Modules\StockJournal\Models\StockJournal;
 use App\Modules\StockJournalEntry\Models\StockJournalEntry;
 use App\Modules\TestBooking\Contracts\TestBookingServiceInterface;
 use App\Modules\TestBooking\Models\TestBooking;
+use App\Modules\TestCancellationRequest\Models\TestCancellationRequest;
+use App\Modules\TransactionInstrument\Models\TransactionInstrument;
 use App\Modules\Voucher\Models\Voucher;
 use App\Modules\VoucherEntry\Models\VoucherEntry;
 use App\Modules\VoucherPatient\Models\VoucherPatient;
@@ -239,6 +242,15 @@ class TestBookingService implements TestBookingServiceInterface
                 'voucher_id' => $voucher->id,
                 'voucher_reference_id' => $data['voucher_id']
             ]);
+            // record transaction mode and method
+            TransactionInstrument::create([
+                'voucher_id' => $voucher->id,
+                'payment_mode_id' => $data['payment_mode'],
+                'transaction_no' => $data['transaction_no'] ?? null,
+                'approved_by' => Auth::id()
+            ]);
+
+
             $testBooking = TestBooking::with($this->resource)
                 ->findOrFail($data['voucher_id']);
 
@@ -506,18 +518,25 @@ class TestBookingService implements TestBookingServiceInterface
                 'voucher_reference_id' => $voucher->id
             ]);
 
-            $jobOrder = JobOrder::where(['voucher_id' => $voucher->id, "stock_journal_entry_id" => $stockJournalEntry->id])->first();
+            // $jobOrder = JobOrder::where(['voucher_id' => $voucher->id, "stock_journal_entry_id" => $stockJournalEntry->id])->first();
 
-            $jobOrder->update([
-                "status" => JobStatus::CancelRequest->value
+            // $jobOrder->update([
+            //     "status" => JobStatus::CancelRequest->value
+            // ]);
+
+            // JobOrderHistory::create([
+            //     "job_order_id" => $jobOrder->id,
+            //     "status" => JobStatus::CancelRequest->value
+            // ]);
+
+            // update test cancellation requests
+            $testCancellationRequest = TestCancellationRequest::where('stock_journal_entry_id', $id)->first();
+            $testCancellationRequest->update([
+                'stock_journal_entry_id' => $id,
+                'status' => TestCancellation::Approved->value,
+                'remarks' => $data['cancellation_remark'],
+                'requested_by' => Auth::id()
             ]);
-
-            JobOrderHistory::create([
-                "job_order_id" => $jobOrder->id,
-                "status" => JobStatus::CancelRequest->value
-            ]);
-
-
 
             DB::commit();
             return true;
@@ -594,43 +613,65 @@ class TestBookingService implements TestBookingServiceInterface
         }
     }
 
-    public function getAllCancelledBooking(): JsonResponse
+    public function getAllCancelledBooking(?string $bookingNo = null): JsonResponse
     {
-        $refundRequests = DB::select('CALL refundRequestList()');
+        if ($bookingNo == null) {
+            $refundRequests = DB::select('CALL refundRequestList(?)', [null]);
 
-        $refundData = collect($refundRequests)->groupBy("booking_no")->map(function ($rows) {
-            $first = $rows->first();
-            return [
-                "bookingNo" => $first->booking_no,
-                "bookingDate" => $first->booking_date,
-                "patientName" => $first->patient_name,
-                "patientName" => $first->patient_name,
-                "patientAge" => $first->patient_age,
-                "patientGender" => $first->patient_gender,
-                "patientContact" => $first->patient_contact,
-                "agentName" => $first->agent_name,
-                "physicianName" => $first->physician_name,
-                "tests" => $rows->map(fn($r) => [
-                    "stockJournalEntryId" => $r->id,
-                    "bookingNo" => $r->booking_no,
-                    "bookingDate" => $r->booking_date,
-                    "testName" => $r->test_name,
-                    "testDate" => $r->test_date,
-                    "reportDate" => $r->report_date,
-                    "amount" => $r->amount,
-                    "remarks" => $r->remarks,
-                    "status" => $r->status
-                ])
-            ];
-        })->values();
+            $refundList = collect($refundRequests)->groupBy("booking_no")->map(function ($rows) {
+                $first = $rows->first();
+                return [
+                    "id" => $first->id,
+                    "bookingNo" => $first->booking_no,
+                    "bookingDate" => $first->booking_date,
+                    "patientName" => $first->patient_name,
+                ];
+            })->values();
 
-        return response()->json([
-            "message" => "Data fetched successfully",
-            "status" => true,
-            "code" => 200,
-            "success" => true,
-            "data" => $refundData
-        ]);
+            return response()->json([
+                "message" => "Tests Cancelled fetched successfully",
+                "status" => true,
+                "code" => 200,
+                "success" => true,
+                "data" => $refundList
+            ]);
+        } else {
+            $refundRequests = DB::select('CALL refundRequestList(?)', [$bookingNo]);
+
+            $refundData = collect($refundRequests)->groupBy("booking_no")->map(function ($rows) {
+                $first = $rows->first();
+                return [
+                    "bookingNo" => $first->booking_no,
+                    "bookingDate" => $first->booking_date,
+                    "patientName" => $first->patient_name,
+                    "patientAge" => $first->patient_age,
+                    "patientGender" => $first->patient_gender,
+                    "patientContact" => $first->patient_contact,
+                    "agentName" => $first->agent_name,
+                    "physicianName" => $first->physician_name,
+                    "tests" => $rows->map(fn($r) => [
+                        "id" => $r->id,
+                        "stockJournalEntryId" => $r->stock_journal_entry_id,
+                        "bookingNo" => $r->booking_no,
+                        "bookingDate" => $r->booking_date,
+                        "testName" => $r->test_name,
+                        "testDate" => $r->test_date,
+                        "reportDate" => $r->report_date,
+                        "amount" => $r->amount,
+                        "remarks" => $r->remarks,
+                        "status" => $r->status
+                    ])->values()
+                ];
+            })->first();
+
+            return response()->json([
+                "message" => "Tests Cancelled fetched successfully",
+                "status" => true,
+                "code" => 200,
+                "success" => true,
+                "data" => $refundData
+            ]);
+        }
     }
 
     public function update(array $data, int $id): TestBooking

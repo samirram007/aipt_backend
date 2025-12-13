@@ -228,7 +228,7 @@ class StockItemSeeder extends Seeder
                 "standard_selling_price" => 500.00,
                 'icon' => null,
                 "status" => "active",
-                "is_sample_required" => true
+                "is_sample_required" => false
             ],
             [
                 "name" => "Urine Culture",

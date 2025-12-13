@@ -9,7 +9,7 @@ use Illuminate\Http\JsonResponse;
 interface TestBookingServiceInterface
 {
     public function getAll(): Collection;
-    public function getAllCancelledBooking(): JsonResponse;
+    public function getAllCancelledBooking(?string $bookingNo = null): JsonResponse;
     public function getById(int $id): ?TestBooking;
     public function store(array $data): TestBooking;
     public function update(array $data, int $id): TestBooking;

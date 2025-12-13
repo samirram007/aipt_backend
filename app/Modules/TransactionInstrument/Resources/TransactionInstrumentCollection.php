@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Modules\PaymentTransaction\Resources;
+namespace App\Modules\TransactionInstrument\Resources;
 
 use Illuminate\Http\Request;
 use App\Http\Resources\SuccessCollection;
 
-class PaymentTransactionCollection extends SuccessCollection
+class TransactionInstrumentCollection extends SuccessCollection
 {
 
          /**
