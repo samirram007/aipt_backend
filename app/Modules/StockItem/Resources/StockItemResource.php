@@ -34,6 +34,8 @@ class StockItemResource extends SuccessResource
             'useExpiryDate' => $this->use_expiry_date,
             'trackManufacturingDate' => $this->track_manufacturing_date,
 
+            'uniqueQuantityCodeId' => $this->unique_quantity_code_id,
+
             'isFinishGoods' => $this->is_finish_goods,
             'isRawMaterial' => $this->is_raw_material,
             'isUnfinishedGoods' => $this->is_unfinished_goods,

@@ -18,6 +18,7 @@ class VoucherDispatchDetailResource extends SuccessResource
             'termsOfDelivery' => $this->terms_of_delivery,
             'receiptDocNo' => $this->receipt_doc_no,
             'dispatchedThrough' => $this->dispatched_through,
+            'source' => $this->source,
             'destination' => $this->destination,
             'carrierName' => $this->carrier_name,
             'billOfLadingNo' => $this->bill_of_lading_no,

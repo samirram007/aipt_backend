@@ -44,6 +44,7 @@ class VoucherController extends Controller
 
     public function update(VoucherRequest $request, int $id): SuccessResource
     {
+        // dd($id, $request->validated());
         $data = $this->service->update($request->validated(), $id);
         return new VoucherResource($data, $messages = 'Voucher updated successfully');
     }

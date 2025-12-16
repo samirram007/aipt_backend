@@ -93,7 +93,9 @@ class AuthService implements AuthServiceInterface
 
     public function profile(): User
     {
-        if (!$user = Auth::user()) {
+
+        $user = Auth::user();
+        if (!$user) {
             throw new AuthenticationException('Unauthenticated.');
         }
 

@@ -9,18 +9,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 
-/**
- * @OA\Schema(
- *     schema="AccountNatureResource",
- *     title="Account Nature Resource",
- *     @OA\Property(property="id", type="integer", example=1),
- *     @OA\Property(property="name", type="string", example="Example Account Nature"),
- *     @OA\Property(property="code", type="string", example="EXAMPLE"),
- *     @OA\Property(property="description", type="string", example="This is an example account nature."),
- *     @OA\Property(property="account_groups", type="array", @OA\Items(ref="#/components/schemas/AccountGroupResource")),
- *     @OA\Property(property="account_ledgers", type="array", @OA\Items(ref="#/components/schemas/AccountLedgerResource")),
- * )
- */
+
 class AccountNatureResource extends SuccessResource
 {
     public function toArray(Request $request): array

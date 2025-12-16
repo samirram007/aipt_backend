@@ -10,6 +10,7 @@ return new class extends Migration {
         Schema::create('stock_journal_godown_entries', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('stock_journal_entry_id');
+            $table->integer('entry_order')->default(0);
 
             // Reference to godown
             $table->unsignedBigInteger('godown_id');

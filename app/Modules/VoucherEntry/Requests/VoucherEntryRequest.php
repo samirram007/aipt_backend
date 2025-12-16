@@ -25,8 +25,8 @@ class VoucherEntryRequest extends FormRequest
 
         // For update requests, make validation more flexible
         if ($this->isMethod('PUT') || $this->isMethod('PATCH')) {
-            $id = $this->route('voucher_entry');
-            // $rules['name'] = ['sometimes', 'required', 'string', 'max:255', 'unique:voucher_entries,name,' . $id,];
+            // $id = $this->route('voucher_entry');
+            $rules['id'] = ['sometimes', 'nullable', 'numeric', 'exists:voucher_entries,id'];
             // $rules['code'] = ['sometimes', 'required', 'string', 'max:255', 'unique:voucher_entries,code,' . $id,];
 
         }

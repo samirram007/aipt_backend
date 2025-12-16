@@ -87,7 +87,7 @@ class AccountLedgerService implements AccountLedgerServiceInterface
 
         // If balance is negative → reverse the sign & flip DR/CR
         if ($balance < 0) {
-            $balance = abs($balance);
+            $balance = $balance ? abs($balance) : 0;
             $drCr = $drCr === 'DR' ? 'CR' : 'DR';
         }
 

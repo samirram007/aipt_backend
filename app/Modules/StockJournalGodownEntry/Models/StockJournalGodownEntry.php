@@ -6,9 +6,12 @@ use App\Enums\MovementType;
 use App\Modules\Godown\Models\Godown;
 use App\Modules\StockItem\Models\StockItem;
 use App\Modules\StockJournalEntry\Models\StockJournalEntry;
+use App\Modules\StockJournalGodownEntryPurge\Models\StockJournalGodownEntryPurge;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class StockJournalGodownEntry extends Model
 {
@@ -18,6 +21,7 @@ class StockJournalGodownEntry extends Model
 
     protected $fillable = [
         'stock_journal_entry_id',
+        'entry_order',
         'godown_id',
         'batch_no',
         'mfg_date',
@@ -51,6 +55,43 @@ class StockJournalGodownEntry extends Model
         'created_at',
         'updated_at',
     ];
+
+    protected $appends = [
+        'is_purged',
+    ];
+
+    protected static function boot()
+    {
+        parent::boot();
+
+        // static::addGlobalScope('hide_purged', function (Builder $builder) {
+        //     $builder->where('is_purged', false);
+        // });
+        static::addGlobalScope('not_purged', function (Builder $builder) {
+            $builder->whereDoesntHave('stock_journal_godown_entry_purge');
+        });
+
+        static::addGlobalScope('default_order', function (Builder $builder) {
+            $builder->orderBy('entry_order', 'asc');
+        });
+    }
+    // public function isPurged(): bool
+    // {
+    //     return StockJournalGodownEntryPurge::where('stock_journal_godown_entry_id', $this->id)->exists();
+    // }
+    public function getIsPurgedAttribute(): bool
+    {
+        return $this->stock_journal_godown_entry_purge()->exists();
+        // return $this->relationLoaded('stock_journal_godown_entry_purge')
+        //     ? $this->stock_journal_godown_entry_purge !== null     // no extra query
+        //     : $this->stock_journal_godown_entry_purge()->exists(); // fallback query
+    }
+
+
+    public function stock_journal_godown_entry_purge(): ?HasOne
+    {
+        return $this->hasOne(StockJournalGodownEntryPurge::class, 'stock_journal_godown_entry_id', 'id');
+    }
 
     public function stock_journal_entry(): BelongsTo
     {

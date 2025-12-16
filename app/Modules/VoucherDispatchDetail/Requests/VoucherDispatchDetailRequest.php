@@ -21,6 +21,7 @@ class VoucherDispatchDetailRequest extends FormRequest
             'terms_of_delivery' => ['sometimes', 'nullable', 'string', 'max:255'],
             'receipt_doc_no' => ['sometimes', 'nullable', 'string', 'max:255'],
             'dispatched_through' => ['sometimes', 'nullable', 'string', 'max:255'],
+            'source' => ['sometimes', 'nullable', 'string', 'max:255'],
             'destination' => ['sometimes', 'nullable', 'string', 'max:255'],
             'carrier_name' => ['sometimes', 'nullable', 'string', 'max:255'],
             'bill_of_lading_no' => ['sometimes', 'nullable', 'string', 'max:255'],
@@ -44,7 +45,7 @@ class VoucherDispatchDetailRequest extends FormRequest
 
         // For update requests, make validation more flexible
         if ($this->isMethod('PUT') || $this->isMethod('PATCH')) {
-            $id = $this->route('voucher_dispatch_detail');
+            $rules['id'] = ['sometimes', 'required', 'numeric', 'exists:voucher_dispatch_details,id'];
 
         }
 

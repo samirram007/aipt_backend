@@ -2,6 +2,8 @@
 
 
 
+use App\Http\Controllers\Api\EnumController;
+use App\Http\Controllers\Api\FileController;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Route;
 
@@ -9,24 +11,19 @@ use Illuminate\Support\Facades\Route;
 
 
 
-// Route::controller(AuthController::class)
-//     ->middleware('api')
-//     ->prefix('auth')
-//     ->group(function () {
-//         Route::post('login', 'login');
-//         Route::post('register', 'register');
-//         Route::post('logout', 'logout');
-//         Route::post('refresh', 'refresh');
-//     });
-// Route::post('reload', function () {
-//     Artisan::call('migrate:refresh --seed');
-// });
-// Route::middleware('auth:api')->group(function () {
-//     Route::get('user', [AuthController::class, 'profile']);
-//     Route::post('logout', [AuthController::class, 'logout']);
-// });
 
 
+
+
+Route::post('clear', function () {
+    Artisan::call('cache:clear');
+    Artisan::call('config:clear');
+    Artisan::call('config:cache');
+    Artisan::call('route:clear');
+    Artisan::call('route:cache');
+    Artisan::call('view:clear');
+
+});
 
 Route::post('reload', function () {
     Artisan::call('migrate:refresh --seed');

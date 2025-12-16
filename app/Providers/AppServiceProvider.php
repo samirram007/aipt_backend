@@ -4,6 +4,7 @@ namespace App\Providers;
 
 use App\Modules\Agent\Models\Agent;
 use App\Modules\Customer\Models\Customer;
+use App\Modules\DeliveryPlace\Models\DeliveryPlace;
 use App\Modules\Distributor\Models\Distributor;
 use App\Modules\Employee\Models\Employee;
 use App\Modules\Godown\Models\Godown;
@@ -38,6 +39,7 @@ class AppServiceProvider extends ServiceProvider
             'supplier' => Supplier::class,
             'transporter' => Transporter::class,
             'vendor' => Vendor::class,
+            'delivery_place' => DeliveryPlace::class,
         ]);
     }
 }

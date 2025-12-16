@@ -7,21 +7,7 @@ use App\Modules\AccountGroup\Resources\AccountGroupResource;
 use App\Modules\AccountNature\Resources\AccountNatureResource;
 use Illuminate\Http\Request;
 use App\Traits\HasPolymorphicResource;
-/**
- * @OA\Schema(
- * schema="AccountLedgerResource",
- * title="AccountLedgerResource",
- * description="AccountLedgerResource",
- * @OA\Property(property="id", type="integer", example=1),
- * @OA\Property(property="name", type="string", example="Account Group Name"),
- * @OA\Property(property="code", type="string", example="AG001"),
- * @OA\Property(property="accountNatureId", type="integer", example=1),
- * @OA\Property(property="accountNature", type="object", ref="#/components/schemas/AccountNatureResource"),
- * @OA\Property(property="description", type="string", example="Account Group Description"),
- * @OA\Property(property="status", type="string", example="Active"),
- * @OA\Property(property="icon", type="string", example="fa fa-user"),
- *)
- */
+
 class LedgerBalanceResource extends SuccessResource
 {
     use HasPolymorphicResource;

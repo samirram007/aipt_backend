@@ -10,6 +10,7 @@ return new class extends Migration {
         Schema::create('stock_journal_entries', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('stock_journal_id');
+            $table->integer('entry_order')->default(0);
             $table->unsignedBigInteger('stock_item_id');
             $table->unsignedBigInteger('stock_unit_id')->nullable();
             $table->unsignedBigInteger('alternate_unit_id')->nullable();

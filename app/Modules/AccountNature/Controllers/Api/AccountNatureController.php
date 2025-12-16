@@ -20,27 +20,6 @@ class AccountNatureController extends Controller
     {
     }
 
-    /**
-     * @OA\Get(
-     *     path="/api/account_natures",
-     *     summary="Get a list of account natures",
-     *     tags={"Account Nature"},
-     *
-     *      security={{"bearerAuth": {}}},
-     *     @OA\Response(
-     *         response=200,
-     *         description="Successful operation",
-     *         @OA\JsonContent(
-     *             type="object",
-     *             @OA\Property(
-     *                 property="data",
-     *                 type="array",
-     *                 @OA\Items(ref="#/components/schemas/AccountNatureResource")
-     *             )
-     *         )
-     *     )
-     * )
-     */
 
     public function index(): SuccessCollection
     {

@@ -119,32 +119,10 @@ class AuthController extends Controller
     }
 
 
-    /**
-     * @OA\Get(
-     *     path="/api/auth/profile",
-     *     tags={"Auth"},
-     *     summary="Get user profile",
-     *     security={{"bearerAuth":{}}},
-     *     @OA\Response(
-     *         response=200,
-     *         description="User profile fetched successfully",
-     *         @OA\JsonContent(
-     *             @OA\Property(property="status", type="string", example="success"),
-     *             @OA\Property(property="message", type="string", example="User profile fetched successfully."),
-     *             @OA\Property(property="data", type="object", ref="#/components/schemas/UserResource"),
-     *         )
-     *     ),
-     *     @OA\Response(
-     *         response=401,
-     *         description="Unauthorized",
-     *         @OA\JsonContent(
-     *             @OA\Property(property="message", type="string", example="Unauthorized"),
-     *         )
-     *     ),
-     * )
-     */
+
     public function profile(): JsonResponse
     {
+
         $user = $this->authService->profile();
         return response()->json([
             'status' => 'success',
@@ -152,23 +130,18 @@ class AuthController extends Controller
             'data' => new UserResource($user),
         ]);
     }
+    public function profile2(): JsonResponse
+    {
 
-    /**
-     * @OA\Post(
-     *     path="/api/auth/refresh",
-     *     tags={"Auth"},
-     *     summary="Refresh user token",
-     *     security={{"bearerAuth":{}}},
-     *     @OA\Response(
-     *         response=200,
-     *         description="User token refreshed successfully",
-     *      @OA\JsonContent(
-     *             @OA\Property(property="status", type="string", example="success"),
-     *             @OA\Property(property="message", type="string", example="Token refreshed successfully!"),
-     *      )
-     * )
-     * )
-     */
+        // $user = $this->authService->profile();
+        return response()->json([
+            'status' => 'success',
+            'message' => 'User profile fetched successfully.',
+            'data' => [],
+        ]);
+    }
+
+
 
     public function refresh()
     {

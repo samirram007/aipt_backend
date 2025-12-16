@@ -20,28 +20,6 @@ class AccountGroupController extends Controller
     public function __construct(protected AccountGroupServiceInterface $service)
     {
     }
-    /**
-     * @OA\Get(
-     *     path="/api/account_groups",
-     *     summary="Get a list of account groups",
-     *     tags={"Account Group"},
-     *
-     *      security={{"bearerAuth": {}}},
-     *     @OA\Response(
-     *         response=200,
-     *         description="Successful operation",
-     *         @OA\JsonContent(
-     *             type="object",
-     *             @OA\Property(
-     *                 property="data",
-     *                 type="array",
-     *                 @OA\Items(ref="#/components/schemas/AccountGroupResource")
-     *             )
-     *         )
-     *     )
-     * )
-     */
-
 
     public function index(): SuccessCollection
     {
@@ -50,34 +28,6 @@ class AccountGroupController extends Controller
 
         return new AccountGroupCollection($data);
     }
-
-    /**
-     * @OA\Get(
-     *     path="/api/account_groups/{id}",
-     *     summary="Get a specific account group",
-     *     tags={"Account Group"},
-     *
-     * security={{"bearerAuth": {}}},
-     * @OA\Parameter(
-     *         name="id",
-     *         in="path",
-     *         description="ID of the account group",
-     *         required=true,
-     *         @OA\Schema(type="integer")
-     *     ),
-     *     @OA\Response(
-     *         response=200,
-     *         description="Successful operation",
-     *         @OA\JsonContent(
-     *             type="object",
-     *             @OA\Property(
-     *                 property="data",
-     *                 ref="#/components/schemas/AccountGroupResource"
-     *             )
-     *         )
-     *     )
-     * )
-     */
     public function show(int $id): ?SuccessResource
     {
         $data = $this->service->getById($id);
@@ -85,30 +35,6 @@ class AccountGroupController extends Controller
         return new AccountGroupResource($data, $message = 'AccountGroup retrieved successfully');
     }
 
-    /**
-     * @OA\Post(
-     *     path="/api/account_groups",
-     *     summary="Create a new account group",
-     *     tags={"Account Group"},
-     *
-     * security={{"bearerAuth": {}}},
-     * @OA\RequestBody(
-     *         required=true,
-     *         @OA\JsonContent(ref="#/components/schemas/AccountGroupRequest")
-     *     ),
-     *     @OA\Response(
-     *         response=201,
-     *         description="Successful operation",
-     *         @OA\JsonContent(
-     *             type="object",
-     *             @OA\Property(
-     *                 property="data",
-     *                 ref="#/components/schemas/AccountGroupResource"
-     *             )
-     *         )
-     *     )
-     * )
-     */
     public function store(AccountGroupRequest $request): SuccessResource
     {
         $data = $this->service->store($request->validated());

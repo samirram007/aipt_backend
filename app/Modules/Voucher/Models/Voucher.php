@@ -12,6 +12,7 @@ use App\Modules\VoucherParty\Models\VoucherParty;
 use App\Modules\VoucherReference\Models\VoucherReference;
 use App\Modules\VoucherType\Models\VoucherType;
 use App\Traits\Blameable;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -52,6 +53,18 @@ class Voucher extends Model
         'effects_account' => 'boolean',
         'effects_stock' => 'boolean',
     ];
+
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::addGlobalScope('default_order', function (Builder $builder) {
+            $builder
+                ->orderBy('voucher_date', 'desc')
+                ->orderBy('voucher_no', 'desc');
+        });
+    }
+
     public function stock_journal(): BelongsTo
     {
         return $this->belongsTo(StockJournal::class);
