@@ -1,12 +1,10 @@
 <?php
 
-namespace App\Modules\TestCancellationRequest\Requests;
+namespace App\Modules\StockJournalReference\Requests;
 
-use App\Enums\TestCancellation;
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Validation\Rule;
 
-class TestCancellationRequestRequest extends FormRequest
+class StockJournalReferenceRequest extends FormRequest
 {
     public function authorize(): bool
     {
@@ -16,18 +14,18 @@ class TestCancellationRequestRequest extends FormRequest
     public function rules(): array
     {
         $rules = [
-            'stock_journal_entry_id' => ['required', 'numeric', 'exists:stock_journal_entries,id'],
-            'voucher_id' => ['required', 'numeric', 'exists:vouchers,id'],
-            'status' => ['required', Rule::enum(TestCancellation::class)],
-            'remarks' => ['nullable', 'string']
+            'name' => ['required', 'string', 'max:255','unique:stock_journal_references,name'],
+            'code' => ['sometimes','required', 'string', 'max:255','unique:stock_journal_references,code'],
+            'description' => ['sometimes','required', 'string', 'max:255'],
+            'status' => ['sometimes','required', 'string', 'max:255'],
         ];
 
         // For update requests, make validation more flexible
         if ($this->isMethod('PUT') || $this->isMethod('PATCH')) {
-            $id = $this->route('test_cancellation_request');
-            $rules['stock_journal_entry_id'] = ['nullable', 'numeric'];
-            $rules['status'] = ['required', Rule::enum(TestCancellation::class)];
-            $rules['remarks'] = ['nullable', 'string', 'max:255'];
+            $id=$this->route('stock_journal_reference');
+            $rules['name'] = ['sometimes', 'required', 'string', 'max:255', 'unique:stock_journal_references,name,' . $id,];
+            $rules['code'] = ['sometimes', 'required', 'string', 'max:255', 'unique:stock_journal_references,code,' . $id,];
+
         }
 
         return $rules;

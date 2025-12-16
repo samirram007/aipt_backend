@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 
 use App\Http\Resources\SuccessResource;
 use App\Modules\StockJournalEntry\Resources\StockJournalEntryResource;
+use App\Modules\Voucher\Resources\VoucherResource;
 
 class StockJournalResource extends SuccessResource
 {
@@ -15,8 +16,9 @@ class StockJournalResource extends SuccessResource
             'id' => $this->id,
             'journalNo' => $this->journal_no,
             'journalDate' => $this->journal_date,
-            'type'=> $this->type,
-            'stockJournalEntries'=> StockJournalEntryResource::collection($this->whenLoaded('stock_journal_entries')),
+            'voucher' => VoucherResource::make($this->whenLoaded('voucher')),
+            'type' => $this->type,
+            'stockJournalEntries' => StockJournalEntryResource::collection($this->whenLoaded('stock_journal_entries')),
             'remarks' => $this->remarks,
         ];
     }

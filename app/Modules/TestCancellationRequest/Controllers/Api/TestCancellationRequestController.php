@@ -18,10 +18,16 @@ class TestCancellationRequestController extends Controller
 
     public function __construct(protected TestCancellationRequestServiceInterface $service) {}
 
-    public function index(): SuccessCollection
+    public function index(): JsonResponse
     {
         $data = $this->service->getAll();
-        return new TestCancellationRequestCollection($data);
+        return $data;
+    }
+
+    public function getByBookingNo(string $bookingNo): JsonResponse
+    {
+        $data = $this->service->getByBookingNo($bookingNo);
+        return $data;
     }
 
     public function show(int $id): SuccessResource

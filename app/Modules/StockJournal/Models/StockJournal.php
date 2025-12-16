@@ -38,6 +38,6 @@ class StockJournal extends Model
 
     public function voucher(): BelongsTo
     {
-        return $this->belongsTo(Voucher::class);
+        return $this->belongsTo(Voucher::class, 'id', 'stock_journal_id');
     }
 }

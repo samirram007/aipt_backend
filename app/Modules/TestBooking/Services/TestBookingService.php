@@ -12,6 +12,7 @@ use App\Modules\Patient\Models\Patient;
 use App\Modules\StockItem\Models\StockItem;
 use App\Modules\StockJournal\Models\StockJournal;
 use App\Modules\StockJournalEntry\Models\StockJournalEntry;
+use App\Modules\StockJournalReference\Models\StockJournalReference;
 use App\Modules\TestBooking\Contracts\TestBookingServiceInterface;
 use App\Modules\TestBooking\Models\TestBooking;
 use App\Modules\TestCancellationRequest\Models\TestCancellationRequest;
@@ -414,6 +415,11 @@ class TestBookingService implements TestBookingServiceInterface
                 'type' => 'in',
             ]);
 
+            StockJournalReference::create([
+                'stock_journal_id' => $stockJournal->id,
+                'stock_journal_reference_id' => $stockParentJournal->id
+            ]);
+
 
             //  create new entry to record the movement of returned stock
             StockJournalEntry::create([
@@ -613,66 +619,7 @@ class TestBookingService implements TestBookingServiceInterface
         }
     }
 
-    public function getAllCancelledBooking(?string $bookingNo = null): JsonResponse
-    {
-        if ($bookingNo == null) {
-            $refundRequests = DB::select('CALL refundRequestList(?)', [null]);
 
-            $refundList = collect($refundRequests)->groupBy("booking_no")->map(function ($rows) {
-                $first = $rows->first();
-                return [
-                    "id" => $first->id,
-                    "bookingNo" => $first->booking_no,
-                    "bookingDate" => $first->booking_date,
-                    "patientName" => $first->patient_name,
-                ];
-            })->values();
-
-            return response()->json([
-                "message" => "Tests Cancelled fetched successfully",
-                "status" => true,
-                "code" => 200,
-                "success" => true,
-                "data" => $refundList
-            ]);
-        } else {
-            $refundRequests = DB::select('CALL refundRequestList(?)', [$bookingNo]);
-
-            $refundData = collect($refundRequests)->groupBy("booking_no")->map(function ($rows) {
-                $first = $rows->first();
-                return [
-                    "bookingNo" => $first->booking_no,
-                    "bookingDate" => $first->booking_date,
-                    "patientName" => $first->patient_name,
-                    "patientAge" => $first->patient_age,
-                    "patientGender" => $first->patient_gender,
-                    "patientContact" => $first->patient_contact,
-                    "agentName" => $first->agent_name,
-                    "physicianName" => $first->physician_name,
-                    "tests" => $rows->map(fn($r) => [
-                        "id" => $r->id,
-                        "stockJournalEntryId" => $r->stock_journal_entry_id,
-                        "bookingNo" => $r->booking_no,
-                        "bookingDate" => $r->booking_date,
-                        "testName" => $r->test_name,
-                        "testDate" => $r->test_date,
-                        "reportDate" => $r->report_date,
-                        "amount" => $r->amount,
-                        "remarks" => $r->remarks,
-                        "status" => $r->status
-                    ])->values()
-                ];
-            })->first();
-
-            return response()->json([
-                "message" => "Tests Cancelled fetched successfully",
-                "status" => true,
-                "code" => 200,
-                "success" => true,
-                "data" => $refundData
-            ]);
-        }
-    }
 
     public function update(array $data, int $id): TestBooking
     {

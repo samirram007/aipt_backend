@@ -93,11 +93,6 @@ class TestBookingController extends Controller
         return new TestBookingResource($data, $messages = "Payment confirmed successfully");
     }
 
-    public function getAllCancelledBooking(?string $bookingNo = null): JsonResponse
-    {
-        $data = $this->service->getAllCancelledBooking($bookingNo);
-        return $data;
-    }
 
 
     public function destroy(int $id): JsonResponse
