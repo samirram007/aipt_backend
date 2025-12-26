@@ -1,5 +1,6 @@
 <?php
 
+use App\Modules\Transporter\Models\Transporter;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -7,7 +8,7 @@ use Illuminate\Support\Facades\Schema;
 return new class extends Migration {
     public function up(): void
     {
-        Schema::create('vehicles', function (Blueprint $table) {
+        Schema::create('delivery_vehicles', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('transporter_id');
             $table->string('vehicle_type')->nullable();
@@ -25,6 +26,10 @@ return new class extends Migration {
 
     public function down(): void
     {
-        Schema::dropIfExists('vehicles');
+        Schema::dropIfExists('delivery_vehicles');
+    }
+    public function transporter()
+    {
+        return $this->belongsTo(Transporter::class, 'transporter_id');
     }
 };

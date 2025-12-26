@@ -14,7 +14,7 @@ class VehicleResource extends SuccessResource
             'id' => $this->id,
             'transporterId' => $this->transporter_id,
             'vehicleType' => $this->vehicle_type,
-            'vehicleNo' => $this->vehicle_no,
+            'vehicleNumber' => $this->vehicle_no,
             'description' => $this->description,
             'status' => $this->status,
             'transporter' => new TransporterResource($this->whenLoaded('transporter')),
