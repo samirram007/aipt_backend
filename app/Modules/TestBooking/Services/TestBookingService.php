@@ -45,6 +45,8 @@ class TestBookingService implements TestBookingServiceInterface
 
     protected $voucherPatientResource = ['agent', 'physician', 'patient.account_ledger', 'voucher'];
 
+    protected $voucherByIdResource = ['voucher_entries', 'voucher_references.voucher.voucher_entries'];
+
     // This is the list of all bookings for patient only
     public function all_bookings(?string $start_date = null, ?string $end_date = null): Collection
     {
@@ -208,6 +210,11 @@ class TestBookingService implements TestBookingServiceInterface
     {
         try {
             DB::beginTransaction();
+            $isFirstPayment = !VoucherReference::where("voucher_reference_id", $data['voucher_id'])->exists();
+            if (!$isFirstPayment) {
+                // checking of total amount code to be written here for validation
+            }
+            // dd($isFirstPayment);
             $accountLedger = AccountLedger::where('ledgerable_id', $data['patient_id'])
                 ->where('ledgerable_type', 'patient')
                 ->firstOrFail();
@@ -218,7 +225,7 @@ class TestBookingService implements TestBookingServiceInterface
             $voucher = Voucher::create([
                 'voucher_no' => $newVoucherNo,
                 'voucher_date' => Carbon::today()->toDateString(),
-                'voucher_type_id' => 1002,
+                'voucher_type_id' => 1003,
             ]);
 
             // Cash A/C
@@ -632,5 +639,12 @@ class TestBookingService implements TestBookingServiceInterface
     {
         $record = TestBooking::findOrFail($id);
         return $record->delete();
+    }
+
+
+    // payment processing details
+    public function get_voucher_by_id(int $id): TestBooking
+    {
+        return TestBooking::with($this->voucherByIdResource)->findOrFail($id);
     }
 }

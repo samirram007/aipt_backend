@@ -39,7 +39,7 @@ class TestCancellationRequestService implements TestCancellationRequestServiceIn
                 "patientGender" => $first->stock_journal_entry->stock_journal->voucher->voucher_patient->patient->gender,
                 "patientContact" => $first->stock_journal_entry->stock_journal->voucher->voucher_patient->patient->contact_no,
                 "agentName" => $first->stock_journal_entry->stock_journal->voucher->voucher_patient->agent->name,
-                "physicianName" => $first->stock_journal_entry->stock_journal->voucher->voucher_patient->physician->name
+                "physicianName" => $first->stock_journal_entry->stock_journal->voucher->voucher_patient->physician->name,
             ];
         })->values();
         return response()->json([

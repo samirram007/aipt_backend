@@ -105,4 +105,13 @@ class TestBookingController extends Controller
             'message' => $result ? 'TestBooking deleted successfully' : 'TestBooking not found',
         ]);
     }
+
+
+    // payment processing business logics
+
+    public function get_voucher_by_id(int $id): SuccessResource
+    {
+        $data = $this->service->get_voucher_by_id($id);
+        return new TestBookingResource($data);
+    }
 }

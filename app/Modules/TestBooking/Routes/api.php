@@ -3,6 +3,9 @@
 use Illuminate\Support\Facades\Route;
 use App\Modules\TestBooking\Controllers\Api\TestBookingController;
 
+# for payment procedings
+Route::get('test_booking/get-payment-detail/{id}', [TestBookingController::class, 'get_voucher_by_id'])->middleware(['jwt.cookies']);
+
 Route::post('test_booking/{id}/test-cancel-request', [TestBookingController::class, 'test_cancellation'])->middleware(['jwt.cookies']);
 Route::post('test_booking/{id}/test-refund-request', [TestBookingController::class, 'test_refund_request'])->middleware(['jwt.cookies']);
 Route::post('test_booking/test-refund-confirm', [TestBookingController::class, 'test_refund_confirm'])->middleware(['jwt.cookies']);

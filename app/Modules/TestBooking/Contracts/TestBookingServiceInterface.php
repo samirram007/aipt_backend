@@ -19,4 +19,7 @@ interface TestBookingServiceInterface
     public function test_cancellation(array $data, int $id): bool;
     public function test_refund_request(array $data, int $id): bool;
     public function test_refund_confirm(array $data): TestBooking;
+
+    // payment processing
+    public function get_voucher_by_id(int $id): TestBooking;
 }

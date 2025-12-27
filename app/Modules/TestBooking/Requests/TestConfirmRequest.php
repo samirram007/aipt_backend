@@ -15,6 +15,7 @@ class TestConfirmRequest extends FormRequest
     {
         $rules = [
             'voucher_id' => ['required', 'numeric', 'exists:vouchers,id'],
+            'voucher_type_id' => ['required', 'numeric', 'exists:voucher_types,id'],
             'amount' => ['required', 'numeric'],
             'patient_id' => ['required', 'numeric', 'exists:patients,id'],
             "payment_mode" => ['required', 'numeric', 'exists:account_ledgers,id'],
