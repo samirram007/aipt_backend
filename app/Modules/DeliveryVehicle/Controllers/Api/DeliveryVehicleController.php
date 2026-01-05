@@ -16,10 +16,13 @@ class DeliveryVehicleController extends Controller
 {
     use ApiResponseTrait;
 
-    public function __construct(protected DeliveryVehicleServiceInterface $service) {}
+    public function __construct(protected DeliveryVehicleServiceInterface $service)
+    {
+    }
 
     public function index(): SuccessCollection
     {
+        // dd('called');
         $data = $this->service->getAll();
         return new DeliveryVehicleCollection($data);
     }
@@ -27,29 +30,29 @@ class DeliveryVehicleController extends Controller
     public function show(int $id): SuccessResource
     {
         $data = $this->service->getById($id);
-        return  new DeliveryVehicleResource($data);
+        return new DeliveryVehicleResource($data);
     }
 
     public function store(DeliveryVehicleRequest $request): SuccessResource
     {
         $data = $this->service->store($request->validated());
-       return  new DeliveryVehicleResource($data, $messages='DeliveryVehicle created successfully');
+        return new DeliveryVehicleResource($data, $messages = 'DeliveryVehicle created successfully');
     }
 
     public function update(DeliveryVehicleRequest $request, int $id): SuccessResource
     {
         $data = $this->service->update($request->validated(), $id);
-        return  new DeliveryVehicleResource($data, $messages='DeliveryVehicle updated successfully');
+        return new DeliveryVehicleResource($data, $messages = 'DeliveryVehicle updated successfully');
     }
 
-        public function destroy(int $id): JsonResponse
+    public function destroy(int $id): JsonResponse
     {
 
-        $result=$this->service->delete($id);
+        $result = $this->service->delete($id);
         return new JsonResponse([
             'status' => $result,
             'code' => 204,
-            'message' => $result?'DeliveryVehicle deleted successfully':'DeliveryVehicle not found',
+            'message' => $result ? 'DeliveryVehicle deleted successfully' : 'DeliveryVehicle not found',
         ]);
     }
 }

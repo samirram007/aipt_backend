@@ -117,6 +117,14 @@ class AuthController extends Controller
 
         return response()->json(['message' => 'Logged out'])->withCookie($cookie);
     }
+    public function clean_logout(): JsonResponse
+    {
+
+        // $this->authService->logout();
+        $cookie = cookie('token', '', -1, '/', $this->domain, true, true);
+
+        return response()->json(['message' => 'Logged out'])->withCookie($cookie);
+    }
 
 
 
