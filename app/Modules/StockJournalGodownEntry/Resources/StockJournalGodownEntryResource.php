@@ -2,6 +2,7 @@
 
 namespace App\Modules\StockJournalGodownEntry\Resources;
 
+use App\Modules\Godown\Resources\GodownResource;
 use Illuminate\Http\Request;
 
 use App\Http\Resources\SuccessResource;
@@ -25,6 +26,7 @@ class StockJournalGodownEntryResource extends SuccessResource
             'amount' => $this->amount,
             'movementType' => $this->movement_type,
             'remarks' => $this->remarks,
+            'godown' => GodownResource::make($this->whenLoaded('godown')),
             'createdAt' => $this->created_at?->toISOString(),
             'updatedAt' => $this->updated_at?->toISOString(),
 

@@ -28,7 +28,7 @@ class VoucherService implements VoucherServiceInterface
         'stock_journal.stock_journal_entries.stock_item.stock_unit',
         'stock_journal.stock_journal_entries.stock_item.alternate_stock_unit',
         'stock_journal.stock_journal_entries.alternate_unit',
-        'stock_journal.stock_journal_entries.stock_journal_godown_entries',
+        'stock_journal.stock_journal_entries.stock_journal_godown_entries.godown',
         'voucher_party.state',
         'voucher_party.country',
         'voucher_dispatch_detail',
@@ -120,13 +120,26 @@ class VoucherService implements VoucherServiceInterface
                 }
             }
             $SANITIZED_DATA = [];
+            // foreach ($data as $key => $value) {
+            //     if (in_array($key, Voucher::getFillable(), true)) {
+            //         $SANITIZED_DATA[$key] = $value;
+            //     }
+            // }
+            // $voucher = Voucher::create($SANITIZED_DATA);
+
+
+            //Avhisek Shaw Approach Start
+            $voucherModel = new Voucher();
+
             foreach ($data as $key => $value) {
-                if (in_array($key, Voucher::getFillable(), true)) {
+                if (in_array($key, $voucherModel->getFillable(), true)) {
                     $SANITIZED_DATA[$key] = $value;
                 }
             }
+
             $voucher = Voucher::create($SANITIZED_DATA);
 
+            //Avhisek Shaw Approach End
             // dd($data['voucher_entries']);
 
             if (!empty($data['voucher_entries'])) {

@@ -98,8 +98,8 @@ class AuthService implements AuthServiceInterface
         if (!$user) {
             throw new AuthenticationException('Unauthenticated.');
         }
-
-        return $user->load('roles', 'user_fiscal_year.fiscal_year');
+        // dd($user->load('roles.permissions')->toArray());
+        return $user->load('roles.permissions.feature', 'user_fiscal_year.fiscal_year');
     }
 
 }

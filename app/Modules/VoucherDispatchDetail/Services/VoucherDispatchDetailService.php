@@ -5,10 +5,11 @@ namespace App\Modules\VoucherDispatchDetail\Services;
 use App\Modules\VoucherDispatchDetail\Contracts\VoucherDispatchDetailServiceInterface;
 use App\Modules\VoucherDispatchDetail\Models\VoucherDispatchDetail;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Support\Facades\Log;
 
 class VoucherDispatchDetailService implements VoucherDispatchDetailServiceInterface
 {
-    protected $resource=[];
+    protected $resource = [];
 
     public function getAll(): Collection
     {
@@ -22,6 +23,17 @@ class VoucherDispatchDetailService implements VoucherDispatchDetailServiceInterf
 
     public function store(array $data): VoucherDispatchDetail
     {
+        if ($data['voucher_id']) {
+            //ensure only one dispatch detail per voucher
+            Log::info("Checking existing dispatch detail for voucher ID {$data['voucher_id']}");
+            $existing = VoucherDispatchDetail::where('voucher_id', $data['voucher_id'])->first();
+            if ($existing) {
+                $existing->update($data);
+                return $existing->fresh();
+                // throw new \Exception("Dispatch detail for voucher ID {$data['voucher_id']} already exists.");
+            }
+        }
+        Log::info("Creating dispatch detail for voucher ID {$data['voucher_id']}");
         return VoucherDispatchDetail::create($data);
     }
 

@@ -8,10 +8,11 @@ use Illuminate\Database\Eloquent\Collection;
 
 class DeliveryVehicleService implements DeliveryVehicleServiceInterface
 {
-    protected $resource=[];
+    protected $resource = ['transporter'];
 
     public function getAll(): Collection
     {
+        // dd('calledtttt');
         return DeliveryVehicle::with($this->resource)->get();
     }
 

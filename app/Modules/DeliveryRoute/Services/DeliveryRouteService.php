@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Collection;
 
 class DeliveryRouteService implements DeliveryRouteServiceInterface
 {
-    protected $resource = ['source_place', 'destination_place'];
+    protected $resource = ['source_place', 'destination_place', 'transporter', 'rate_unit'];
 
     public function getAll(): Collection
     {

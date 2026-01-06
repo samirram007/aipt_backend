@@ -2,6 +2,8 @@
 
 namespace App\Modules\UserRole\Resources;
 
+use App\Modules\Role\Resources\RoleResource;
+use App\Modules\User\Resources\UserResource;
 use Illuminate\Http\Request;
 
 use App\Http\Resources\SuccessResource;
@@ -11,9 +13,10 @@ class UserRoleResource extends SuccessResource
     {
         return [
             'id' => $this->id,
-            'name' => $this->name,
-            'created_at' => $this->created_at?->toISOString(),
-            'updated_at' => $this->updated_at?->toISOString(),
+            'userId' => $this->user_id,
+            'roleId' => $this->role_id,
+            'user' => UserResource::make($this->whenLoaded('user')),
+            'role' => RoleResource::make($this->whenLoaded('role')),
         ];
     }
 }

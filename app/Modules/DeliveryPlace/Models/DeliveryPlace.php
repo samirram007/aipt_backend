@@ -31,6 +31,14 @@ class DeliveryPlace extends Model
         'status'
     ];
 
+    //order by name ascending
+    protected static function booted()
+    {
+        static::addGlobalScope('order', function ($query) {
+            $query->orderBy('name', 'asc');
+        });
+    }
+
     public function address(): MorphOne
     {
         return $this->morphOne(Address::class, 'addressable');
