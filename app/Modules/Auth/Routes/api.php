@@ -16,6 +16,7 @@ Route::group(['prefix' => 'auth'], function ($router) {
         ]);
     });
     Route::post('/clean_logout', [AuthController::class, 'clean_logout']);
+    Route::get('/clean_logout', [AuthController::class, 'clean_logout']);
     // Social
     Route::get('/{provider}', [AuthController::class, 'socialRedirect'])
         ->where('provider', 'google|github');
