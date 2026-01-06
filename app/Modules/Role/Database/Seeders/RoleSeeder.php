@@ -52,6 +52,18 @@ class RoleSeeder extends Seeder
                 'code' => 'AGENT',
                 'status' => 'active',
             ],
+            [
+                'id' => 10007,
+                'name' => 'Doctor General',
+                'code' => 'DOCTOR_GENERAL',
+                'status' => 'active',
+            ],
+            [
+                'id' => 10008,
+                'name' => 'Doctor Specialist',
+                'code' => 'DOCTOR_SPECIALIST',
+                'status' => 'active',
+            ],
         ];
 
         foreach ($roles as $role) {

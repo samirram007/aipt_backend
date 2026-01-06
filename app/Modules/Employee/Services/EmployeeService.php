@@ -33,7 +33,7 @@ class EmployeeService implements EmployeeServiceInterface
 
         $employee = Employee::create($data);
         // dd($data);
-        if ($data['address']) {
+        if (!empty($data['address'])) {
 
             $data['address']['address_type'] = 'office';
             $data['address']['addressable_type'] = 'employee';

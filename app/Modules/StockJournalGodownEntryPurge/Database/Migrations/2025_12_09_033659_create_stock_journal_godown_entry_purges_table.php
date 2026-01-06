@@ -16,7 +16,7 @@ return new class extends Migration {
 
             // $table->foreign('stock_journal_godown_entry_id')->references('id')->on('stock_journal_godown_entries')->onDelete('cascade');
             // $table->foreign('purged_by')->references('id')->on('users')->onDelete('set null');
-            $table->index('stock_journal_godown_entry_id');
+            // $table->index('stock_journal_godown_entry_id');
             $table->index('purged_by');
         });
     }

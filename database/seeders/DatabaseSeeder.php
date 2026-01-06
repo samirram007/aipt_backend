@@ -55,7 +55,8 @@ use App\Modules\VoucherClassification\Models\VoucherClassification;
 use App\Modules\VoucherCategory\Database\Seeders\VoucherCategorySeeder;
 use App\Modules\UniqueQuantityCode\Database\Seeders\UniqueQuantityCodeSeeder;
 use App\Modules\VoucherClassification\Database\Seeders\VoucherClassificationSeeder;
-
+use App\Modules\Patient\Database\Seeders\PatientSeeder;
+use App\Modules\Doctor\Database\Seeders\DoctorSeeder;
 
 class DatabaseSeeder extends Seeder
 {
@@ -90,6 +91,8 @@ class DatabaseSeeder extends Seeder
             VoucherTypeSeeder::class,
             VoucherClassificationSeeder::class,
 
+            DoctorSeeder::class,
+
             UniqueQuantityCodeSeeder::class,
             StockUnitSeeder::class,
             StockGroupSeeder::class,
@@ -101,6 +104,8 @@ class DatabaseSeeder extends Seeder
             DepartmentSeeder::class,
             DesignationSeeder::class,
             GradeSeeder::class,
+            PatientSeeder::class,
+
                 // ShiftSeeder::class,
 
                 // VoucherSeeder::class,

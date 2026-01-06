@@ -31,9 +31,9 @@ return new class extends Migration {
      */
     public function down(): void
     {
-        Schema::table('account_ledgers', function (Blueprint $table) {
-            $table->dropForeign(['account_group_id']);
-        });
+        // Schema::table('account_ledgers', function (Blueprint $table) {
+        //     $table->dropForeign(['account_group_id']);
+        // });
         Schema::dropIfExists('account_ledgers');
     }
 };
