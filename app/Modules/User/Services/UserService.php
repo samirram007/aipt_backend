@@ -9,10 +9,13 @@ use Illuminate\Support\Str;
 
 class UserService implements UserServiceInterface
 {
-    protected $resources = [];
+    protected $resources = ['roles'];
     public function getAll(): Collection
     {
-        return User::all();
+        // return User::all();
+        // return User::with('user_roles')->get();
+        return User::with($this->resources)->get();
+
     }
 
     public function getById(int $id): User

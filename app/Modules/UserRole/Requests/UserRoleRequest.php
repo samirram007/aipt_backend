@@ -14,10 +14,8 @@ class UserRoleRequest extends FormRequest
     public function rules(): array
     {
         $rules = [
-            'name' => ['required', 'string', 'max:255','unique:user_roles,name'],
-            'code' => ['sometimes','required', 'string', 'max:255','unique:user_roles,code'],
-            'description' => ['sometimes','required', 'string', 'max:255'],
-            'status' => ['sometimes','required', 'string', 'max:255'],
+            'user_id' => ['required', 'integer', 'exists:users,id'],
+            'role_id' => ['required', 'integer', 'exists:roles,id'],
         ];
 
         // For update requests, make validation more flexible

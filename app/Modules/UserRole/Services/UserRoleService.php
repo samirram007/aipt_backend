@@ -20,10 +20,16 @@ class UserRoleService implements UserRoleServiceInterface
         return UserRole::with($this->resource)->findOrFail($id);
     }
 
-    public function store(array $data): UserRole
+    public function store(array $data): UserRole | bool
     {
+        $exists = UserRole::where('user_id', $data['user_id'])->where('role_id', $data['role_id'])->first();
+        if($exists){
+             $exists->delete();
+            return $exists;
+        }
         return UserRole::create($data);
     }
+
 
     public function update(array $data, int $id): UserRole
     {
