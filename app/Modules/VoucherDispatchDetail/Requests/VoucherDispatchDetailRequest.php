@@ -23,6 +23,8 @@ class VoucherDispatchDetailRequest extends FormRequest
             'dispatched_through' => ['sometimes', 'nullable', 'string', 'max:255'],
             'source' => ['sometimes', 'nullable', 'string', 'max:255'],
             'destination' => ['sometimes', 'nullable', 'string', 'max:255'],
+            'destination_secondary' => ['sometimes', 'nullable', 'string', 'max:255'],
+            'billing_preference' => ['sometimes', 'nullable', 'string', 'max:255'],
             'carrier_name' => ['sometimes', 'nullable', 'string', 'max:255'],
             'bill_of_lading_no' => ['sometimes', 'nullable', 'string', 'max:255'],
             'bill_of_lading_date' => ['sometimes', 'nullable', 'date'],

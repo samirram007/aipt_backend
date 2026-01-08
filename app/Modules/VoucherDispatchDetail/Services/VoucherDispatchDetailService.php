@@ -25,7 +25,7 @@ class VoucherDispatchDetailService implements VoucherDispatchDetailServiceInterf
     {
         if ($data['voucher_id']) {
             //ensure only one dispatch detail per voucher
-            Log::info("Checking existing dispatch detail for voucher ID {$data['voucher_id']}");
+            // Log::info("Checking existing dispatch detail for voucher ID {$data['voucher_id']}");
             $existing = VoucherDispatchDetail::where('voucher_id', $data['voucher_id'])->first();
             if ($existing) {
                 $existing->update($data);
@@ -33,7 +33,7 @@ class VoucherDispatchDetailService implements VoucherDispatchDetailServiceInterf
                 // throw new \Exception("Dispatch detail for voucher ID {$data['voucher_id']} already exists.");
             }
         }
-        Log::info("Creating dispatch detail for voucher ID {$data['voucher_id']}");
+        // Log::info("Creating dispatch detail for voucher ID {$data['voucher_id']}");
         return VoucherDispatchDetail::create($data);
     }
 
