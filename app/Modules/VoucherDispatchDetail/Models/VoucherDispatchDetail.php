@@ -25,6 +25,8 @@ class VoucherDispatchDetail extends Model
         'dispatched_through',
         'source',
         'destination',
+        'destination_secondary',
+        'billing_preference',
         'carrier_name',
         'bill_of_lading_no',
         'bill_of_lading_date',
