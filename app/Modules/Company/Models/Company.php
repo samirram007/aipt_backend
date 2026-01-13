@@ -26,6 +26,7 @@ class Company extends Model
         'phone_no',
         'mobile_no',
         'email',
+        'mailing_name',
         'website',
         'cin_no',
         'tin_no',

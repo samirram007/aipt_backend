@@ -12,6 +12,10 @@ class TreatmentMasterResource extends SuccessResource
         return [
             'id' => $this->id,
             'name' => $this->name,
+            'code' => $this->code,
+            'description' => $this->description,
+            'defaultCost' => $this->default_cost,
+            'status' => $this->status,
             'created_at' => $this->created_at?->toISOString(),
             'updated_at' => $this->updated_at?->toISOString(),
         ];

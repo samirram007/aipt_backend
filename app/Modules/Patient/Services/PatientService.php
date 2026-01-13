@@ -8,10 +8,11 @@ use Illuminate\Database\Eloquent\Collection;
 
 class PatientService implements PatientServiceInterface
 {
-    protected $resource=[];
+    protected $resource=['address'];
 
     public function getAll(): Collection
     {
+        // return Patient::get();
         return Patient::with($this->resource)->get();
     }
 
@@ -22,7 +23,18 @@ class PatientService implements PatientServiceInterface
 
     public function store(array $data): Patient
     {
-        return Patient::create($data);
+        // dd($data['address']);
+        $patient =  Patient::create($data);
+        if (!empty($data['address'])) {
+
+            $data['address']['address_type'] = 'home';
+            $data['address']['addressable_type'] = 'patient';
+            $data['address']['addressable_id'] = $patient->id;
+
+            $patient->address()->create($data['address']);
+        }
+
+         return $patient->load($this->resource);
     }
 
     public function update(array $data, int $id): Patient

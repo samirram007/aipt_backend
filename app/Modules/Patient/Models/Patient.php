@@ -4,7 +4,8 @@ namespace App\Modules\Patient\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-
+use App\Modules\Address\Models\Address;
+use Illuminate\Database\Eloquent\Relations\MorphOne;
 class Patient extends Model
 {
     use HasFactory;
@@ -19,7 +20,8 @@ class Patient extends Model
         'dob',
         'status',
         'contact_no',
-        'image'
+        'image',
+        'blood_group'
 
     ];
 
@@ -28,6 +30,12 @@ class Patient extends Model
         'created_at' => 'datetime',
         'updated_at' => 'datetime',
     ];
+
+    public function address(): MorphOne
+    {
+        return $this->morphOne(Address::class, 'addressable');
+    }
+
 
      protected static function boot()
     {

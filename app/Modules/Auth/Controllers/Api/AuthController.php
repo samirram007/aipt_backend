@@ -171,7 +171,6 @@ class AuthController extends Controller
             true,
             'None'
         );
-
         return response()->json([
             // 'token' => $token,
             'status' => 'success',

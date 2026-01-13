@@ -38,6 +38,7 @@ class CompanyRequest extends FormRequest
     {
         $rules = [
             'name' => ['required', 'string', 'max:255', 'unique:companies,name'],
+            'code' => ['sometimes', 'nullable', 'string', 'max:255'],
             'address' => ['sometimes', 'nullable', 'string', 'max:255'],
             'mailing_name' => ['sometimes', 'nullable', 'string', 'max:255'],
             'phone_no' => ['sometimes', 'nullable', 'string', 'max:255'],
@@ -51,9 +52,9 @@ class CompanyRequest extends FormRequest
             'gst_no' => ['sometimes', 'nullable', 'string', 'max:255'],
             'pan_no' => ['sometimes', 'nullable', 'string', 'max:255'],
             'logo' => ['sometimes', 'nullable', 'string', 'max:255'],
-            'currency_id' => ['sometimes', 'nullable', 'number', 'exists:currencies,id'],
-            'country_id' => ['sometimes', 'nullable', 'number', 'exists:countries,id'],
-            'state_id' => ['sometimes', 'nullable', 'number', 'exists:states,id'],
+            'currency_id' => ['sometimes', 'nullable',  'exists:currencies,id'],
+            'country_id' => ['sometimes', 'nullable', 'exists:countries,id'],
+            'state_id' => ['sometimes', 'nullable', 'exists:states,id'],
             'city' => ['sometimes', 'nullable', 'string', 'max:255'],
             'zip_code' => ['sometimes', 'nullable', 'string', 'max:255'],
             'status' => ['nullable', 'string', 'max:255'],

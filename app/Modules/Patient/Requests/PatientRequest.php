@@ -3,6 +3,7 @@
 namespace App\Modules\Patient\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use App\Modules\Address\Requests\AddressRequest;
 
 class PatientRequest extends FormRequest
 {
@@ -19,10 +20,15 @@ class PatientRequest extends FormRequest
             'email' => ['sometimes', 'nullable', 'email', 'max:255'],
             'gender' => ['sometimes', 'nullable', 'in:male,female,other'],
             'dob' => ['sometimes', 'nullable', 'date'],
+            'blood_group' => ['sometimes', 'nullable', 'in:A+,A-,B+,B-,AB+,AB-,O+,O-'],
             'image' => ['sometimes', 'nullable', 'string', 'max:255'],
             'contact_no' => ['sometimes', 'nullable', 'string', 'max:255'],
             'status' => ['sometimes', 'required', 'string', 'max:255'],
         ];
+
+        $addressRules = collect((new AddressRequest())->rules())
+            ->mapWithKeys(fn($rule, $key) => ["address.$key" => $rule])
+            ->toArray();
 
         // For update requests, make validation more flexible
         if ($this->isMethod('PUT') || $this->isMethod('PATCH')) {
@@ -32,7 +38,7 @@ class PatientRequest extends FormRequest
 
         }
 
-        return $rules;
+        return array_merge($rules, $addressRules);
     }
 
     public function messages(): array

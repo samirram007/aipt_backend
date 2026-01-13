@@ -12,7 +12,7 @@ use App\Modules\Supplier\Models\Supplier;
 use App\Modules\Transporter\Models\Transporter;
 use App\Modules\Vendor\Models\Vendor;
 use App\Modules\Doctor\Models\Doctor;
-
+use App\Modules\Patient\Models\Patient;
 use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Support\ServiceProvider;
 
@@ -41,7 +41,8 @@ class AppServiceProvider extends ServiceProvider
             'transporter' => Transporter::class,
             'vendor' => Vendor::class,
             'delivery_place' => DeliveryPlace::class,
-            'doctor' => Doctor::class
+            'doctor' => Doctor::class,
+            'patient' => Patient::class
         ]);
     }
 }

@@ -12,6 +12,7 @@ return new class extends Migration
             $table->id();
             $table->uuid('patient_id');
             $table->string('name');
+            $table->enum('blood_group', ['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-'])->nullable();
             $table->string('email')->nullable();
             $table->enum('gender', ['male', 'female', 'other'])->nullable();
             $table->date('dob')->nullable();

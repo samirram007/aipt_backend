@@ -120,12 +120,7 @@ class VoucherService implements VoucherServiceInterface
                 }
             }
             $SANITIZED_DATA = [];
-            // foreach ($data as $key => $value) {
-            //     if (in_array($key, Voucher::getFillable(), true)) {
-            //         $SANITIZED_DATA[$key] = $value;
-            //     }
-            // }
-            // $voucher = Voucher::create($SANITIZED_DATA);
+
 
 
             //Avhisek Shaw Approach Start

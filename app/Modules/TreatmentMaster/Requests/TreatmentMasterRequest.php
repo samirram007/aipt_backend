@@ -17,6 +17,7 @@ class TreatmentMasterRequest extends FormRequest
             'name' => ['required', 'string', 'max:255','unique:treatment_masters,name'],
             'code' => ['sometimes','required', 'string', 'max:255','unique:treatment_masters,code'],
             'description' => ['sometimes','required', 'string', 'max:255'],
+            'default_cost' => ['required'],
             'status' => ['sometimes','required', 'string', 'max:255'],
         ];
 
