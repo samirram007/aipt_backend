@@ -50,6 +50,14 @@ use App\Modules\VoucherType\Database\Seeders\VoucherTypeSeeder;
 use App\Modules\AccountGroup\Database\Seeders\AccountGroupSeeder;
 use App\Modules\AccountLedger\Database\Seeders\AccountLedgerSeeder;
 use App\Modules\AccountNature\Database\Seeders\AccountNatureSeeder;
+use App\Modules\Amenity\Database\Seeders\AmenitySeeder;
+use App\Modules\AmenityCategory\Database\Seeders\AmenityCategorySeeder;
+use App\Modules\Bed\Database\Seeders\BedSeeder;
+use App\Modules\Building\Database\Seeders\BuildingSeeder;
+use App\Modules\Facility\Database\Seeders\FacilitySeeder;
+use App\Modules\FacilityAmenity\Database\Seeders\FacilityAmenitySeeder;
+use App\Modules\Floor\Database\Seeders\FloorSeeder;
+use App\Modules\Room\Database\Seeders\RoomSeeder;
 use App\Modules\StockCategory\Database\Seeders\StockCategorySeeder;
 use App\Modules\VoucherClassification\Models\VoucherClassification;
 use App\Modules\VoucherCategory\Database\Seeders\VoucherCategorySeeder;
@@ -80,11 +88,11 @@ class DatabaseSeeder extends Seeder
             StateSeeder::class,
             SampleDataSeeder::class,
             AccountNatureSeeder::class,
-                // AccountGroupSeeder::class,
-                // AccountLedgerSeeder::class,
+            // AccountGroupSeeder::class,
+            // AccountLedgerSeeder::class,
             CompanyTypeSeeder::class,
             FiscalYearSeeder::class,
-                // CompanySeeder::class,
+            // CompanySeeder::class,
 
             VoucherCategorySeeder::class,
             VoucherTypeSeeder::class,
@@ -96,15 +104,15 @@ class DatabaseSeeder extends Seeder
             StockCategorySeeder::class,
 
             StockItemSeeder::class,
-                // PurchaseSeeder::class
+            // PurchaseSeeder::class
             GodownSeeder::class,
             DepartmentSeeder::class,
             DesignationSeeder::class,
             GradeSeeder::class,
-                // ShiftSeeder::class,
+            // ShiftSeeder::class,
 
-                // VoucherSeeder::class,
-                // VoucherEntrySeeder::class,
+            // VoucherSeeder::class,
+            // VoucherEntrySeeder::class,
 
             EmployeeGroupSeeder::class,
             SupplierSeeder::class,
@@ -112,6 +120,15 @@ class DatabaseSeeder extends Seeder
             UserFiscalYearSeeder::class,
             // VoucherDemoSeeder::class,
             // ReceiptNoteSeeder::class,
+
+            FacilitySeeder::class,
+            // AmenitySeeder::class,
+            // RoomSeeder::class,
+            // BedSeeder::class,
+            // FloorSeeder::class,
+            // BuildingSeeder::class,
+            // AmenityCategorySeeder::class,
+            FacilityAmenitySeeder::class
 
 
         ]);

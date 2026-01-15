@@ -3,11 +3,15 @@
 namespace App\Providers;
 
 use App\Modules\Agent\Models\Agent;
+use App\Modules\Bed\Models\Bed;
+use App\Modules\Building\Models\Building;
 use App\Modules\Customer\Models\Customer;
 use App\Modules\DeliveryPlace\Models\DeliveryPlace;
 use App\Modules\Distributor\Models\Distributor;
 use App\Modules\Employee\Models\Employee;
+use App\Modules\Floor\Models\Floor;
 use App\Modules\Godown\Models\Godown;
+use App\Modules\Room\Models\Room;
 use App\Modules\Supplier\Models\Supplier;
 use App\Modules\Transporter\Models\Transporter;
 use App\Modules\Vendor\Models\Vendor;
@@ -20,10 +24,7 @@ class AppServiceProvider extends ServiceProvider
     /**
      * Register any application services.
      */
-    public function register(): void
-    {
-
-    }
+    public function register(): void {}
 
     /**
      * Bootstrap any application services.
@@ -40,6 +41,10 @@ class AppServiceProvider extends ServiceProvider
             'transporter' => Transporter::class,
             'vendor' => Vendor::class,
             'delivery_place' => DeliveryPlace::class,
+            'room' => Room::class,
+            'bed' => Bed::class,
+            'floor' => Floor::class,
+            'building' => Building::class
         ]);
     }
 }
