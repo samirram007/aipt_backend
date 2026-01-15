@@ -96,6 +96,18 @@ class VoucherService implements VoucherServiceInterface
         try {
             //code...
 
+             if (isset($data['stock_journal']) && !empty($data['stock_journal'])) {
+                $stock_journal = $data['stock_journal'];
+                $rules = (new StockJournalRequest())->rules();
+                $validatedStockJournal = Validator::make($stock_journal, $rules)->validate();
+                if (!empty($validatedStockJournal)) {
+
+                    $stockJournal = $this->stockJournalService->store($validatedStockJournal);
+                    //dd("VoucherLevel", $stockJournal);
+                    $data['stock_journal_id'] = $stockJournal->id ?? null;
+                }
+            }
+
             if (!isset($data['voucher_no']) || empty($data['voucher_no']) || $data['voucher_no'] === 'new') {
                 // $voucher_type = Voucher::where('voucher_type_id', $data['voucher_type_id'])->first();
 
@@ -108,17 +120,7 @@ class VoucherService implements VoucherServiceInterface
                 $data['voucher_no'] = $voucher_no;
             }
 
-            if (isset($data['stock_journal']) && !empty($data['stock_journal'])) {
-                $stock_journal = $data['stock_journal'];
-                $rules = (new StockJournalRequest())->rules();
-                $validatedStockJournal = Validator::make($stock_journal, $rules)->validate();
-                if (!empty($validatedStockJournal)) {
 
-                    $stockJournal = $this->stockJournalService->store($validatedStockJournal);
-                    //dd("VoucherLevel", $stockJournal);
-                    $data['stock_journal_id'] = $stockJournal->id ?? null;
-                }
-            }
             $SANITIZED_DATA = [];
 
 

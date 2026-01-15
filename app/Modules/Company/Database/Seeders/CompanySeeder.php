@@ -9,11 +9,10 @@ class CompanySeeder extends Seeder
 {
     public function run(): void
     {
-        Company::create([
+        $company = Company::create([
             'name' => 'Sharma Hardware',
             'code' => 'C001',
             'mailing_name' => 'Sharma Hardware',
-            'address' => 'N.H.-34, MangalBari, Malda',
             'phone_no' => '03512-260342',
             'mobile_no' => '9805595288',
             'email' => 'sharma_hardware@gmail.com',
@@ -26,14 +25,26 @@ class CompanySeeder extends Seeder
             'pan_no' => '1234567890',
             'logo' => 'logo.png',
             'currency_id' => 1,
-            'country_id' => 76,
-            'state_id' => 36,
-            'city' => ' Malda',
-            'zip_code' => '732142',
             'status' => 'active',
         ]);
 
-        // Uncomment to use factory if available
-        // Company::factory()->count(10)->create();
+        // Nested Address JSON
+        $company->address()->create([
+            'line1' => 'N.H.-34',
+            'line2' => 'MangalBari',
+            'landmark' => 'Near Bus Stand',
+            'post_office' => 'Mangalbari',
+            'district' => 'Malda',
+            'city' => 'Malda',
+            'state_id' => 36,
+            'country_id' => 76,
+            'postal_code' => '732142',
+            'latitude' => null,
+            'longitude' => null,
+            'addressable_type' => 'company',
+            'addressable_id' => $company->id,
+            'address_type' => 'company',
+            'is_primary' => 1,
+        ]);
     }
 }

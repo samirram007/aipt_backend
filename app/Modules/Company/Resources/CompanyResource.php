@@ -8,6 +8,7 @@ use App\Modules\Country\Resources\CountryResource;
 use App\Modules\Currency\Resources\CurrencyResource;
 use App\Modules\FiscalYear\Resources\FiscalYearCollection;
 use App\Modules\FiscalYear\Resources\FiscalYearResource;
+use App\Modules\Address\Resources\AddressResource;
 use App\Modules\State\Resources\StateResource;
 use Illuminate\Http\Request;
 
@@ -59,19 +60,12 @@ class CompanyResource extends SuccessResource
             'currencyId' => $this->currency_id,
             'currency' => new CurrencyResource($this->whenLoaded('currency')),
 
-            'countryId' => $this->country_id,
-            'country' => new CountryResource($this->whenLoaded('country')),
-
-            'stateId' => $this->state_id,
-            'state' => new StateResource($this->whenLoaded('state')),
-            'city' => $this->city,
-            'zipCode' => $this->zip_code,
             'status' => $this->status,
             'isGroupCompany' => $this->is_group_company,
             'companyTypeId' => $this->company_type_id,
             'companyType' => new CompanyTypeResource($this->whenLoaded('company_type')),
             'fiscalYears' => new FiscalYearCollection($this->whenLoaded('fiscal_years')),
-
+            'address' => AddressResource::make($this->whenLoaded('address')),
         ];
     }
 }

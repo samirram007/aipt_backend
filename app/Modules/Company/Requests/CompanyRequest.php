@@ -2,6 +2,8 @@
 
 namespace App\Modules\Company\Requests;
 
+
+use App\Modules\Address\Requests\AddressRequest;
 use Illuminate\Foundation\Http\FormRequest;
 
 /**
@@ -39,7 +41,6 @@ class CompanyRequest extends FormRequest
         $rules = [
             'name' => ['required', 'string', 'max:255', 'unique:companies,name'],
             'code' => ['sometimes', 'nullable', 'string', 'max:255'],
-            'address' => ['sometimes', 'nullable', 'string', 'max:255'],
             'mailing_name' => ['sometimes', 'nullable', 'string', 'max:255'],
             'phone_no' => ['sometimes', 'nullable', 'string', 'max:255'],
             'mobile_no' => ['sometimes', 'nullable', 'string', 'max:255'],
@@ -53,14 +54,14 @@ class CompanyRequest extends FormRequest
             'pan_no' => ['sometimes', 'nullable', 'string', 'max:255'],
             'logo' => ['sometimes', 'nullable', 'string', 'max:255'],
             'currency_id' => ['sometimes', 'nullable',  'exists:currencies,id'],
-            'country_id' => ['sometimes', 'nullable', 'exists:countries,id'],
-            'state_id' => ['sometimes', 'nullable', 'exists:states,id'],
-            'city' => ['sometimes', 'nullable', 'string', 'max:255'],
-            'zip_code' => ['sometimes', 'nullable', 'string', 'max:255'],
             'status' => ['nullable', 'string', 'max:255'],
             'is_group_company' => ['sometimes', 'nullable', 'boolean'],
             'children' => ['nullable', 'string']
         ];
+
+        $addressRules = collect((new AddressRequest())->rules())
+            ->mapWithKeys(fn($rule, $key) => ["address.$key" => $rule])
+            ->toArray();
 
         // For update requests, make validation more flexible
         if ($this->isMethod('PUT') || $this->isMethod('PATCH')) {
@@ -68,8 +69,7 @@ class CompanyRequest extends FormRequest
             $rules['name'] = ['sometimes', 'required', 'string', 'max:255', 'unique:companies,name,' . $id];
 
         }
-
-        return $rules;
+        return array_merge($rules, $addressRules);
     }
 
     public function messages(): array
