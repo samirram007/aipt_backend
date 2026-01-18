@@ -46,4 +46,11 @@ class StockJournalGodownEntryService implements StockJournalGodownEntryServiceIn
         $record = StockJournalGodownEntry::findOrFail($id);
         return $record->delete();
     }
+
+    public function getByStockJournalEntryId(int $stockJournalEntryId): Collection
+    {
+        return StockJournalGodownEntry::with($this->resource)
+            ->where('stock_journal_entry_id', $stockJournalEntryId)
+            ->get();
+    }
 }

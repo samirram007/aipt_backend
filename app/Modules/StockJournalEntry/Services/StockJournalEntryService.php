@@ -50,7 +50,42 @@ class StockJournalEntryService implements StockJournalEntryServiceInterface
     {
         $record = StockJournalEntry::findOrFail($id);
         $record->update($data);
+
+        if (!empty($data['stock_journal_godown_entries'])) {
+            $this->checkDelete($data['stock_journal_godown_entries'], $record);
+
+            $rules = (new StockJournalGodownEntryRequest())->rules();
+
+            foreach ($data['stock_journal_godown_entries'] as $godownData) {
+
+                $validatedGodownEntry = Validator::make(
+                    $godownData,
+                    $rules
+                )->validate();
+
+                if (!empty($godownData['id'])) {
+
+                    $this->stockJournalGodownEntryService->update(
+                        $validatedGodownEntry,
+                        $godownData['id']
+                    );
+
+                } else {
+                    $this->stockJournalGodownEntryService->store(
+                        $validatedGodownEntry
+                    );
+                }
+            }
+        }
+
         return $record->fresh();
+    }
+
+    public function getByStockJournalId(int $stockJournalId): Collection
+    {
+        return StockJournalEntry::with($this->resource)
+            ->where('stock_journal_id', $stockJournalId)
+            ->get();
     }
 
     public function delete(int $id): bool
@@ -58,4 +93,26 @@ class StockJournalEntryService implements StockJournalEntryServiceInterface
         $record = StockJournalEntry::findOrFail($id);
         return $record->delete();
     }
-}
+
+    private function checkDelete($data, $record){
+        $existingEntries = $this->stockJournalGodownEntryService->getByStockJournalEntryId($record->id);
+            foreach ($existingEntries as $existingEntry) {
+
+                $found = false;
+
+                foreach ($data as $entries) {
+                    if (
+                        isset($entries['id']) &&
+                        $entries['id'] == $existingEntry->id
+                    ) {
+                        $found = true;
+                        break;
+                    }
+                }
+
+                if (!$found) {
+                    $this->stockJournalGodownEntryService->delete($existingEntry->id);
+                }
+            }
+        }
+    }
