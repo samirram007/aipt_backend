@@ -95,6 +95,17 @@ class VoucherService implements VoucherServiceInterface
         DB::beginTransaction();
         try {
             //code...
+            if (isset($data['stock_journal']) && !empty($data['stock_journal'])) {
+                $stock_journal = $data['stock_journal'];
+                $rules = (new StockJournalRequest())->rules();
+                $validatedStockJournal = Validator::make($stock_journal, $rules)->validate();
+                if (!empty($validatedStockJournal)) {
+
+                    $stockJournal = $this->stockJournalService->store($validatedStockJournal);
+                    //dd("VoucherLevel", $stockJournal);
+                    $data['stock_journal_id'] = $stockJournal->id ?? null;
+                }
+            }
 
             if (!isset($data['voucher_no']) || empty($data['voucher_no']) || $data['voucher_no'] === 'new') {
                 // $voucher_type = Voucher::where('voucher_type_id', $data['voucher_type_id'])->first();
@@ -108,17 +119,7 @@ class VoucherService implements VoucherServiceInterface
                 $data['voucher_no'] = $voucher_no;
             }
 
-            if (isset($data['stock_journal']) && !empty($data['stock_journal'])) {
-                $stock_journal = $data['stock_journal'];
-                $rules = (new StockJournalRequest())->rules();
-                $validatedStockJournal = Validator::make($stock_journal, $rules)->validate();
-                if (!empty($validatedStockJournal)) {
 
-                    $stockJournal = $this->stockJournalService->store($validatedStockJournal);
-                    //dd("VoucherLevel", $stockJournal);
-                    $data['stock_journal_id'] = $stockJournal->id ?? null;
-                }
-            }
             $SANITIZED_DATA = [];
             // foreach ($data as $key => $value) {
             //     if (in_array($key, Voucher::getFillable(), true)) {
@@ -200,6 +201,48 @@ class VoucherService implements VoucherServiceInterface
             //code...
             $voucher = Voucher::findOrFail($id);
 
+
+            //Check if voucher is locked
+            if ($voucher->locked) {
+                throw new \Exception("This voucher is locked and cannot be updated.");
+            }
+
+
+            //Check if stock journal is provided
+            if (isset($data['stock_journal']) && !empty($data['stock_journal'])) {
+
+                //Check if stock journal is already assigned
+                if ($voucher->stock_journal_id) {
+                    //check if any update is requested on stock journal
+                    if (isset($data['stock_journal']['id']) && $data['stock_journal']['id'] == $voucher->stock_journal_id) {
+
+
+
+                        //Update existing stock journal
+
+
+                        $this->stockJournalService->update($data['stock_journal'], $voucher->stock_journal_id);
+                        //remove stock journal from data to avoid re-creation
+                        unset($data['stock_journal']);
+                        //Proceed with voucher update
+                        // dd("Updating existing stock journal");
+                    } else {
+                        throw new \Exception("Stock Journal is already assigned to this voucher. Cannot assign a different stock journal.");
+                    }
+
+                }
+
+                $stock_journal = $data['stock_journal'];
+                $rules = (new StockJournalRequest())->rules();
+                $validatedStockJournal = Validator::make($stock_journal, $rules)->validate();
+                if (!empty($validatedStockJournal)) {
+
+                    $stockJournal = $this->stockJournalService->store($validatedStockJournal);
+                    //dd("VoucherLevel", $stockJournal);
+                    $data['stock_journal_id'] = $stockJournal->id ?? null;
+                }
+            }
+
             if (!isset($data['voucher_no']) || empty($data['voucher_no']) || $data['voucher_no'] === 'new') {
                 // $voucher_type = Voucher::where('voucher_type_id', $data['voucher_type_id'])->first();
 
@@ -212,17 +255,7 @@ class VoucherService implements VoucherServiceInterface
                 $data['voucher_no'] = $voucher_no;
             }
 
-            if (isset($data['stock_journal']) && !empty($data['stock_journal'])) {
-                $stock_journal = $data['stock_journal'];
-                $rules = (new StockJournalRequest())->rules();
-                $validatedStockJournal = Validator::make($stock_journal, $rules)->validate();
-                if (!empty($validatedStockJournal)) {
 
-                    $stockJournal = $this->stockJournalService->store($validatedStockJournal);
-                    //dd("VoucherLevel", $stockJournal);
-                    $data['stock_journal_id'] = $stockJournal->id ?? null;
-                }
-            }
             //Sanitize data before update
             $SANITIZED_DATA = [];
             foreach ($data as $key => $value) {

@@ -34,7 +34,12 @@ class UserResource extends JsonResource
             'role' => $this->user_type,
             'status' => $this->status,
             'userFiscalYear' => UserFiscalYearResource::make($this->whenLoaded('user_fiscal_year')),
+            // 'roles' => RoleResource::collection($this->whenLoaded('roles')),
             'roles' => RoleResource::collection($this->whenLoaded('roles')),
+            'roleIds' => $this->whenLoaded(
+                'roles',
+                fn() => $this->roles->pluck('id')->values()
+            ),
         ];
     }
 }

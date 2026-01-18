@@ -8,11 +8,12 @@ use Illuminate\Database\Eloquent\Collection;
 
 class CompanyService implements CompanyServiceInterface
 {
-    protected $resource = ['company_type', 'fiscal_years', 'state', 'country', 'currency'];
+    protected $resource = ['company_type', 'address', 'fiscal_years', 'currency'];
 
     public function getAll(): Collection
     {
         return Company::with($this->resource)->get();
+
     }
 
     public function getById(int $id): ?Company
@@ -23,7 +24,21 @@ class CompanyService implements CompanyServiceInterface
 
     public function store(array $data): Company
     {
-        return Company::create($data);
+        if (empty($data['mailing_name'])) {
+            $data['mailing_name'] = $data['name'];
+        }
+        $company = Company::create($data);
+
+        if (!empty($data['address'])) {
+
+            $data['address']['address_type'] = 'company';
+            $data['address']['addressable_type'] = 'company';
+            $data['address']['addressable_id'] = $company->id;
+
+            $company->address()->create($data['address']);
+        }
+
+        return $company->load($this->resource);
     }
 
     public function update(array $data, int $id): Company

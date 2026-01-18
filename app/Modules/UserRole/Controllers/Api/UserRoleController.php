@@ -11,12 +11,15 @@ use App\Http\Resources\SuccessResource;
 use App\Http\Resources\SuccessCollection;
 use App\Traits\ApiResponseTrait;
 use Illuminate\Http\JsonResponse;
+use Log;
 
 class UserRoleController extends Controller
 {
     use ApiResponseTrait;
 
-    public function __construct(protected UserRoleServiceInterface $service) {}
+    public function __construct(protected UserRoleServiceInterface $service)
+    {
+    }
 
     public function index(): SuccessCollection
     {
@@ -27,29 +30,39 @@ class UserRoleController extends Controller
     public function show(int $id): SuccessResource
     {
         $data = $this->service->getById($id);
-        return  new UserRoleResource($data);
+        return new UserRoleResource($data);
     }
 
-    public function store(UserRoleRequest $request): SuccessResource
+    public function store(UserRoleRequest $request): SuccessResource|JsonResponse
     {
         $data = $this->service->store($request->validated());
-       return  new UserRoleResource($data, $messages='UserRole created successfully');
+
+        if ($data) {
+            return new UserRoleResource($data ?? [], $messages = 'Role assigned successfully');
+        }
+
+        return new JsonResponse([
+            'status' => $data,
+            'code' => 204,
+            'message' => 'Role unassigned successfully',
+        ]);
+
     }
 
     public function update(UserRoleRequest $request, int $id): SuccessResource
     {
         $data = $this->service->update($request->validated(), $id);
-        return  new UserRoleResource($data, $messages='UserRole updated successfully');
+        return new UserRoleResource($data, $messages = 'UserRole updated successfully');
     }
 
-        public function destroy(int $id): JsonResponse
+    public function destroy(int $id): JsonResponse
     {
 
-        $result=$this->service->delete($id);
+        $result = $this->service->delete($id);
         return new JsonResponse([
             'status' => $result,
             'code' => 204,
-            'message' => $result?'UserRole deleted successfully':'UserRole not found',
+            'message' => $result ? 'UserRole deleted successfully' : 'UserRole not found',
         ]);
     }
 }
