@@ -1,5 +1,6 @@
 <?php
 
+use App\Enums\BuildingTypeEnum;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -13,20 +14,21 @@ return new class extends Migration
             $table->string('name');
             $table->string('code')->unique();
             $table->enum('status', ['active', 'inactive', 'maintenance'])->default('active');
+            $table->string('description')->nullable();
             $table->string('icon')->nullable();
 
             // physical attributes
-            $table->string('building_type');
+            $table->enum('building_type', array_column(BuildingTypeEnum::cases(), 'value'));
             $table->decimal('total_area_sqft', 15, 2)->nullable();
             $table->decimal('covered_area_sqft', 15, 2)->nullable();
-            $table->integer('year_of_construction');
+            $table->date('year_of_construction');
             $table->boolean('sesmic_zone_compliance')->default(true);
             $table->string('structural_type');
 
-            $table->boolean('has_fire_safety_certificate')->default(false);
-            $table->boolean('has_lift')->default(false);
-            $table->date('fire_certificate_valid_upto');
-            $table->string('remark')->nullable();
+            // $table->boolean('has_fire_safety_certificate')->default(false);
+            // $table->boolean('has_lift')->default(false);
+            // $table->date('fire_certificate_valid_upto');
+            // $table->string('remark')->nullable();
             $table->timestamps();
         });
     }

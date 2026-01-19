@@ -78,15 +78,15 @@ class DatabaseSeeder extends Seeder
 
         $this->call([
 
-            AppModuleSeeder::class,
+            // AppModuleSeeder::class,
             RoleSeeder::class,
 
             GstRegistrationTypeSeeder::class,
-
+            SampleDataSeeder::class,
             CurrencySeeder::class,
             CountrySeeder::class,
             StateSeeder::class,
-            SampleDataSeeder::class,
+
             AccountNatureSeeder::class,
             // AccountGroupSeeder::class,
             // AccountLedgerSeeder::class,

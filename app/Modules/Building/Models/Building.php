@@ -19,6 +19,7 @@ class Building extends Model
         'name',
         'code',
         'status',
+        'description',
         'building_type',
         'total_area_sqft',
         'covered_area_sqft',

@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Modules\Building\Requests;
+namespace App\Modules\CapitalItemMaintenanceLog\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class BuildingRequest extends FormRequest
+class CapitalItemMaintenanceLogRequest extends FormRequest
 {
     public function authorize(): bool
     {
@@ -14,23 +14,18 @@ class BuildingRequest extends FormRequest
     public function rules(): array
     {
         $rules = [
-            'name' => ['required', 'string', 'max:255', 'unique:buildings,name'],
-            'code' => ['sometimes', 'required', 'string', 'max:255', 'unique:buildings,code'],
-            'description' => ['nullable', 'string', 'max:255'],
-            'status' => ['sometimes', 'required', 'string', 'max:255'],
-            'building_type' => ['sometimes', 'required', 'string', 'max:255'],
-            'total_area_sqft' => ['sometimes', 'required', 'string'],
-            'covered_area_sqft' => ['sometimes', 'required', 'string'],
-            'year_of_construction' => ['sometimes', 'required', 'date'],
-            'sesmic_zone_compliance' => ['sometimes', 'required', 'boolean'],
-            'structural_type' => ['sometimes', 'required', 'string'],
+            'name' => ['required', 'string', 'max:255','unique:capital_item_maintenance_logs,name'],
+            'code' => ['sometimes','required', 'string', 'max:255','unique:capital_item_maintenance_logs,code'],
+            'description' => ['sometimes','required', 'string', 'max:255'],
+            'status' => ['sometimes','required', 'string', 'max:255'],
         ];
 
         // For update requests, make validation more flexible
         if ($this->isMethod('PUT') || $this->isMethod('PATCH')) {
-            $id = $this->route('building');
-            $rules['name'] = ['sometimes', 'required', 'string', 'max:255', 'unique:buildings,name,' . $id,];
-            $rules['code'] = ['sometimes', 'required', 'string', 'max:255', 'unique:buildings,code,' . $id,];
+            $id=$this->route('capital_item_maintenance_log');
+            $rules['name'] = ['sometimes', 'required', 'string', 'max:255', 'unique:capital_item_maintenance_logs,name,' . $id,];
+            $rules['code'] = ['sometimes', 'required', 'string', 'max:255', 'unique:capital_item_maintenance_logs,code,' . $id,];
+
         }
 
         return $rules;

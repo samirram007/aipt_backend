@@ -8,19 +8,20 @@ return new class extends Migration
 {
     public function up(): void
     {
-        Schema::create('beds', function (Blueprint $table) {
-            $table->uuid('id')->primary();
-            $table->string('name');
+        Schema::create('capital_item_maintenance_logs', function (Blueprint $table) {
+            $table->id();
+            $table->string('name')->unique();
             $table->string('code')->unique();
             $table->string('description')->nullable();
-            $table->enum('status', ['available', 'occupied', 'booked', 'maintenance', 'blocked', 'under_cleaning'])->default('available');
-            $table->string('remark')->nullable();
+            $table->string('status')->default('active');
+            $table->string('icon')->nullable();
+
             $table->timestamps();
         });
     }
 
     public function down(): void
     {
-        Schema::dropIfExists('beds');
+        Schema::dropIfExists('capital_item_maintenance_logs');
     }
 };
