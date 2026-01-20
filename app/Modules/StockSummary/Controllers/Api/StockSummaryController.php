@@ -5,6 +5,7 @@ namespace App\Modules\StockSummary\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Modules\StockSummary\Contracts\StockSummaryServiceInterface;
 use App\Modules\StockSummary\Resources\StockInHandCollection;
+use App\Modules\StockSummary\Resources\StockInHandItemDetailsResource;
 use App\Modules\StockSummary\Resources\StockInHandResource;
 use App\Modules\StockSummary\Resources\StockSummaryResource;
 use App\Modules\StockSummary\Resources\StockSummaryCollection;
@@ -26,6 +27,17 @@ class StockSummaryController extends Controller
     public function stock_in_hand(): StockInHandCollection
     {
         $data = $this->service->stockInHand();
+        // dd($data);
+        return new StockInHandCollection($data);
+    }
+    public function stock_in_hand_item_in_details(): \Illuminate\Http\Resources\Json\AnonymousResourceCollection|array
+    {
+        $data = $this->service->stock_in_hand_item_in_details();
+        return StockInHandItemDetailsResource::collection($data);
+    }
+    public function stock_in_hand_godown_in_details(): StockInHandCollection
+    {
+        $data = $this->service->stock_in_hand_godown_in_details();
         // dd($data);
         return new StockInHandCollection($data);
     }

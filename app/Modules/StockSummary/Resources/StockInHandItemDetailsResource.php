@@ -7,7 +7,7 @@ use App\Modules\StockItem\Resources\StockItemResource;
 use Illuminate\Http\Request;
 
 use App\Http\Resources\SuccessResource;
-class StockInHandResource extends SuccessResource
+class StockInHandItemDetailsResource extends SuccessResource
 {
     public function toArray(Request $request): array
     {
@@ -18,7 +18,7 @@ class StockInHandResource extends SuccessResource
             'itemName' => $this['item_name'],
             'unitCode' => $this['unit_code'] ?? null,
             'unitName' => $this['unit_name'] ?? null,
-            'noOfDecimalPlaces' => $this['no_of_decimal_places'] ?? 2,
+            'noOfDecimalPlaces' => $this['no_of_decimal_places'] ?? 3,
             'openingQuantity' => $this['opening_quantity'] ?? 0,
             'openingAmount' => $this['opening_amount'] ?? 0,
             'inwardQuantity' => $this['inward_quantity'] ?? 0,
@@ -27,6 +27,7 @@ class StockInHandResource extends SuccessResource
             'outwardAmount' => $this['outward_amount'] ?? 0,
             'closingQuantity' => $this['closing_quantity'] ?? 0,
             'closingAmount' => $this['closing_amount'] ?? 0,
+            'godownDetails' => StockInHandGodownResource::collection($this['godown_details'] ?? []),
 
 
         ];
