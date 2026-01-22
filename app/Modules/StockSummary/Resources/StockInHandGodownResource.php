@@ -25,6 +25,7 @@ class StockInHandGodownResource extends SuccessResource
             'outwardAmount' => $this['outward_amount'] ?? 0,
             'closingQuantity' => $this['closing_quantity'] ?? 0,
             'closingAmount' => $this['closing_amount'] ?? 0,
+            'itemDetails' => StockInHandItemDetailsResource::collection($this['item_details'] ?? []),
 
 
         ];

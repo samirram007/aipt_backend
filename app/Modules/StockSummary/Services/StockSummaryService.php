@@ -85,7 +85,7 @@ class StockSummaryService implements StockSummaryServiceInterface
         return ['in' => $in, 'out' => $out, 'balance' => $in - $out];
     }
 
-    public function stock_in_hand_item_in_details(): array
+    public function stock_in_hand_item_wise(): array
     {
         $fiscalYearId = $this->userFiscalYear->fiscal_year_id;
 
@@ -208,56 +208,136 @@ class StockSummaryService implements StockSummaryServiceInterface
         //dd($in, $out);
         return ['in' => $in, 'out' => $out, 'balance' => $in - $out];
     }
-    public function stock_in_hand_godown_in_details(): array
+    public function stock_in_hand_godown_wise1(): array
+    {
+        $fiscalYearId = $this->userFiscalYear->fiscal_year_id;
+        $godowns = Godown::withWhereHas(
+            'stock_journal_godown_entries.stock_journal_entry.stock_journal.voucher',
+            fn($q) => $q->where('fiscal_year_id', $fiscalYearId)
+        )
+            ->with([
+                'stock_journal_godown_entries' => function ($q) {
+                    $q->whereHas('stock_journal_entry')
+                        ->with([
+                            'stock_journal_entry.stock_item.stock_unit',
+                            'stock_journal_entry.stock_journal.voucher',
+                        ]);
+                },
+            ])
+            ->get();
+        //dd($godowns->toArray());
+        $result = [];
+        foreach ($godowns as $godown) {
+            $stock = $this->calculateGodownTotal($godown->stock_journal_godown_entries);
+            dd($stock);
+            $result[] = [
+                'godown_id' => $godown->id,
+                'godown_name' => $godown->name,
+                'godown_code' => $godown->code,
+                'inward_quantity' => $stock['in'],
+                'outward_quantity' => $stock['out'],
+                'closing_quantity' => $stock['balance'],
+                'item_details' => $godown->stock_journal_godown_entries
+                    ->groupBy('stock_journal_entry.stock_item.id')
+                    ->map(function ($entries) {
+                        $entry = $entries->first()->stock_journal_entry;
+
+                        if (!$entry || !$entry->stock_item) {
+                            return null;
+                        }
+
+                        $item = $entry->stock_item;
+
+                        $itemTotal = $this->calculateItemTotal(
+                            $entries->map(fn($e) => $e->stock_journal_entry)
+                        );
+
+                        return [
+                            'item_id' => $item->id,
+                            'item_name' => $item->name,
+                            'unit_code' => $item->stock_unit?->code,
+                            'unit_name' => $item->stock_unit?->name,
+                            'no_of_decimal_places' => $item->stock_unit?->no_of_decimal_places,
+                            'inward_quantity' => $itemTotal['in'],
+                            'outward_quantity' => $itemTotal['out'],
+                            'closing_quantity' => $itemTotal['balance'],
+                        ];
+                    })
+                    ->values()
+                    ->toArray(),
+
+            ];
+        }
+
+
+        // dd($result);
+
+        return $result;
+    }
+    public function stock_in_hand_godown_wise(): array
     {
         $fiscalYearId = $this->userFiscalYear->fiscal_year_id;
 
-        $entries = StockJournalEntry::with([
-            'stock_item.stock_unit',
-            'storage_unit',
-            'stock_journal.voucher'
-        ])
-            ->whereHas('stock_journal.voucher', function ($q) use ($fiscalYearId) {
-                $q->where('fiscal_year_id', $fiscalYearId);
-            })
-            ->get();
+        $godowns = Godown::withWhereHas(
+            'stock_journal_godown_entries.stock_journal_entry.stock_journal.voucher',
+            fn($q) => $q->where('fiscal_year_id', $fiscalYearId)
+        )->with([
+                    'stock_journal_godown_entries' => function ($q) {
+                        $q->whereHas('stock_journal_entry')
+                            ->with([
+                                'stock_journal_entry.stock_item.stock_unit',
+                                'stock_journal_entry.stock_journal.voucher',
+                            ]);
+                    },
+                ])->get();
 
-        $grouped = [];
+        $result = [];
 
-        foreach ($entries as $entry) {
+        foreach ($godowns as $godown) {
 
-            $key = $entry->stock_item_id . '_' . $entry->storage_unit_id;
+            $itemEntries = $godown->stock_journal_godown_entries
+                ->groupBy(fn($e) => $e->stock_journal_entry->stock_item_id);
 
-            if (!isset($grouped[$key])) {
-                $grouped[$key] = [
-                    'item_id' => $entry->stock_item->id,
-                    'item_name' => $entry->stock_item->name,
-                    'unit_code' => $entry->stock_item->stock_unit?->code,
-                    'unit_name' => $entry->stock_item->stock_unit?->name,
+            $itemsCollection = [];
 
-                    'storage_unit_id' => $entry->storage_unit->id,
-                    'storage_unit_name' => $entry->storage_unit->name,
+            foreach ($itemEntries as $itemId => $entries) {
 
-                    'inward_quantity' => 0,
-                    'outward_quantity' => 0,
-                    'closing_quantity' => 0,
+                $item = $entries->first()
+                    ->stock_journal_entry
+                    ->stock_item;
+
+                $itemTotal = $this->calculateGodownTotal($entries);
+
+                $itemsCollection[] = [
+                    'item_id' => $item->id,
+                    'item_name' => $item->name,
+                    'unit_code' => $item->stock_unit?->code,
+                    'unit_name' => $item->stock_unit?->name,
+
+                    'inward_quantity' => $itemTotal['in'],
+                    'outward_quantity' => $itemTotal['out'],
+                    'closing_quantity' => $itemTotal['balance'],
                 ];
             }
 
-            if ($entry->movement_type === 'in') {
-                $grouped[$key]['inward_quantity'] += $entry->actual_quantity;
-            } else {
-                $grouped[$key]['outward_quantity'] += $entry->actual_quantity;
-            }
+            // if (empty($itemsCollection)) {
+            //     continue;
+            // }
 
-            $grouped[$key]['closing_quantity'] =
-                $grouped[$key]['inward_quantity']
-                - $grouped[$key]['outward_quantity'];
+            $result[] = [
+                'godown_id' => $godown->id,
+                'godown_name' => $godown->name,
+                'godown_code' => $godown->code,
+                'inward_quantity' => array_sum(array_column($itemsCollection, 'inward_quantity')),
+                'outward_quantity' => array_sum(array_column($itemsCollection, 'outward_quantity')),
+                'closing_quantity' => array_sum(array_column($itemsCollection, 'closing_quantity')),
+                'item_details' => $itemsCollection,
+            ];
         }
+        //  dd($result);
 
-        return array_values($grouped);
+        return $result;
     }
-
     public function netStock(array $data): StockSummary
     {
         // Implement the logic to retrieve net stock

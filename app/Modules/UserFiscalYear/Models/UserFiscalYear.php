@@ -18,9 +18,16 @@ class UserFiscalYear extends Model
     protected $fillable = [
         'user_id',
         'fiscal_year_id',
+        'start_date',
+        'end_date',
+        'current_date',
     ];
 
-    protected $casts = [];
+    protected $casts = [
+        'start_date' => 'date',
+        'end_date' => 'date',
+        'current_date' => 'date',
+    ];
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class, 'user_id', 'id');

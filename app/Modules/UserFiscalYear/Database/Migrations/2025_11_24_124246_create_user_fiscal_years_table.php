@@ -11,6 +11,9 @@ return new class extends Migration {
             $table->id();
             $table->string('user_id')->unique();
             $table->string('fiscal_year_id');
+            $table->date('start_date')->nullable();
+            $table->date('end_date')->nullable();
+            $table->date('current_date')->default(now());
 
             // $table->timestamps();
             $table->unique(['user_id', 'fiscal_year_id']);

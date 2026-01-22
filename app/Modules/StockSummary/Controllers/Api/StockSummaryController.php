@@ -5,6 +5,7 @@ namespace App\Modules\StockSummary\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Modules\StockSummary\Contracts\StockSummaryServiceInterface;
 use App\Modules\StockSummary\Resources\StockInHandCollection;
+use App\Modules\StockSummary\Resources\StockInHandGodownResource;
 use App\Modules\StockSummary\Resources\StockInHandItemDetailsResource;
 use App\Modules\StockSummary\Resources\StockInHandResource;
 use App\Modules\StockSummary\Resources\StockSummaryResource;
@@ -30,16 +31,16 @@ class StockSummaryController extends Controller
         // dd($data);
         return new StockInHandCollection($data);
     }
-    public function stock_in_hand_item_in_details(): \Illuminate\Http\Resources\Json\AnonymousResourceCollection|array
+    public function stock_in_hand_item_wise(): \Illuminate\Http\Resources\Json\AnonymousResourceCollection|array
     {
-        $data = $this->service->stock_in_hand_item_in_details();
+        $data = $this->service->stock_in_hand_item_wise();
         return StockInHandItemDetailsResource::collection($data);
     }
-    public function stock_in_hand_godown_in_details(): StockInHandCollection
+    public function stock_in_hand_godown_wise(): \Illuminate\Http\Resources\Json\AnonymousResourceCollection|array
     {
-        $data = $this->service->stock_in_hand_godown_in_details();
+        $data = $this->service->stock_in_hand_godown_wise();
         // dd($data);
-        return new StockInHandCollection($data);
+        return StockInHandGodownResource::collection($data);
     }
 
     public function net_stock(StockSummaryRequest $request): SuccessResource
