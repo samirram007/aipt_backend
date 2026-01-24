@@ -2,21 +2,21 @@
 
 namespace App\Modules\StockSummary\Resources;
 
-use App\Modules\StockItem\Models\StockItem;
-use App\Modules\StockItem\Resources\StockItemResource;
 use Illuminate\Http\Request;
 
 use App\Http\Resources\SuccessResource;
-class StockInHandGodownResource extends SuccessResource
+class StockInHandItemWiseResource extends SuccessResource
 {
     public function toArray(Request $request): array
     {
 
 
         return [
-            'godownId' => $this['godown_id'],
-            'godownName' => $this['godown_name'],
-            'godownCode' => $this['godown_code'],
+            'itemId' => $this['item_id'],
+            'itemName' => $this['item_name'],
+            'unitCode' => $this['unit_code'] ?? null,
+            'unitName' => $this['unit_name'] ?? null,
+            'noOfDecimalPlaces' => $this['no_of_decimal_places'] ?? 3,
             'openingQuantity' => $this['opening_quantity'] ?? 0,
             'openingAmount' => $this['opening_amount'] ?? 0,
             'inwardQuantity' => $this['inward_quantity'] ?? 0,
@@ -25,7 +25,7 @@ class StockInHandGodownResource extends SuccessResource
             'outwardAmount' => $this['outward_amount'] ?? 0,
             'closingQuantity' => $this['closing_quantity'] ?? 0,
             'closingAmount' => $this['closing_amount'] ?? 0,
-            'itemDetails' => StockInHandItemDetailsResource::collection($this['item_details'] ?? []),
+            'godownDetails' => StockInHandGodownWiseResource::collection($this['godown_details'] ?? []),
 
 
         ];

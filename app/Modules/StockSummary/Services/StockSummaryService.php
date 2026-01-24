@@ -13,6 +13,7 @@ use App\Modules\UserFiscalYear\Contracts\UserFiscalYearServiceInterface;
 use App\Modules\UserFiscalYear\Models\UserFiscalYear;
 use App\Modules\Voucher\Models\Voucher;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Support\Facades\Log;
 
 class StockSummaryService implements StockSummaryServiceInterface
 {
@@ -34,21 +35,31 @@ class StockSummaryService implements StockSummaryServiceInterface
 
         $fiscalYearId = $this->userFiscalYear->fiscal_year_id;
 
-        $items = StockItem::with([
-            'stock_unit',
-            'stock_journal_entries' => function ($query) use ($fiscalYearId) {
-                $query->whereHas('stock_journal.voucher', function ($q) use ($fiscalYearId) {
-                    $q->where('fiscal_year_id', $fiscalYearId)
-                        ->where('stock_journal_id', '!=', null);
-                });
-            }
-        ])->get();
+        $items = StockItem::withWhereHas(
+            'stock_journal_entries.stock_journal.voucher',
+            fn($q) => $q->where('fiscal_year_id', $fiscalYearId)
+        )
+            ->with([
+                'stock_unit',
+                'stock_journal_entries' => function ($q) use ($fiscalYearId) {
+                    $q->whereHas(
+                        'stock_journal.voucher',
+                        fn($v) => $v->where('fiscal_year_id', $fiscalYearId)
+                    )
+                        ->with([
+                            'stock_journal.voucher',
+                            'stock_journal_godown_entries.godown',
+                        ]);
+                },
+            ])
+            ->get();
         // $items = StockItem::with([
         //     'stock_unit',
         //     'stock_journal_entries.stock_journal.voucher' => function ($q) use ($fiscalYearId) {
         //         $q->where('fiscal_year_id', $fiscalYearId)->where('stock_journal_id', '!=', null);
         //     }
         // ])->get();
+        //Log::info(json_encode($items->toArray()));
         $result = [];
         foreach ($items as $index => $item) {
             // $stock = $this->calculateStockInHand($item);
@@ -278,18 +289,40 @@ class StockSummaryService implements StockSummaryServiceInterface
     {
         $fiscalYearId = $this->userFiscalYear->fiscal_year_id;
 
+        // $godowns = Godown::withWhereHas(
+        //     'stock_journal_godown_entries.stock_journal_entry.stock_journal.voucher',
+        //     fn($q) => $q->where('fiscal_year_id', $fiscalYearId)
+        // )->with([
+        //             'stock_journal_godown_entries' => function ($q) {
+        //                 $q->whereHas('stock_journal_entry')
+        //                     ->with([
+        //                         'stock_journal_entry.stock_item.stock_unit',
+        //                         'stock_journal_entry.stock_journal.voucher',
+        //                     ]);
+        //             },
+        //         ])->get();
+
         $godowns = Godown::withWhereHas(
             'stock_journal_godown_entries.stock_journal_entry.stock_journal.voucher',
-            fn($q) => $q->where('fiscal_year_id', $fiscalYearId)
-        )->with([
-                    'stock_journal_godown_entries' => function ($q) {
-                        $q->whereHas('stock_journal_entry')
-                            ->with([
-                                'stock_journal_entry.stock_item.stock_unit',
-                                'stock_journal_entry.stock_journal.voucher',
-                            ]);
-                    },
-                ])->get();
+            function ($q) use ($fiscalYearId) {
+                $q->where('fiscal_year_id', $fiscalYearId)
+                    ->whereHas('stock_journal');
+            }
+        )
+            ->with([
+                'stock_journal_godown_entries' => function ($q) use ($fiscalYearId) {
+                    $q->whereHas(
+                        'stock_journal_entry.stock_journal.voucher',
+                        fn($v) => $v->where('fiscal_year_id', $fiscalYearId)
+                            ->whereHas('stock_journal')
+                    )
+                        ->with([
+                            'stock_journal_entry.stock_item.stock_unit',
+                            'stock_journal_entry.stock_journal.voucher',
+                        ]);
+                },
+            ])
+            ->get();
 
         $result = [];
 
@@ -335,6 +368,79 @@ class StockSummaryService implements StockSummaryServiceInterface
             ];
         }
         //  dd($result);
+
+
+        return $result;
+    }
+
+    public function stock_in_hand_voucher_wise(): array
+    {
+        $fiscalYearId = $this->userFiscalYear->fiscal_year_id;
+
+        $items = StockItem::with([
+            'stock_unit',
+            'stock_journal_entries' => function ($query) use ($fiscalYearId) {
+                $query->whereHas('stock_journal.voucher', function ($q) use ($fiscalYearId) {
+                    $q->where('fiscal_year_id', $fiscalYearId)
+                        ->where('stock_journal_id', '!=', null);
+                })->with([
+                            'stock_journal.voucher.voucher_type',
+                        ]);
+            }
+        ])->get();
+
+        $result = [];
+        foreach ($items as $item) {
+
+            $voucherCollection = [];
+
+            // GROUP BY VOUCHER ACROSS ALL ENTRIES
+            $allVoucherEntries = $item->stock_journal_entries
+                ->filter(fn($e) => $e->stock_journal && $e->stock_journal->voucher)
+                ->groupBy(fn($e) => $e->stock_journal->voucher->id)
+                ->sortBy(function ($entries) {
+                    $voucher = $entries->first()->stock_journal->voucher;
+
+                    return sprintf(
+                        '%03d-%s-%s',
+                        $voucher->voucher_type_id,
+                        $voucher->voucher_date,
+                        $voucher->voucher_no
+                    );
+                });
+            //dump($allVoucherEntries->toArray());
+
+            foreach ($allVoucherEntries as $voucherId => $entries) {
+
+                $voucherTotal = $this->calculateItemTotal($entries);
+
+                $voucher = $entries->first()->stock_journal->voucher;
+
+                $voucherCollection[] = [
+                    'voucher_id' => $voucher->id,
+                    'voucher_type' => $voucher->voucher_type->name,
+                    'voucher_no' => $voucher->voucher_no,
+                    'voucher_date' => $voucher->voucher_date,
+                    'inward_quantity' => $voucherTotal['in'],
+                    'outward_quantity' => $voucherTotal['out'],
+                    'closing_quantity' => $voucherTotal['balance'],
+                ];
+            }
+
+            $itemTotal = $this->calculateItemTotal($item->stock_journal_entries);
+
+            $result[] = [
+                'item_id' => $item->id,
+                'item_name' => $item->name,
+                'unit_code' => $item->stock_unit?->code,
+                'unit_name' => $item->stock_unit?->name,
+                'inward_quantity' => $itemTotal['in'],
+                'outward_quantity' => $itemTotal['out'],
+                'closing_quantity' => $itemTotal['balance'],
+                'voucher_details' => $voucherCollection,
+            ];
+        }
+        // dd($result);
 
         return $result;
     }
