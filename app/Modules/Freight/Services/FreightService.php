@@ -64,6 +64,39 @@ class FreightService implements FreightServiceInterface
         return $deliveryNotesWithOutFreight;
     }
 
+
+    public function godownWiseReport(): Collection
+    {
+        // Implement the logic for godown wise report
+        // Return a collection of results
+        return collect(); // Placeholder
+    }
+    public function transporterWiseReport(): Collection
+    {
+        // Implement the logic for transporter wise report
+        // Return a collection of results
+        return collect(); // Placeholder
+    }
+    public function vehicleWiseReport(): Collection
+    {
+        // Implement the logic for vehicle wise report
+        // Return a collection of results
+        return collect(); // Placeholder
+    }
+    public function billingPreferenceReport(): Collection
+    {
+        // Implement the logic for billing preference report
+        // Return a collection of results
+        return collect(); // Placeholder
+    }
+
+    public function voucherWiseReport(): Collection
+    {
+        // Implement the logic for vehicle wise report
+        // Return a collection of results
+        return collect(); // Placeholder
+    }
+
     public function getById(int $id): ?Freight
     {
         return Freight::with($this->resource)->findOrFail($id);

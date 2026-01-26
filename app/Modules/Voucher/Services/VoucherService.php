@@ -326,7 +326,7 @@ class VoucherService implements VoucherServiceInterface
             }
 
             // dd($voucher);
-            //   DB::commit();
+            DB::commit();
             return $voucher->fresh();
         } catch (\Exception $e) {
             DB::rollBack();

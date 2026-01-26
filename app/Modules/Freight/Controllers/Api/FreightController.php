@@ -32,6 +32,31 @@ class FreightController extends Controller
         $data = $this->service->getDeliveryNote();
         return new VoucherCollection($data);
     }
+    public function godown_wise(): SuccessCollection
+    {
+        $data = $this->service->godownWiseReport();
+        return new SuccessCollection($data);
+    }
+    public function transporter_wise(): SuccessCollection
+    {
+        $data = $this->service->transporterWiseReport();
+        return new SuccessCollection($data);
+    }
+    public function vehicle_wise(): SuccessCollection
+    {
+        $data = $this->service->vehicleWiseReport();
+        return new SuccessCollection($data);
+    }
+    public function voucher_wise(): SuccessCollection
+    {
+        $data = $this->service->voucherWiseReport();
+        return new SuccessCollection($data);
+    }
+    public function billing_preference(): SuccessCollection
+    {
+        $data = $this->service->billingPreferenceReport();
+        return new SuccessCollection($data);
+    }
 
     public function show(int $id): SuccessResource
     {
