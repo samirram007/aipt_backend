@@ -8,14 +8,14 @@ use Illuminate\Database\Eloquent\Collection;
 
 class BedService implements BedServiceInterface
 {
-    protected $resource=[];
+    protected $resource = [];
 
     public function getAll(): Collection
     {
         return Bed::with($this->resource)->get();
     }
 
-    public function getById(int $id): ?Bed
+    public function getById(string $id): ?Bed
     {
         return Bed::with($this->resource)->findOrFail($id);
     }
@@ -25,7 +25,7 @@ class BedService implements BedServiceInterface
         return Bed::create($data);
     }
 
-    public function update(array $data, int $id): Bed
+    public function update(array $data, string $id): Bed
     {
         $record = Bed::findOrFail($id);
         $record->update($data);

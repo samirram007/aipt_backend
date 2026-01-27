@@ -24,7 +24,7 @@ class BedController extends Controller
         return new BedCollection($data);
     }
 
-    public function show(int $id): SuccessResource
+    public function show(string $id): SuccessResource
     {
         $data = $this->service->getById($id);
         return  new BedResource($data);
@@ -33,23 +33,23 @@ class BedController extends Controller
     public function store(BedRequest $request): SuccessResource
     {
         $data = $this->service->store($request->validated());
-       return  new BedResource($data, $messages='Bed created successfully');
+        return  new BedResource($data, $messages = 'Bed created successfully');
     }
 
-    public function update(BedRequest $request, int $id): SuccessResource
+    public function update(BedRequest $request, string $id): SuccessResource
     {
         $data = $this->service->update($request->validated(), $id);
-        return  new BedResource($data, $messages='Bed updated successfully');
+        return  new BedResource($data, $messages = 'Bed updated successfully');
     }
 
-        public function destroy(int $id): JsonResponse
+    public function destroy(int $id): JsonResponse
     {
 
-        $result=$this->service->delete($id);
+        $result = $this->service->delete($id);
         return new JsonResponse([
             'status' => $result,
             'code' => 204,
-            'message' => $result?'Bed deleted successfully':'Bed not found',
+            'message' => $result ? 'Bed deleted successfully' : 'Bed not found',
         ]);
     }
 }

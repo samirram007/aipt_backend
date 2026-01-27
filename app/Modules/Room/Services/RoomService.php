@@ -8,14 +8,14 @@ use Illuminate\Database\Eloquent\Collection;
 
 class RoomService implements RoomServiceInterface
 {
-    protected $resource=[];
+    protected $resource = [];
 
     public function getAll(): Collection
     {
         return Room::with($this->resource)->get();
     }
 
-    public function getById(int $id): ?Room
+    public function getById(string $id): ?Room
     {
         return Room::with($this->resource)->findOrFail($id);
     }
@@ -25,7 +25,7 @@ class RoomService implements RoomServiceInterface
         return Room::create($data);
     }
 
-    public function update(array $data, int $id): Room
+    public function update(array $data, string $id): Room
     {
         $record = Room::findOrFail($id);
         $record->update($data);

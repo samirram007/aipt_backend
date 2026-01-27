@@ -8,14 +8,14 @@ use Illuminate\Database\Eloquent\Collection;
 
 class FloorService implements FloorServiceInterface
 {
-    protected $resource=[];
+    protected $resource = [];
 
     public function getAll(): Collection
     {
         return Floor::with($this->resource)->get();
     }
 
-    public function getById(int $id): ?Floor
+    public function getById(string $id): ?Floor
     {
         return Floor::with($this->resource)->findOrFail($id);
     }
@@ -25,7 +25,7 @@ class FloorService implements FloorServiceInterface
         return Floor::create($data);
     }
 
-    public function update(array $data, int $id): Floor
+    public function update(array $data, string $id): Floor
     {
         $record = Floor::findOrFail($id);
         $record->update($data);

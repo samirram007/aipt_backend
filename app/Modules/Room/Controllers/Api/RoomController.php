@@ -24,7 +24,7 @@ class RoomController extends Controller
         return new RoomCollection($data);
     }
 
-    public function show(int $id): SuccessResource
+    public function show(string $id): SuccessResource
     {
         $data = $this->service->getById($id);
         return  new RoomResource($data);
@@ -33,23 +33,23 @@ class RoomController extends Controller
     public function store(RoomRequest $request): SuccessResource
     {
         $data = $this->service->store($request->validated());
-       return  new RoomResource($data, $messages='Room created successfully');
+        return  new RoomResource($data, $messages = 'Room created successfully');
     }
 
-    public function update(RoomRequest $request, int $id): SuccessResource
+    public function update(RoomRequest $request, string $id): SuccessResource
     {
         $data = $this->service->update($request->validated(), $id);
-        return  new RoomResource($data, $messages='Room updated successfully');
+        return  new RoomResource($data, $messages = 'Room updated successfully');
     }
 
-        public function destroy(int $id): JsonResponse
+    public function destroy(int $id): JsonResponse
     {
 
-        $result=$this->service->delete($id);
+        $result = $this->service->delete($id);
         return new JsonResponse([
             'status' => $result,
             'code' => 204,
-            'message' => $result?'Room deleted successfully':'Room not found',
+            'message' => $result ? 'Room deleted successfully' : 'Room not found',
         ]);
     }
 }

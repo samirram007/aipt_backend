@@ -24,7 +24,7 @@ class FloorController extends Controller
         return new FloorCollection($data);
     }
 
-    public function show(int $id): SuccessResource
+    public function show(string $id): SuccessResource
     {
         $data = $this->service->getById($id);
         return  new FloorResource($data);
@@ -33,23 +33,23 @@ class FloorController extends Controller
     public function store(FloorRequest $request): SuccessResource
     {
         $data = $this->service->store($request->validated());
-       return  new FloorResource($data, $messages='Floor created successfully');
+        return  new FloorResource($data, $messages = 'Floor created successfully');
     }
 
-    public function update(FloorRequest $request, int $id): SuccessResource
+    public function update(FloorRequest $request, string $id): SuccessResource
     {
         $data = $this->service->update($request->validated(), $id);
-        return  new FloorResource($data, $messages='Floor updated successfully');
+        return  new FloorResource($data, $messages = 'Floor updated successfully');
     }
 
-        public function destroy(int $id): JsonResponse
+    public function destroy(int $id): JsonResponse
     {
 
-        $result=$this->service->delete($id);
+        $result = $this->service->delete($id);
         return new JsonResponse([
             'status' => $result,
             'code' => 204,
-            'message' => $result?'Floor deleted successfully':'Floor not found',
+            'message' => $result ? 'Floor deleted successfully' : 'Floor not found',
         ]);
     }
 }

@@ -24,7 +24,7 @@ class BuildingController extends Controller
         return new BuildingCollection($data);
     }
 
-    public function show(int $id): SuccessResource
+    public function show(string $id): SuccessResource
     {
         $data = $this->service->getById($id);
         return  new BuildingResource($data);
@@ -33,23 +33,23 @@ class BuildingController extends Controller
     public function store(BuildingRequest $request): SuccessResource
     {
         $data = $this->service->store($request->validated());
-       return  new BuildingResource($data, $messages='Building created successfully');
+        return  new BuildingResource($data, $messages = 'Building created successfully');
     }
 
-    public function update(BuildingRequest $request, int $id): SuccessResource
+    public function update(BuildingRequest $request, string $id): SuccessResource
     {
         $data = $this->service->update($request->validated(), $id);
-        return  new BuildingResource($data, $messages='Building updated successfully');
+        return  new BuildingResource($data, $messages = 'Building updated successfully');
     }
 
-        public function destroy(int $id): JsonResponse
+    public function destroy(int $id): JsonResponse
     {
 
-        $result=$this->service->delete($id);
+        $result = $this->service->delete($id);
         return new JsonResponse([
             'status' => $result,
             'code' => 204,
-            'message' => $result?'Building deleted successfully':'Building not found',
+            'message' => $result ? 'Building deleted successfully' : 'Building not found',
         ]);
     }
 }

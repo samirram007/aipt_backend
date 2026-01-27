@@ -16,6 +16,9 @@ return new class extends Migration {
             $table->unsignedBigInteger('alternate_unit_id')->nullable();
             $table->decimal('unit_ratio', 15, 4)->default(1.00);
             $table->decimal('item_cost', 15, 4)->default(0);
+            $table->decimal('snapshot_quantity', 15, 4)->nullable();
+            $table->decimal('counted_quantity', 15, 4)->nullable();
+
             $table->decimal('actual_quantity', 15, 4)->default(1);
             $table->decimal('billing_quantity', 15, 4)->default(1);
             $table->decimal('rate', 15, 2)->default(0);

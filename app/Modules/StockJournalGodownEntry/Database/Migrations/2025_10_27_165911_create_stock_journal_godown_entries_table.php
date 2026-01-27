@@ -22,6 +22,8 @@ return new class extends Migration {
             $table->string('serial_no')->nullable();
             // Quantities
             $table->decimal('actual_quantity', 15, 4)->default(1);
+            $table->decimal('counted_quantity', 15, 4)->nullable();
+            $table->decimal('snapshot_quantity', 15, 4)->nullable();
             $table->decimal('billing_quantity', 15, 4)->default(1);
             $table->decimal('rate', 15, 4)->default(0);
             $table->decimal('discount_percentage', 15, 4)->default(0);
