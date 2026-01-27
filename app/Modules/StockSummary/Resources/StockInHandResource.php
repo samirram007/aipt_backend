@@ -18,6 +18,7 @@ class StockInHandResource extends SuccessResource
             'itemName' => $this['item_name'],
             'unitCode' => $this['unit_code'] ?? null,
             'unitName' => $this['unit_name'] ?? null,
+            'noOfDecimalPlaces' => $this['no_of_decimal_places'] ?? 2,
             'openingQuantity' => $this['opening_quantity'] ?? 0,
             'openingAmount' => $this['opening_amount'] ?? 0,
             'inwardQuantity' => $this['inward_quantity'] ?? 0,

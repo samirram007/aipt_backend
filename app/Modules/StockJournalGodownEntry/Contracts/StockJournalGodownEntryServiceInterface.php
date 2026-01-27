@@ -12,4 +12,5 @@ interface StockJournalGodownEntryServiceInterface
     public function store(array $data): StockJournalGodownEntry;
     public function update(array $data, int $id): StockJournalGodownEntry;
     public function delete(int $id): bool;
+    public function getByStockJournalEntryId(int $stockJournalEntryId): Collection;
 }

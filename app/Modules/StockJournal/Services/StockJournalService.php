@@ -74,8 +74,65 @@ class StockJournalService implements StockJournalServiceInterface
     {
         $record = StockJournal::findOrFail($id);
         $record->update($data);
+
+        if (!empty($data['stock_journal_entries'])) {
+
+            $this->checkDelete(
+                $data['stock_journal_entries'],
+                $record
+            );
+
+            $rules = (new StockJournalEntryRequest)->rules();
+
+            foreach ($data['stock_journal_entries'] as $entryData) {
+                // need to have stock_journal_id = $record->id;
+                // becoz while updating stock journal entries
+                // stock_journal_id is not sent from frontend
+
+                $entryData['stock_journal_id'] = $record->id;
+
+                $validatedEntry = Validator::make($entryData, $rules)->validate();
+
+                if (!empty($entryData['id'])) {
+
+                    $this->stockJournalEntryService->update($validatedEntry, $entryData['id']);
+
+                } else {
+                    //  dump($validatedEntry);
+                    $stockJournalEntry = $this->stockJournalEntryService->store($validatedEntry);
+                }
+            }
+
+        }
         return $record->fresh();
+
     }
+
+    private function checkDelete($data, $record)
+    {
+        $existingEntries = $this->stockJournalEntryService->getByStockJournalId($record->id);
+
+        //delete entries not present in the update data
+        foreach ($existingEntries as $existingEntry) {
+
+            $found = false;
+
+            foreach ($data as $entries) {
+                if (
+                    isset($entries['id']) &&
+                    $entries['id'] == $existingEntry->id
+                ) {
+                    $found = true;
+                    break;
+                }
+            }
+
+            if (!$found) {
+                $this->stockJournalEntryService->delete($existingEntry->id);
+            }
+        }
+    }
+
 
     public function delete(int $id): bool
     {

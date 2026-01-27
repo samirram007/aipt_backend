@@ -16,6 +16,9 @@ class UserFiscalYearRequest extends FormRequest
         $rules = [
             'user_id' => ['sometimes', 'numeric', 'exists:users,id'],
             'fiscal_year_id' => ['sometimes', 'required', 'numeric', 'exists:fiscal_years,id'],
+            'start_date' => ['sometimes', 'date'],
+            'end_date' => ['sometimes', 'date'],
+            'current_date' => ['sometimes', 'date'],
         ];
 
         // For update requests, make validation more flexible
@@ -32,19 +35,12 @@ class UserFiscalYearRequest extends FormRequest
     public function messages(): array
     {
         return [
-            'name.required' => 'The name field is required.',
-            'name.string' => 'The name must be a string.',
-            'name.max' => 'The name may not be greater than 255 characters.',
-            'name.unique' => 'The name has already been taken.',
-            'code.required' => 'The code field is required.',
-            'code.string' => 'The code must be a string.',
-            'code.max' => 'The code may not be greater than 255 characters.',
-            'code.unique' => 'The code has already been taken.',
-            'description.required   ' => 'The description field is required.',
-            'description.string' => 'The description must be a string.',
-            'description.max' => 'The description may not be greater than 255 characters.',
-            'status.required' => 'The status field is required.',
-            'status.string' => 'The status must be a string.',
+            'user_id.required' => 'The user ID is required.',
+            'user_id.numeric' => 'The user ID must be a number.',
+            'user_id.exists' => 'The selected user ID does not exist.',
+            'fiscal_year_id.required' => 'The fiscal year ID is required.',
+            'fiscal_year_id.numeric' => 'The fiscal year ID must be a number.',
+            'fiscal_year_id.exists' => 'The selected fiscal year ID does not exist.',
         ];
     }
 }

@@ -6,11 +6,14 @@ use App\Modules\CompanyType\Models\CompanyType;
 use App\Modules\Country\Models\Country;
 use App\Modules\Currency\Models\Currency;
 use App\Modules\FiscalYear\Models\FiscalYear;
+use App\Modules\Address\Models\Address;
 use App\Modules\State\Models\State;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\MorphOne;
+
 
 class Company extends Model
 {
@@ -21,11 +24,11 @@ class Company extends Model
     protected $fillable = [
         'name',
         'code',
-        'description',
         'company_type_id',
         'phone_no',
         'mobile_no',
         'email',
+        'mailing_name',
         'website',
         'cin_no',
         'tin_no',
@@ -34,11 +37,6 @@ class Company extends Model
         'pan_no',
         'logo',
         'currency_id',
-        'address',
-        'country_id',
-        'state_id',
-        'city',
-        'zip_code',
         'status',
         'is_group_company',
     ];
@@ -53,14 +51,7 @@ class Company extends Model
     {
         return $this->belongsTo(CompanyType::class);
     }
-    public function country(): BelongsTo
-    {
-        return $this->belongsTo(Country::class);
-    }
-    public function state(): BelongsTo
-    {
-        return $this->belongsTo(State::class);
-    }
+
     public function currency(): BelongsTo
     {
         return $this->belongsTo(Currency::class);
@@ -68,5 +59,10 @@ class Company extends Model
     public function fiscal_years(): HasMany
     {
         return $this->hasMany(FiscalYear::class);
+    }
+
+    public function address(): MorphOne
+    {
+        return $this->morphOne(Address::class, 'addressable');
     }
 }

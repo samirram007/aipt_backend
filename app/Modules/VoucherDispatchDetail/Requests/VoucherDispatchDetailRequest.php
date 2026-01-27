@@ -23,17 +23,22 @@ class VoucherDispatchDetailRequest extends FormRequest
             'dispatched_through' => ['sometimes', 'nullable', 'string', 'max:255'],
             'source' => ['sometimes', 'nullable', 'string', 'max:255'],
             'destination' => ['sometimes', 'nullable', 'string', 'max:255'],
+            'destination_secondary' => ['sometimes', 'nullable', 'string', 'max:255'],
+            'billing_preference' => ['sometimes', 'nullable', 'string', 'max:255'],
             'carrier_name' => ['sometimes', 'nullable', 'string', 'max:255'],
             'bill_of_lading_no' => ['sometimes', 'nullable', 'string', 'max:255'],
             'bill_of_lading_date' => ['sometimes', 'nullable', 'date'],
             'motor_vehicle_no' => ['sometimes', 'nullable', 'string', 'max:255'],
             'distance' => ['sometimes', 'nullable', 'numeric'],
-            'rate' => ['sometimes', 'nullable', 'numeric'],
             'distance_unit_id' => ['sometimes', 'nullable', 'numeric', 'exists:stock_units,id'],
+            'rate' => ['sometimes', 'nullable', 'numeric'],
             'rate_unit_id' => ['sometimes', 'nullable', 'numeric', 'exists:stock_units,id'],
             'quantity' => ['sometimes', 'nullable', 'numeric'],
             'weight' => ['sometimes', 'nullable', 'numeric'],
+            'weight_unit_id' => ['sometimes', 'nullable', 'numeric', 'exists:stock_units,id'],
             'volume' => ['sometimes', 'nullable', 'numeric'],
+            'volume_unit_id' => ['sometimes', 'nullable', 'numeric', 'exists:stock_units,id'],
+            'freight_basis' => ['sometimes', 'nullable', 'string'],
             'loading_charges' => ['sometimes', 'nullable', 'numeric'],
             'unloading_charges' => ['sometimes', 'nullable', 'numeric'],
             'packing_charges' => ['sometimes', 'nullable', 'numeric'],
@@ -55,19 +60,6 @@ class VoucherDispatchDetailRequest extends FormRequest
     public function messages(): array
     {
         return [
-            'name.required' => 'The name field is required.',
-            'name.string' => 'The name must be a string.',
-            'name.max' => 'The name may not be greater than 255 characters.',
-            'name.unique' => 'The name has already been taken.',
-            'code.required' => 'The code field is required.',
-            'code.string' => 'The code must be a string.',
-            'code.max' => 'The code may not be greater than 255 characters.',
-            'code.unique' => 'The code has already been taken.',
-            'description.required   ' => 'The description field is required.',
-            'description.string' => 'The description must be a string.',
-            'description.max' => 'The description may not be greater than 255 characters.',
-            'status.required' => 'The status field is required.',
-            'status.string' => 'The status must be a string.',
         ];
     }
 }

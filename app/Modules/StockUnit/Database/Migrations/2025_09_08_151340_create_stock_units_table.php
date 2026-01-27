@@ -30,7 +30,11 @@ return new class extends Migration {
             $table->boolean('is_base')->default(false)->comment('Mark this as base unit for the item');
             $table->timestamps();
 
+<<<<<<< HEAD
             $table->index(['unique_quantity_code_id', 'primary_stock_unit_id', 'secondary_stock_unit_id'],'stock_units_qty_unit_idx');
+=======
+            $table->index(['unique_quantity_code_id', 'primary_stock_unit_id', 'secondary_stock_unit_id'], 'unique_stock_unit');
+>>>>>>> 834255e73cd7172752846e6d810856f53c86f4c7
         });
     }
 

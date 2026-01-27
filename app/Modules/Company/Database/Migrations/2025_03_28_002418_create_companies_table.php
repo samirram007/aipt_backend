@@ -15,8 +15,8 @@ return new class extends Migration {
             $table->id();
             $table->string('name')->unique();
             $table->string('code')->unique();
-            $table->string('mailing_name')->unique();
-            $table->string('address')->nullable();
+            $table->string('mailing_name')->nullable();
+            // $table->string('address')->nullable();
             $table->string('phone_no')->nullable();
             $table->string('mobile_no')->nullable();
             $table->string('email')->nullable();
@@ -29,10 +29,10 @@ return new class extends Migration {
             $table->string('pan_no')->nullable();
             $table->string('logo')->nullable();
             $table->unsignedBigInteger('currency_id')->default(1);
-            $table->unsignedBigInteger('country_id')->default(76);
-            $table->unsignedBigInteger('state_id')->nullable();
-            $table->string('city')->nullable();
-            $table->string('zip_code')->nullable();
+            // $table->unsignedBigInteger('country_id')->default(76);
+            // $table->unsignedBigInteger('state_id')->nullable();
+            // $table->string('city')->nullable();
+            // $table->string('zip_code')->nullable();
             $table->boolean('is_group_company')->default(false);
             $table->enum('status', array_column(ActiveInactive::cases(), 'value'))
                 ->default(ActiveInactive::Active->value);

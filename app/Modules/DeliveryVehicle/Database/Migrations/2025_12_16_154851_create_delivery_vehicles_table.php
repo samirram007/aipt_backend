@@ -13,7 +13,7 @@ return new class extends Migration {
             $table->unsignedBigInteger('transporter_id');
             $table->string('vehicle_type')->nullable();
             $table->string('vehicle_number')->unique();
-            $table->string('capacity')->unique();
+            $table->string('capacity')->nullable();
             $table->string('driver_name')->nullable();
             $table->string('driver_contact')->nullable();
             $table->string('description')->nullable();
@@ -28,8 +28,5 @@ return new class extends Migration {
     {
         Schema::dropIfExists('delivery_vehicles');
     }
-    public function transporter()
-    {
-        return $this->belongsTo(Transporter::class, 'transporter_id');
-    }
+
 };

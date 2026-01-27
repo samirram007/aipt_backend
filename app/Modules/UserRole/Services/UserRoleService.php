@@ -5,10 +5,11 @@ namespace App\Modules\UserRole\Services;
 use App\Modules\UserRole\Contracts\UserRoleServiceInterface;
 use App\Modules\UserRole\Models\UserRole;
 use Illuminate\Database\Eloquent\Collection;
+use Log;
 
 class UserRoleService implements UserRoleServiceInterface
 {
-    protected $resource=[];
+    protected $resource = [];
 
     public function getAll(): Collection
     {
@@ -20,8 +21,17 @@ class UserRoleService implements UserRoleServiceInterface
         return UserRole::with($this->resource)->findOrFail($id);
     }
 
-    public function store(array $data): UserRole
+    public function store(array $data): UserRole|bool|null
     {
+        $exists = UserRole::where('user_id', $data['user_id'])
+            ->where('role_id', $data['role_id'])->first();
+        if ($exists) {
+            $exists->delete();
+            Log::info('UserRole unassigned:', ['data' => $exists->fresh()]);
+
+            return $exists->fresh();
+
+        }
         return UserRole::create($data);
     }
 

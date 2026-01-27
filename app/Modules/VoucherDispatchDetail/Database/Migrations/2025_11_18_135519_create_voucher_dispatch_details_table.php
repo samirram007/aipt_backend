@@ -1,5 +1,6 @@
 <?php
 
+use App\Enums\QuantityType;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -23,6 +24,8 @@ return new class extends Migration {
             $table->string('receipt_doc_no')->nullable();                   // Receipt Doc No
             $table->string('dispatched_through')->nullable();               // Dispatched through
             $table->string('destination')->nullable();                      // Destination
+            $table->string('destination_secondary')->nullable();                      // Destination
+            $table->string('source')->nullable();                           // Source
             $table->string('carrier_name')->nullable();                     // Carrier Name/Agent
             $table->string('bill_of_lading_no')->nullable();                // Bill of Lading/LR-RR No
             $table->date('bill_of_lading_date')->nullable();                // Date
@@ -34,8 +37,10 @@ return new class extends Migration {
             $table->unsignedBigInteger('weight_unit_id')->nullable();          // Weight Unit
             $table->decimal('volume', 15, 4)->nullable();            // Volume
             $table->unsignedBigInteger('volume_unit_id')->nullable();          // Volume Unit
+            $table->string('billing_preference')->nullable();          // Billing Preference
 
-            $table->enum('freight_basis', ['WEIGHT', 'VOLUME', 'DISTANCE'])->nullable();
+            $table->enum('freight_basis', QuantityType::getValues())
+                ->default(QuantityType::Weight->value);// Freight Basis
             $table->decimal('rate', 15, 2)->nullable();            // Rate
             $table->unsignedBigInteger('rate_unit_id')->nullable();            // Freight Unit
 

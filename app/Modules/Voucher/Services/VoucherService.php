@@ -28,7 +28,7 @@ class VoucherService implements VoucherServiceInterface
         'stock_journal.stock_journal_entries.stock_item.stock_unit',
         'stock_journal.stock_journal_entries.stock_item.alternate_stock_unit',
         'stock_journal.stock_journal_entries.alternate_unit',
-        'stock_journal.stock_journal_entries.stock_journal_godown_entries',
+        'stock_journal.stock_journal_entries.stock_journal_godown_entries.godown',
         'voucher_party.state',
         'voucher_party.country',
         'voucher_dispatch_detail',
@@ -95,6 +95,17 @@ class VoucherService implements VoucherServiceInterface
         DB::beginTransaction();
         try {
             //code...
+            if (isset($data['stock_journal']) && !empty($data['stock_journal'])) {
+                $stock_journal = $data['stock_journal'];
+                $rules = (new StockJournalRequest())->rules();
+                $validatedStockJournal = Validator::make($stock_journal, $rules)->validate();
+                if (!empty($validatedStockJournal)) {
+
+                    $stockJournal = $this->stockJournalService->store($validatedStockJournal);
+                    //dd("VoucherLevel", $stockJournal);
+                    $data['stock_journal_id'] = $stockJournal->id ?? null;
+                }
+            }
 
             if (!isset($data['voucher_no']) || empty($data['voucher_no']) || $data['voucher_no'] === 'new') {
                 // $voucher_type = Voucher::where('voucher_type_id', $data['voucher_type_id'])->first();
@@ -108,25 +119,28 @@ class VoucherService implements VoucherServiceInterface
                 $data['voucher_no'] = $voucher_no;
             }
 
-            if (isset($data['stock_journal']) && !empty($data['stock_journal'])) {
-                $stock_journal = $data['stock_journal'];
-                $rules = (new StockJournalRequest())->rules();
-                $validatedStockJournal = Validator::make($stock_journal, $rules)->validate();
-                if (!empty($validatedStockJournal)) {
 
-                    $stockJournal = $this->stockJournalService->store($validatedStockJournal);
-                    //dd("VoucherLevel", $stockJournal);
-                    $data['stock_journal_id'] = $stockJournal->id ?? null;
-                }
-            }
             $SANITIZED_DATA = [];
+            // foreach ($data as $key => $value) {
+            //     if (in_array($key, Voucher::getFillable(), true)) {
+            //         $SANITIZED_DATA[$key] = $value;
+            //     }
+            // }
+            // $voucher = Voucher::create($SANITIZED_DATA);
+
+
+            //Avhisek Shaw Approach Start
+            $voucherModel = new Voucher();
+
             foreach ($data as $key => $value) {
-                if (in_array($key, Voucher::getFillable(), true)) {
+                if (in_array($key, $voucherModel->getFillable(), true)) {
                     $SANITIZED_DATA[$key] = $value;
                 }
             }
+
             $voucher = Voucher::create($SANITIZED_DATA);
 
+            //Avhisek Shaw Approach End
             // dd($data['voucher_entries']);
 
             if (!empty($data['voucher_entries'])) {
@@ -182,10 +196,43 @@ class VoucherService implements VoucherServiceInterface
 
     public function update(array $data, int $id): Voucher
     {
-        // DB::beginTransaction();
+        DB::beginTransaction();
         try {
-            //code...
             $voucher = Voucher::findOrFail($id);
+
+            if ($voucher->locked) {
+                throw new \Exception('This voucher is locked and cannot be updated.');
+            }
+
+            if (isset($data['stock_journal']) && !empty($data['stock_journal'])) {
+
+                if ($voucher->stock_journal_id) {
+
+                    if (isset($data['stock_journal']['id']) && $data['stock_journal']['id'] == $voucher->stock_journal_id) {
+
+                        $this->stockJournalService->update($data['stock_journal'], $data['stock_journal']['id']);
+
+                    } else {
+                        throw new \Exception(
+                            'Stock Journal is already assigned to this voucher. Cannot assign a different stock journal.'
+                        );
+                    }
+
+                } else {
+                    $stock_journal = $data['stock_journal'];
+                    $rules = (new StockJournalRequest)->rules();
+                    $validatedStockJournal = Validator::make($stock_journal, $rules)->validate();
+                    if (!empty($validatedStockJournal)) {
+
+                        $stockJournal = $this->stockJournalService->store($validatedStockJournal);
+                        // dd("VoucherLevel", $stockJournal);
+                        $data['stock_journal_id'] = $stockJournal->id ?? null;
+                    }
+                }
+
+                unset($data['stock_journal']);
+            }
+
 
             if (!isset($data['voucher_no']) || empty($data['voucher_no']) || $data['voucher_no'] === 'new') {
                 // $voucher_type = Voucher::where('voucher_type_id', $data['voucher_type_id'])->first();
@@ -199,18 +246,7 @@ class VoucherService implements VoucherServiceInterface
                 $data['voucher_no'] = $voucher_no;
             }
 
-            if (isset($data['stock_journal']) && !empty($data['stock_journal'])) {
-                $stock_journal = $data['stock_journal'];
-                $rules = (new StockJournalRequest())->rules();
-                $validatedStockJournal = Validator::make($stock_journal, $rules)->validate();
-                if (!empty($validatedStockJournal)) {
-
-                    $stockJournal = $this->stockJournalService->store($validatedStockJournal);
-                    //dd("VoucherLevel", $stockJournal);
-                    $data['stock_journal_id'] = $stockJournal->id ?? null;
-                }
-            }
-            //Sanitize data before update
+            // Sanitize data before update
             $SANITIZED_DATA = [];
             foreach ($data as $key => $value) {
                 if (in_array($key, $voucher->getFillable(), true)) {
@@ -218,7 +254,7 @@ class VoucherService implements VoucherServiceInterface
                 }
             }
             $voucher->fill($SANITIZED_DATA);
-            //call Update if and only any value differs
+            // call Update if and only any value differs
             if ($voucher->isDirty()) {
                 $voucher->update($SANITIZED_DATA);
             }
@@ -230,64 +266,72 @@ class VoucherService implements VoucherServiceInterface
             if (!empty($data['voucher_entries'])) {
                 foreach ($data['voucher_entries'] as $key => $voucher_entry) {
                     $voucher_entry['voucher_id'] = $voucher->id;
-                    $rules = (new VoucherEntryRequest())->rules();
+                    $rules = (new VoucherEntryRequest)->rules();
                     $validatedVoucherEntry = Validator::make($voucher_entry, $rules)->validate();
-                    if ($validatedVoucherEntry['id'] ?? false) {
-                        //Update existing voucher entry
-                        //check is_deleted flag
+                    if ($voucher_entry['id'] ?? false) {
+                        // Update existing voucher entry
+                        // check is_deleted flag
                         if (isset($validatedVoucherEntry['is_deleted']) && $validatedVoucherEntry['is_deleted']) {
-                            $this->voucherEntryService->delete($validatedVoucherEntry['id']);
-                            continue; //skip to next entry
+                            $this->voucherEntryService->delete($voucher_entry['id']);
+
+                            continue; // skip to next entry
+                            //Hello Avhisek Shaw What you are doing here by "continue"?
                         } else {
-                            //unset($validatedVoucherEntry['is_deleted']); //remove is_deleted flag before update
-                            $this->voucherEntryService->update($validatedVoucherEntry, $validatedVoucherEntry['id']);
+                            // unset($validatedVoucherEntry['is_deleted']); //remove is_deleted flag before update
+                            $this->voucherEntryService->update($validatedVoucherEntry, $voucher_entry['id']);
                         }
                     } else {
-                        //Create new voucher entry
+                        // Create new voucher entry
                         $data['voucher_entries'][$key] = $this->voucherEntryService->store($validatedVoucherEntry);
                     }
                 }
             }
             if (!empty($data['voucher_dispatch_detail'])) {
                 $data['voucher_dispatch_detail']['voucher_id'] = $voucher->id;
-                $rules = (new VoucherDispatchDetailRequest())->rules();
+                $rules = (new VoucherDispatchDetailRequest)->rules();
                 $validatedDispatchDetail = Validator::make($data['voucher_dispatch_detail'], $rules)->validate();
-                if ($validatedDispatchDetail['id'] ?? false) {
-                    //Update existing voucher dispatch detail
-                    $this->voucherDispatchDetailService->update($validatedDispatchDetail, $validatedDispatchDetail['id']);
+                if ($data['voucher_dispatch_detail']['id'] ?? false) {
+                    // Update existing voucher dispatch detail
+                    $this->voucherDispatchDetailService->update($validatedDispatchDetail, $data['voucher_dispatch_detail']['id']);
                 } else {
-                    //Create new voucher dispatch detail
+                    // Create new voucher dispatch detail
                     $data['voucher_dispatch_detail'] = $this->voucherDispatchDetailService->store($validatedDispatchDetail);
                 }
                 // $voucher->voucher_dispatch_detail()->create($data['voucher_dispatch_detail']);
             }
             if (!empty($data['party'])) {
                 $data['party']['voucher_id'] = $voucher->id;
-                $rules = (new VoucherPartyRequest())->rules();
+                $rules = (new VoucherPartyRequest)->rules();
                 $validatedParty = Validator::make($data['party'], $rules)->validate();
-                //dump($validatedParty);
-                $this->voucherPartyService->store($validatedParty);
+                // dump($validatedParty);
+                if ($data['party']['id'] ?? false) {
+
+                    // Update existing voucher party
+                    $this->voucherPartyService->update($validatedParty, $data['party']['id']);
+                } else {
+                    // Create new voucher party
+                    $this->voucherPartyService->store($validatedParty);
+                }
+
                 // $voucher->party()->create($validatedParty);
             }
             if (!empty($data['voucher_reference'])) {
 
                 $data['voucher_reference']['voucher_id'] = $voucher->id;
-                $rules = (new VoucherReferenceRequest())->rules();
+                $rules = (new VoucherReferenceRequest)->rules();
                 $validatedVoucherReference = Validator::make($data['voucher_reference'], $rules)->validate();
                 $data['voucher_reference'] = app(VoucherReferenceServiceInterface::class)
                     ->store($validatedVoucherReference);
 
             }
 
-            //dd($voucher);
-            //   DB::commit();
+            // dd($voucher);
+            DB::commit();
             return $voucher->fresh();
         } catch (\Exception $e) {
-            // DB::rollBack();
-            // throw $e;
+            DB::rollBack();
             throw $e;
         }
-
 
     }
 

@@ -64,6 +64,39 @@ class FreightService implements FreightServiceInterface
         return $deliveryNotesWithOutFreight;
     }
 
+
+    public function godownWiseReport(): Collection
+    {
+        // Implement the logic for godown wise report
+        // Return a collection of results
+        return collect(); // Placeholder
+    }
+    public function transporterWiseReport(): Collection
+    {
+        // Implement the logic for transporter wise report
+        // Return a collection of results
+        return collect(); // Placeholder
+    }
+    public function vehicleWiseReport(): Collection
+    {
+        // Implement the logic for vehicle wise report
+        // Return a collection of results
+        return collect(); // Placeholder
+    }
+    public function billingPreferenceReport(): Collection
+    {
+        // Implement the logic for billing preference report
+        // Return a collection of results
+        return collect(); // Placeholder
+    }
+
+    public function voucherWiseReport(): Collection
+    {
+        // Implement the logic for vehicle wise report
+        // Return a collection of results
+        return collect(); // Placeholder
+    }
+
     public function getById(int $id): ?Freight
     {
         return Freight::with($this->resource)->findOrFail($id);
@@ -88,7 +121,9 @@ class FreightService implements FreightServiceInterface
                 'rate_unit_id' => $data['rate_unit_id'] ?? null,
                 'quantity' => $data['quantity'] ?? null,
                 'weight' => $data['weight'] ?? null,
+                'weight_unit_id' => $data['weight_unit_id'] ?? null,
                 'volume' => $data['volume'] ?? null,
+                'volume_unit_id' => $data['volume_unit_id'] ?? null,
                 'loading_charges' => $data['loading_charges'] ?? null,
                 'unloading_charges' => $data['unloading_charges'] ?? null,
                 'packing_charges' => $data['packing_charges'] ?? null,
@@ -98,22 +133,22 @@ class FreightService implements FreightServiceInterface
                 'total_fare' => $data['total_fare'] ?? null,
             ];
             $dispatchDetail = $deliveryNote->voucher_dispatch_detail;
-            $rules = (new VoucherDispatchDetailRequest())->rules();
-            // dump($rules);
-            $validatedDispatchData = Validator::make($dispatchDetailData, $rules)->validate();
+            // $rules = (new VoucherDispatchDetailRequest())->rules();
+            // // dump($rules);
+            // $validatedDispatchData = Validator::make($dispatchDetailData, $rules)->validate();
 
-            //  dd($validatedDispatchData);
-            if (!empty($validatedDispatchData)) {
-                if (!$dispatchDetail) {
+            // //  dd($validatedDispatchData);
+            // if (!empty($validatedDispatchData)) {
+            //     if (!$dispatchDetail) {
 
-                    $dispatchDetail = $this->voucherDispatchDetailService->store($validatedDispatchData);
-                    //dd("VoucherLevel", $stockJournal);
-                    $data['stock_journal_id'] = $stockJournal->id ?? null;
+            //         $dispatchDetail = $this->voucherDispatchDetailService->store($validatedDispatchData);
+            //         //dd("VoucherLevel", $stockJournal);
+            //         $data['stock_journal_id'] = $stockJournal->id ?? null;
 
-                } else {
-                    $dispatchDetail = $this->voucherDispatchDetailService->update($validatedDispatchData, $dispatchDetail->id);
-                }
-            }
+            //     } else {
+            //         $dispatchDetail = $this->voucherDispatchDetailService->update($validatedDispatchData, $dispatchDetail->id);
+            //     }
+            // }
 
 
 
@@ -128,66 +163,78 @@ class FreightService implements FreightServiceInterface
 
             if ($existingFreightReference) {
                 $salesVoucher = $this->voucherService->getById($existingFreightReference->voucher_id);
-                return $salesVoucher->load('company');
-                //throw new \Exception("A Freight record is already associated with this Delivery Note ID: " . $deliverNoteId);
-            } else {
-
-
-                // Create a new Sales Voucher linked to this Delivery Note
-                $salesAccountLedger = $this->accountLedgerService->getById($this->salesAccountLedgerID);
-                if (!$salesAccountLedger) {
-                    throw new \Exception("Sales Account Ledger not found with ID: " . $this->salesAccountLedgerID);
+                if ($salesVoucher->amount == $dispatchDetail->total_fare) {
+                    return $salesVoucher->load('company');
                 }
-                //  dd($deliveryNote->party_ledger['id']);
 
-                //being the payment received towards freight charges pertaining to Delivery Note ID 24
-                $salesVoucherData = [
-                    'voucher_type_id' => $this->salesVoucherTypeID,
-                    'voucher_date' => date('Y-m-d'),
-                    'company_id' => $deliveryNote->company_id,
-                    'fiscal_year_id' => $deliveryNote->fiscal_year_id,
-                    'module' => 'freight',
-                    'reference_no' => $deliveryNote->voucher_no,
-                    'reference_date' => $deliveryNote->voucher_date,
-                    'remarks' => 'being the payment received towards freight charges pertaining to Delivery Note ID : ' . $deliverNoteId . ' dated ' . $deliveryNote->voucher_date,
-                    'party_ledger' => $deliveryNote->party_ledger,
-                    'transaction_ledger' => [
-                        'id' => $salesAccountLedger->id,
-                        'name' => $salesAccountLedger->name,
-                        'code' => $salesAccountLedger->code,
-                        'account_group_id' => $salesAccountLedger->account_group_id,
-
-                    ],
-                    'voucher_entries' => [
-                        [
-                            'entry_order' => 1,
-                            'account_ledger_id' => $salesAccountLedger->id,
-                            'debit' => 0,
-                            'credit' => $data['total_fare'] ?? 0,
-                        ],
-                        [
-                            'entry_order' => 2,
-                            'account_ledger_id' => $deliveryNote->party_ledger['id'],
-                            'debit' => $data['total_fare'] ?? 0,
-                            'credit' => 0,
-                        ],
-                    ],
-                    'voucher_reference' => [
-                        'ref_voucher_id' => $deliverNoteId,
-                        'type' => 'freight'
-                    ],
-                    // Add other necessary fields here
-                ];
-                $voucherRules = (new VoucherRequest())->rules();
-                // dump($rules);
-                $validatedVoucherData = Validator::make($salesVoucherData, $voucherRules)->validate();
-                // dd($validatedVoucherData);
-                $salesVoucherStored = $this->voucherService->store($validatedVoucherData);
-                $salesVoucher = $this->voucherService->getById($salesVoucherStored->id);
-                return $salesVoucher->load('company');
-
-
+                $salesVoucher->voucher_entries->each(function ($entry) {
+                    $entry->delete();
+                });
+                $salesVoucher->voucher_references->each(function ($reference) {
+                    $reference->delete();
+                });
+                $salesVoucher->delete();
+                // return $salesVoucher->load('company');
+                //throw new \Exception("A Freight record is already associated with this Delivery Note ID: " . $deliverNoteId);
             }
+
+
+            // Create a new Sales Voucher linked to this Delivery Note
+            $salesAccountLedger = $this->accountLedgerService->getById($this->salesAccountLedgerID);
+            if (!$salesAccountLedger) {
+                throw new \Exception("Sales Account Ledger not found with ID: " . $this->salesAccountLedgerID);
+            }
+
+
+            //being the payment received towards freight charges pertaining to Delivery Note ID 24
+            $salesVoucherData = [
+                'voucher_type_id' => $this->salesVoucherTypeID,
+                'voucher_date' => date('Y-m-d'),
+                'company_id' => $deliveryNote->company_id,
+                'fiscal_year_id' => $deliveryNote->fiscal_year_id,
+                'module' => 'freight',
+                'reference_no' => $deliveryNote->voucher_no,
+                'reference_date' => $deliveryNote->voucher_date,
+                'remarks' => 'being the payment received towards freight charges pertaining to Delivery Note ID : ' . $deliverNoteId . ' dated ' . date_format($deliveryNote->voucher_date, 'd-M-Y'),
+                'party_ledger' => $deliveryNote->party_ledger,
+                'transaction_ledger' => [
+                    'id' => $salesAccountLedger->id,
+                    'name' => $salesAccountLedger->name,
+                    'code' => $salesAccountLedger->code,
+                    'account_group_id' => $salesAccountLedger->account_group_id,
+
+                ],
+                'voucher_entries' => [
+                    [
+                        'entry_order' => 1,
+                        'account_ledger_id' => $salesAccountLedger->id,
+                        'debit' => 0,
+                        'credit' => $dispatchDetail->total_fare ?? 0,
+                    ],
+                    [
+                        'entry_order' => 2,
+                        'account_ledger_id' => $deliveryNote->party_ledger['id'],
+                        'debit' => $dispatchDetail->total_fare ?? 0,
+                        'credit' => 0,
+                    ],
+                ],
+                'voucher_reference' => [
+                    'ref_voucher_id' => $deliverNoteId,
+                    'type' => 'freight'
+                ],
+                // Add other necessary fields here
+            ];
+            $voucherRules = (new VoucherRequest())->rules();
+            // dump($rules);
+            $validatedVoucherData = Validator::make($salesVoucherData, $voucherRules)->validate();
+            // dd($validatedVoucherData);
+            //check if
+
+            $salesVoucherStored = $this->voucherService->store($validatedVoucherData);
+            $salesVoucher = $this->voucherService->getById($salesVoucherStored->id);
+            return $salesVoucher->load('company');
+
+
 
         }
         throw new \Exception("Delivery Note ID is required to create Freight record.");
