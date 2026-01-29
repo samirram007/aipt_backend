@@ -66,17 +66,16 @@ class AuthController extends Controller
     {
         $token = $this->authService->login($request->validated());
         return $this->respondWithToken($token, 'Login successful!');
-
     }
     public function socialCallback(string $provider)
     {
-        $socialUser = Socialite::driver($provider)->stateless()->user();
+        // $socialUser = Socialite::driver($provider)->stateless()->user();
 
-        $user = $this->userService->findOrCreateFromProvider($socialUser, $provider);
+        // $user = $this->userService->findOrCreateFromProvider($socialUser, $provider);
 
-        $token = $this->authService->loginWithUser($user); // ← uses same method!
+        // $token = $this->authService->loginWithUser($user);
 
-        return $this->respondWithToken($token);
+        // return $this->respondWithToken($token);
     }
 
     public function register(RegisterRequest $request): JsonResponse
@@ -155,7 +154,6 @@ class AuthController extends Controller
     {
         $token = $this->authService->refresh();
         return $this->respondWithToken($token, 'Token refreshed successfully!');
-
     }
 
     protected function respondWithToken(string $token, string $message = 'Authenticated successfully!')

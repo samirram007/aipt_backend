@@ -2,13 +2,25 @@
 
 namespace App\Modules\Room\Services;
 
+use App\Modules\Facility\Contracts\FacilityServiceInterface;
+use App\Modules\Facility\Requests\FacilityRequest;
 use App\Modules\Room\Contracts\RoomServiceInterface;
 use App\Modules\Room\Models\Room;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Validator;
 
 class RoomService implements RoomServiceInterface
 {
     protected $resource = [];
+
+    protected $facilityService;
+
+    public function __construct(
+        FacilityServiceInterface $facilityService
+    ) {
+        $this->facilityService = $facilityService;
+    }
 
     public function getAll(): Collection
     {
@@ -22,7 +34,23 @@ class RoomService implements RoomServiceInterface
 
     public function store(array $data): Room
     {
-        return Room::create($data);
+        try {
+            DB::beginTransaction();
+            $room = Room::create($data);
+            $facility_request = [
+                'status' => 'active',
+                'parent_id' => $data['floor_id'],
+                'facilityable_type' => 'room',
+                'facilityable_id' => $room->id,
+            ];
+            $rules = (new FacilityRequest())->rules();
+            $validateFacility = Validator::make($facility_request, $rules)->validate();
+            $this->facilityService->store($validateFacility);
+            DB::commit();
+            return $room;
+        } catch (\Exception $e) {
+            throw $e;
+        }
     }
 
     public function update(array $data, string $id): Room

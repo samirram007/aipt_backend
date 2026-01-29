@@ -22,6 +22,7 @@ class Floor extends Model
         'description',
         'status',
         'floor_number',
+        'remark'
     ];
 
     protected $casts = [

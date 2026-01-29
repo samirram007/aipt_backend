@@ -14,18 +14,21 @@ class RoomRequest extends FormRequest
     public function rules(): array
     {
         $rules = [
-            'name' => ['required', 'string', 'max:255','unique:rooms,name'],
-            'code' => ['sometimes','required', 'string', 'max:255','unique:rooms,code'],
-            'description' => ['sometimes','required', 'string', 'max:255'],
-            'status' => ['sometimes','required', 'string', 'max:255'],
+            'name' => ['required', 'string', 'max:255'],
+            'code' => ['sometimes', 'required', 'string', 'max:255', 'unique:rooms,code'],
+            'description' => ['sometimes', 'required', 'string', 'max:255'],
+            'status' => ['sometimes', 'required', 'string', 'max:255'],
+            'gender_allowed' => ['sometimes', 'required', 'string'],
+            'isolation_supported' => ['sometimes', 'required', 'boolean'],
+            'room_number' => ['required', 'numeric'],
+            'floor_id' => ['required', 'string', 'exists:floors,id']
         ];
 
         // For update requests, make validation more flexible
         if ($this->isMethod('PUT') || $this->isMethod('PATCH')) {
-            $id=$this->route('room');
+            $id = $this->route('room');
             $rules['name'] = ['sometimes', 'required', 'string', 'max:255', 'unique:rooms,name,' . $id,];
             $rules['code'] = ['sometimes', 'required', 'string', 'max:255', 'unique:rooms,code,' . $id,];
-
         }
 
         return $rules;

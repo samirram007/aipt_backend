@@ -13,6 +13,7 @@ return new class extends Migration
             $table->string('name');
             $table->string('code')->unique();
             $table->string('description')->nullable();
+            // $table->enum('bed_type',['general',''])->default('general');
             $table->enum('status', ['available', 'occupied', 'booked', 'maintenance', 'blocked', 'under_cleaning'])->default('available');
             $table->string('remark')->nullable();
             $table->timestamps();

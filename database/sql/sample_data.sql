@@ -1,12 +1,39 @@
 -- drop database aipt_online;
 -- create database aipt_online;
-use aipt_online;
+-- use aipt_online;
 
+-- DROP TABLE IF EXISTS users;
+-- CREATE TABLE IF NOT EXISTS users (
+--   id bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+--   name varchar(191) NOT NULL,
+--   username varchar(191) DEFAULT NULL,
+--   user_type enum('admin','user') NOT NULL DEFAULT 'user',
+--   email varchar(191) NOT NULL,
+--   email_verified_at timestamp NULL DEFAULT NULL,
+--   password varchar(191) DEFAULT NULL,
+--   remember_token varchar(100) DEFAULT NULL,
+--   userable_id bigint(20) unsigned DEFAULT NULL,
+--   userable_type varchar(191) NOT NULL DEFAULT 'employee',
+--   status varchar(191) NOT NULL DEFAULT 'active',
+--   provider varchar(191) DEFAULT NULL,
+--   provider_id varchar(191) DEFAULT NULL,
+--   avatar varchar(191) DEFAULT NULL,
+--   provider_token text DEFAULT NULL,
+--   provider_refresh_token text DEFAULT NULL,
+--   created_at timestamp NULL DEFAULT NULL,
+--   updated_at timestamp NULL DEFAULT NULL,
+--   PRIMARY KEY (id),
+--   UNIQUE KEY users_email_unique (email),
+--   UNIQUE KEY users_provider_provider_id_unique (provider,provider_id),
+--   UNIQUE KEY users_username_unique (username),
+--   UNIQUE KEY users_provider_id_unique (provider_id),
+--   KEY users_userable_id_userable_type_index (userable_id,userable_type)
+-- ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
-INSERT INTO `users` (`id`, `name`,`username`,`user_type`, `email`, `email_verified_at`, `password`, `remember_token`,`status`, `created_at`, `updated_at`) VALUES
-	(1, 'Admin User', 'admin@admin.com','admin', 'admin@admin.com', '2025-06-14 17:39:14', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'yaQRzRT1BQ','active', '2025-06-14 17:39:14', '2025-06-14 17:39:14'),
-	(2, 'Manager User', 'manager@admin.com', 'user','manager@admin.com', '2025-06-14 17:39:14', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'zuUppGB7Bl','active', '2025-06-14 17:39:14', '2025-06-14 17:39:14');
-
+-- DELETE FROM users;
+INSERT INTO users (id, name, username, user_type, email, email_verified_at, password, remember_token, userable_id, userable_type, status, provider, provider_id, avatar, provider_token, provider_refresh_token, created_at, updated_at) VALUES
+	(1, 'Admin User', 'admin@admin.com', 'admin', 'admin@admin.com', '2025-06-14 12:09:14', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'yaQRzRT1BQ', NULL, 'employee', 'active', NULL, NULL, NULL, NULL, NULL, '2025-06-14 12:09:14', '2025-06-14 12:09:14'),
+	(2, 'Manager User', 'manager@admin.com', 'user', 'manager@admin.com', '2025-06-14 12:09:14', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'zuUppGB7Bl', NULL, 'employee', 'active', NULL, NULL, NULL, NULL, NULL, '2025-06-14 12:09:14', '2025-06-14 12:09:14');
 
 INSERT INTO `shifts` (`id`, `name`, `code`, `status`, `icon`, `created_at`, `updated_at`) VALUES
 	(101, 'Morning Shift', 'MS', 'active', NULL, '2025-10-12 22:03:40', '2025-10-12 22:03:40'),
@@ -87,23 +114,23 @@ INSERT IGNORE INTO `app_module_features` (`id`, `app_module_id`, `name`, `code`,
 
 
 
--- DROP TABLE IF EXISTS `account_groups`;
--- CREATE TABLE IF NOT EXISTS `account_groups` (
---   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
---   `name` varchar(191) NOT NULL,
---   `code` varchar(191) DEFAULT NULL,
---   `parent_id` bigint(20) unsigned DEFAULT NULL,
---   `account_nature_id` bigint(20) unsigned DEFAULT NULL,
---   `description` text DEFAULT NULL,
---   `status` varchar(191) NOT NULL DEFAULT 'active',
---   `icon` varchar(191) DEFAULT NULL,
---   `is_system` tinyint(1) NOT NULL DEFAULT 0,
---   `is_hidden` tinyint(1) NOT NULL DEFAULT 0,
---   `created_at` timestamp NULL DEFAULT NULL,
---   `updated_at` timestamp NULL DEFAULT NULL,
---   PRIMARY KEY (`id`),
---   UNIQUE KEY `account_groups_name_unique` (`name`)
--- ) ENGINE=InnoDB AUTO_INCREMENT=50004 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+DROP TABLE IF EXISTS `account_groups`;
+CREATE TABLE IF NOT EXISTS `account_groups` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `name` varchar(191) NOT NULL,
+  `code` varchar(191) DEFAULT NULL,
+  `parent_id` bigint(20) unsigned DEFAULT NULL,
+  `account_nature_id` bigint(20) unsigned DEFAULT NULL,
+  `description` text DEFAULT NULL,
+  `status` varchar(191) NOT NULL DEFAULT 'active',
+  `icon` varchar(191) DEFAULT NULL,
+  `is_system` tinyint(1) NOT NULL DEFAULT 0,
+  `is_hidden` tinyint(1) NOT NULL DEFAULT 0,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `account_groups_name_unique` (`name`)
+) ENGINE=InnoDB AUTO_INCREMENT=50004 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- Dumping data for table aipt.account_groups: ~32 rows (approximately)
 INSERT IGNORE INTO `account_groups` (`id`, `name`, `code`, `parent_id`, `account_nature_id`, `description`, `status`, `icon`, `is_system`, `is_hidden`, `created_at`, `updated_at`) VALUES
@@ -231,381 +258,381 @@ INSERT IGNORE INTO `account_ledgers` (`id`, `name`, `code`, `account_group_id`, 
 -- ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- Dumping data for table aipt.companies: ~1 rows (approximately)
-INSERT IGNORE INTO `companies`
-(`id`, `name`, `code`, `mailing_name`, `address`, `phone_no`, `mobile_no`, `email`, `website`, `company_type_id`, `cin_no`, `tin_no`, `tan_no`, `gst_no`, `pan_no`, `logo`, `currency_id`, `country_id`, `state_id`, `city`, `zip_code`, `is_group_company`, `status`, `created_at`, `updated_at`) VALUES
-(1, 'Sharma Hardware', 'C001', 'Sharma Hardware', 'N.H.-34, MangalBari, Malda', '03512-260342', '9805595288', 'sharma_hardware@gmail.com', 'www.sharma_hardware.com', 1, '1234567890', '1234567890', '1234567890', '19AAACL6442L1Z7', '1234567890', 'logo.png', 1, 76, 36, ' Malda', '732142', 0, 'active', '2025-11-04 11:53:30', '2025-11-04 11:53:30');
+-- INSERT IGNORE INTO `companies`
+-- (`id`, `name`, `code`, `mailing_name`, `address`, `phone_no`, `mobile_no`, `email`, `website`, `company_type_id`, `cin_no`, `tin_no`, `tan_no`, `gst_no`, `pan_no`, `logo`, `currency_id`, `country_id`, `state_id`, `city`, `zip_code`, `is_group_company`, `status`, `created_at`, `updated_at`) VALUES
+-- (1, 'Sharma Hardware', 'C001', 'Sharma Hardware', 'N.H.-34, MangalBari, Malda', '03512-260342', '9805595288', 'sharma_hardware@gmail.com', 'www.sharma_hardware.com', 1, '1234567890', '1234567890', '1234567890', '19AAACL6442L1Z7', '1234567890', 'logo.png', 1, 76, 36, ' Malda', '732142', 0, 'active', '2025-11-04 11:53:30', '2025-11-04 11:53:30');
 
-INSERT INTO `beds`
-(`id`, `name`, `code`, `description`, `status`, `remark`, `created_at`, `updated_at`)
-VALUES
-('7e8a6441-0173-4d3a-a819-0c306949a757','Bed A','BED-101-A','Left side bed','available',NULL,'2026-01-09 16:27:46','2026-01-09 16:27:46'),
-('f8f4b107-1ec0-4dbf-bfc4-c974cefda46c','Bed B','BED-101-B','Right side bed','available',NULL,'2026-01-09 16:27:46','2026-01-09 16:27:46'),
-('1d012652-8b87-4b0a-b670-51aac9dec8fb','Bed A','BED-102-A','Near window bed','available',NULL,'2026-01-09 16:27:46','2026-01-09 16:27:46'),
-('f7b72c64-ed02-4576-bf25-17176ad068bf','Bed B','BED-102-B','Near door bed','available',NULL,'2026-01-09 16:27:46','2026-01-09 16:27:46'),
-('a785e3b3-e17a-4a9c-baec-c65a2bcede5d','Bed A','BED-103-A','Standard bed','available',NULL,'2026-01-09 16:27:46','2026-01-09 16:27:46'),
-('395cc060-09f5-4680-ab8a-6934603617da','Bed B','BED-103-B','Standard bed','available',NULL,'2026-01-09 16:27:46','2026-01-09 16:27:46'),
-('7fd54af2-9104-4cef-9cdf-9015968dc471','Bed 1','ICU-301-1','Ventilator-supported bed','available',NULL,'2026-01-09 16:27:46','2026-01-09 16:27:46'),
-('11f8a9f3-9c55-443a-9ca1-b035fc052f90','Bed 2','ICU-301-2','Monitoring-supported bed','available',NULL,'2026-01-09 16:27:46','2026-01-09 16:27:46'),
-('7d2e6aef-6943-4460-bc5b-5d8910129be9','Recovery Bed 1','REC-401-1','Post-operation recovery bed','available',NULL,'2026-01-09 16:27:46','2026-01-09 16:27:46'),
-('d9ece7f6-7de5-4708-96e3-1033e41fdeba','Recovery Bed 2','REC-401-2','Post-operation recovery bed','available',NULL,'2026-01-09 16:27:46','2026-01-09 16:27:46');
+-- INSERT INTO `beds`
+-- (`id`, `name`, `code`, `description`, `status`, `remark`, `created_at`, `updated_at`)
+-- VALUES
+-- ('7e8a6441-0173-4d3a-a819-0c306949a757','Bed A','BED-101-A','Left side bed','available',NULL,'2026-01-09 16:27:46','2026-01-09 16:27:46'),
+-- ('f8f4b107-1ec0-4dbf-bfc4-c974cefda46c','Bed B','BED-101-B','Right side bed','available',NULL,'2026-01-09 16:27:46','2026-01-09 16:27:46'),
+-- ('1d012652-8b87-4b0a-b670-51aac9dec8fb','Bed A','BED-102-A','Near window bed','available',NULL,'2026-01-09 16:27:46','2026-01-09 16:27:46'),
+-- ('f7b72c64-ed02-4576-bf25-17176ad068bf','Bed B','BED-102-B','Near door bed','available',NULL,'2026-01-09 16:27:46','2026-01-09 16:27:46'),
+-- ('a785e3b3-e17a-4a9c-baec-c65a2bcede5d','Bed A','BED-103-A','Standard bed','available',NULL,'2026-01-09 16:27:46','2026-01-09 16:27:46'),
+-- ('395cc060-09f5-4680-ab8a-6934603617da','Bed B','BED-103-B','Standard bed','available',NULL,'2026-01-09 16:27:46','2026-01-09 16:27:46'),
+-- ('7fd54af2-9104-4cef-9cdf-9015968dc471','Bed 1','ICU-301-1','Ventilator-supported bed','available',NULL,'2026-01-09 16:27:46','2026-01-09 16:27:46'),
+-- ('11f8a9f3-9c55-443a-9ca1-b035fc052f90','Bed 2','ICU-301-2','Monitoring-supported bed','available',NULL,'2026-01-09 16:27:46','2026-01-09 16:27:46'),
+-- ('7d2e6aef-6943-4460-bc5b-5d8910129be9','Recovery Bed 1','REC-401-1','Post-operation recovery bed','available',NULL,'2026-01-09 16:27:46','2026-01-09 16:27:46'),
+-- ('d9ece7f6-7de5-4708-96e3-1033e41fdeba','Recovery Bed 2','REC-401-2','Post-operation recovery bed','available',NULL,'2026-01-09 16:27:46','2026-01-09 16:27:46');
 
-INSERT INTO `buildings`
-(
-  `id`,
-  `name`,
-  `code`,
-  `status`,
-  `description`,
-  `icon`,
-  `building_type`,
-  `total_area_sqft`,
-  `covered_area_sqft`,
-  `year_of_construction`,
-  `sesmic_zone_compliance`,
-  `structural_type`,
-  `created_at`,
-  `updated_at`
-)
-VALUES
-(
-  '78f7bb19-4ecd-4712-8396-1c422260d31a',
-  'Emergency & Trauma Block',
-  'BLD-ER',
-  'active',
-  'Emergency block',
-  'emergency',
-  'emergency_block',
-  120000.00,
-  105000.00,
-  '2018-01-01',
-  1,
-  'Steel + RCC',
-  '2026-01-09 16:27:46',
-  '2026-01-09 16:27:46'
-),
-(
-  '8b282891-069a-4a67-b90b-c8a0fa90c1dd',
-  'Main Hospital Building',
-  'BLD-MAIN',
-  'active',
-  'Main clinical hospital building',
-  'hospital',
-  'main_hospital_block',
-  250000.00,
-  220000.00,
-  '2015-01-01',
-  1,
-  'RCC',
-  '2026-01-09 16:27:46',
-  '2026-01-09 16:27:46'
-),
-(
-  '304a13ec-d2db-4fd1-85c0-36b376e2a4d2',
-  'Research & Administration Block',
-  'BLD-RES-ADM',
-  'active',
-  'Research and admin offices',
-  'office',
-  'admin_block',
-  90000.00,
-  82000.00,
-  '2012-01-01',
-  1,
-  'RCC',
-  '2026-01-09 16:27:46',
-  '2026-01-09 16:27:46'
-);
+-- INSERT INTO `buildings`
+-- (
+--   `id`,
+--   `name`,
+--   `code`,
+--   `status`,
+--   `description`,
+--   `icon`,
+--   `building_type`,
+--   `total_area_sqft`,
+--   `covered_area_sqft`,
+--   `year_of_construction`,
+--   `sesmic_zone_compliance`,
+--   `structural_type`,
+--   `created_at`,
+--   `updated_at`
+-- )
+-- VALUES
+-- (
+--   '78f7bb19-4ecd-4712-8396-1c422260d31a',
+--   'Emergency & Trauma Block',
+--   'BLD-ER',
+--   'active',
+--   'Emergency block',
+--   'emergency',
+--   'emergency_block',
+--   120000.00,
+--   105000.00,
+--   '2018-01-01',
+--   1,
+--   'Steel + RCC',
+--   '2026-01-09 16:27:46',
+--   '2026-01-09 16:27:46'
+-- ),
+-- (
+--   '8b282891-069a-4a67-b90b-c8a0fa90c1dd',
+--   'Main Hospital Building',
+--   'BLD-MAIN',
+--   'active',
+--   'Main clinical hospital building',
+--   'hospital',
+--   'main_hospital_block',
+--   250000.00,
+--   220000.00,
+--   '2015-01-01',
+--   1,
+--   'RCC',
+--   '2026-01-09 16:27:46',
+--   '2026-01-09 16:27:46'
+-- ),
+-- (
+--   '304a13ec-d2db-4fd1-85c0-36b376e2a4d2',
+--   'Research & Administration Block',
+--   'BLD-RES-ADM',
+--   'active',
+--   'Research and admin offices',
+--   'office',
+--   'admin_block',
+--   90000.00,
+--   82000.00,
+--   '2012-01-01',
+--   1,
+--   'RCC',
+--   '2026-01-09 16:27:46',
+--   '2026-01-09 16:27:46'
+-- );
 
-INSERT INTO `floors`
-(
-  `id`,
-  `name`,
-  `code`,
-  `description`,
-  `status`,
-  `floor_number`,
-  `remark`,
-  `created_at`,
-  `updated_at`
-)
-VALUES
-(
-  '4247b27c-4711-494f-8f09-172bd9557d37',
-  'First Floor',
-  'FLOOR-1',
-  'Main inpatient floor',
-  'active',
-  1,
-  NULL,
-  '2026-01-09 16:27:46',
-  '2026-01-09 16:27:46'
-),
-(
-  'd881f591-eabc-4b04-9ae3-80922b5dbb9a',
-  'Second Floor',
-  'FLOOR-2',
-  'General wards',
-  'active',
-  2,
-  NULL,
-  '2026-01-09 16:27:46',
-  '2026-01-09 16:27:46'
-),
-(
-  '2a0d6f69-cd32-4d80-9e6c-699f4c157aab',
-  'Third Floor',
-  'FLOOR-3',
-  'ICU and critical care',
-  'active',
-  3,
-  NULL,
-  '2026-01-09 16:27:46',
-  '2026-01-09 16:27:46'
-),
-(
-  '77262084-b88d-4d50-ba38-840b09348817',
-  'Fourth Floor',
-  'FLOOR-4',
-  'Operation theatres',
-  'active',
-  4,
-  NULL,
-  '2026-01-09 16:27:46',
-  '2026-01-09 16:27:46'
-),
-(
-  '7ef4a210-206a-4234-8f1a-09de3d697f94',
-  'Fifth Floor',
-  'FLOOR-5',
-  'Private rooms',
-  'active',
-  5,
-  NULL,
-  '2026-01-09 16:27:46',
-  '2026-01-09 16:27:46'
-),
-(
-  'ba6a1538-0fdc-4670-b650-6fef19d7d476',
-  'Sixth Floor',
-  'FLOOR-6',
-  'Administration offices',
-  'active',
-  6,
-  NULL,
-  '2026-01-09 16:27:46',
-  '2026-01-09 16:27:46'
-),
-(
-  'c9c6f86d-637a-4594-afe0-6dfc33f40bd4',
-  'Seventh Floor',
-  'FLOOR-7',
-  'Staff accommodation',
-  'active',
-  7,
-  NULL,
-  '2026-01-09 16:27:46',
-  '2026-01-09 16:27:46'
-),
-(
-  '629a3074-f95f-4cbe-b330-23824d088e8c',
-  'Ground Floor',
-  'FLOOR-G',
-  'Reception and emergency services',
-  'active',
-  0,
-  NULL,
-  '2026-01-09 16:27:46',
-  '2026-01-09 16:27:46'
-);
+-- INSERT INTO `floors`
+-- (
+--   `id`,
+--   `name`,
+--   `code`,
+--   `description`,
+--   `status`,
+--   `floor_number`,
+--   `remark`,
+--   `created_at`,
+--   `updated_at`
+-- )
+-- VALUES
+-- (
+--   '4247b27c-4711-494f-8f09-172bd9557d37',
+--   'First Floor',
+--   'FLOOR-1',
+--   'Main inpatient floor',
+--   'active',
+--   1,
+--   NULL,
+--   '2026-01-09 16:27:46',
+--   '2026-01-09 16:27:46'
+-- ),
+-- (
+--   'd881f591-eabc-4b04-9ae3-80922b5dbb9a',
+--   'Second Floor',
+--   'FLOOR-2',
+--   'General wards',
+--   'active',
+--   2,
+--   NULL,
+--   '2026-01-09 16:27:46',
+--   '2026-01-09 16:27:46'
+-- ),
+-- (
+--   '2a0d6f69-cd32-4d80-9e6c-699f4c157aab',
+--   'Third Floor',
+--   'FLOOR-3',
+--   'ICU and critical care',
+--   'active',
+--   3,
+--   NULL,
+--   '2026-01-09 16:27:46',
+--   '2026-01-09 16:27:46'
+-- ),
+-- (
+--   '77262084-b88d-4d50-ba38-840b09348817',
+--   'Fourth Floor',
+--   'FLOOR-4',
+--   'Operation theatres',
+--   'active',
+--   4,
+--   NULL,
+--   '2026-01-09 16:27:46',
+--   '2026-01-09 16:27:46'
+-- ),
+-- (
+--   '7ef4a210-206a-4234-8f1a-09de3d697f94',
+--   'Fifth Floor',
+--   'FLOOR-5',
+--   'Private rooms',
+--   'active',
+--   5,
+--   NULL,
+--   '2026-01-09 16:27:46',
+--   '2026-01-09 16:27:46'
+-- ),
+-- (
+--   'ba6a1538-0fdc-4670-b650-6fef19d7d476',
+--   'Sixth Floor',
+--   'FLOOR-6',
+--   'Administration offices',
+--   'active',
+--   6,
+--   NULL,
+--   '2026-01-09 16:27:46',
+--   '2026-01-09 16:27:46'
+-- ),
+-- (
+--   'c9c6f86d-637a-4594-afe0-6dfc33f40bd4',
+--   'Seventh Floor',
+--   'FLOOR-7',
+--   'Staff accommodation',
+--   'active',
+--   7,
+--   NULL,
+--   '2026-01-09 16:27:46',
+--   '2026-01-09 16:27:46'
+-- ),
+-- (
+--   '629a3074-f95f-4cbe-b330-23824d088e8c',
+--   'Ground Floor',
+--   'FLOOR-G',
+--   'Reception and emergency services',
+--   'active',
+--   0,
+--   NULL,
+--   '2026-01-09 16:27:46',
+--   '2026-01-09 16:27:46'
+-- );
 
-INSERT INTO `rooms`
-(
-  `id`,
-  `name`,
-  `code`,
-  `gender_allowed`,
-  `isolation_supported`,
-  `description`,
-  `room_number`,
-  `status`,
-  `remark`,
-  `created_at`,
-  `updated_at`
-)
-VALUES
-(
-  '16e3bb44-f489-44d9-adce-7e74accef7fa',
-  'ICU 301',
-  'ICU-301',
-  'any',
-  true,
-  'ICU bed with ventilator',
-  '301',
-  'active',
-  NULL,
-  '2026-01-09 16:27:46',
-  '2026-01-09 16:27:46'
-),
-(
-  'd5101c34-4f07-4f30-b7fc-6c9bcafc5215',
-  'ICU 302',
-  'ICU-302',
-  'any',
-  true,
-  'ICU bed with monitoring',
-  '302',
-  'active',
-  NULL,
-  '2026-01-09 16:27:46',
-  '2026-01-09 16:27:46'
-),
-(
-  'c360c994-2517-4245-a7de-e666800007b3',
-  'OT 401',
-  'OT-401',
-  'any',
-  false,
-  'Major operation theatre',
-  '401',
-  'active',
-  NULL,
-  '2026-01-09 16:27:46',
-  '2026-01-09 16:27:46'
-),
-(
-  '786423a7-efbb-4ecc-8ff5-bf0856803681',
-  'OT 402',
-  'OT-402',
-  'any',
-  false,
-  'Minor operation theatre',
-  '402',
-  'active',
-  NULL,
-  '2026-01-09 16:27:46',
-  '2026-01-09 16:27:46'
-),
-(
-  '36677887-8d2c-42d6-abab-3255c72212ed',
-  'Room 101',
-  'RM-101',
-  'any',
-  false,
-  'General ward room',
-  '101',
-  'active',
-  NULL,
-  '2026-01-09 16:27:46',
-  '2026-01-09 16:27:46'
-),
-(
-  'eb708a0b-9131-4c28-a8d7-d28a0f87d389',
-  'Room 102',
-  'RM-102',
-  'any',
-  false,
-  'General ward room',
-  '102',
-  'active',
-  NULL,
-  '2026-01-09 16:27:46',
-  '2026-01-09 16:27:46'
-),
-(
-  '887f56eb-b6cf-4fd4-9361-2ce4f6b66e12',
-  'Room 103',
-  'RM-103',
-  'any',
-  false,
-  'General ward room',
-  '103',
-  'active',
-  NULL,
-  '2026-01-09 16:27:46',
-  '2026-01-09 16:27:46'
-),
-(
-  '54177208-b9f2-489c-b2b7-9b837a5dcf9e',
-  'Room 201',
-  'RM-201',
-  'any',
-  false,
-  'Semi-private room',
-  '201',
-  'active',
-  NULL,
-  '2026-01-09 16:27:46',
-  '2026-01-09 16:27:46'
-),
-(
-  '762daa08-558c-482f-b192-ed9a7e19e783',
-  'Room 202',
-  'RM-202',
-  'any',
-  false,
-  'Semi-private room',
-  '202',
-  'active',
-  NULL,
-  '2026-01-09 16:27:46',
-  '2026-01-09 16:27:46'
-),
-(
-  '6ccb563b-31bd-433d-8a84-2295ae2a172e',
-  'Room G01',
-  'RM-G01',
-  'any',
-  false,
-  'Emergency consultation room',
-  'G01',
-  'reserved_for_emergency',
-  NULL,
-  '2026-01-09 16:27:46',
-  '2026-01-09 16:27:46'
-),
-(
-  '99c5cb3a-ac99-4c73-96a5-f7c01cc0fb7a',
-  'Room G02',
-  'RM-G02',
-  'any',
-  false,
-  'Triage room',
-  'G02',
-  'reserved_for_emergency',
-  NULL,
-  '2026-01-09 16:27:46',
-  '2026-01-09 16:27:46'
-);
+-- INSERT INTO `rooms`
+-- (
+--   `id`,
+--   `name`,
+--   `code`,
+--   `gender_allowed`,
+--   `isolation_supported`,
+--   `description`,
+--   `room_number`,
+--   `status`,
+--   `remark`,
+--   `created_at`,
+--   `updated_at`
+-- )
+-- VALUES
+-- (
+--   '16e3bb44-f489-44d9-adce-7e74accef7fa',
+--   'ICU 301',
+--   'ICU-301',
+--   'any',
+--   true,
+--   'ICU bed with ventilator',
+--   '301',
+--   'active',
+--   NULL,
+--   '2026-01-09 16:27:46',
+--   '2026-01-09 16:27:46'
+-- ),
+-- (
+--   'd5101c34-4f07-4f30-b7fc-6c9bcafc5215',
+--   'ICU 302',
+--   'ICU-302',
+--   'any',
+--   true,
+--   'ICU bed with monitoring',
+--   '302',
+--   'active',
+--   NULL,
+--   '2026-01-09 16:27:46',
+--   '2026-01-09 16:27:46'
+-- ),
+-- (
+--   'c360c994-2517-4245-a7de-e666800007b3',
+--   'OT 401',
+--   'OT-401',
+--   'any',
+--   false,
+--   'Major operation theatre',
+--   '401',
+--   'active',
+--   NULL,
+--   '2026-01-09 16:27:46',
+--   '2026-01-09 16:27:46'
+-- ),
+-- (
+--   '786423a7-efbb-4ecc-8ff5-bf0856803681',
+--   'OT 402',
+--   'OT-402',
+--   'any',
+--   false,
+--   'Minor operation theatre',
+--   '402',
+--   'active',
+--   NULL,
+--   '2026-01-09 16:27:46',
+--   '2026-01-09 16:27:46'
+-- ),
+-- (
+--   '36677887-8d2c-42d6-abab-3255c72212ed',
+--   'Room 101',
+--   'RM-101',
+--   'any',
+--   false,
+--   'General ward room',
+--   '101',
+--   'active',
+--   NULL,
+--   '2026-01-09 16:27:46',
+--   '2026-01-09 16:27:46'
+-- ),
+-- (
+--   'eb708a0b-9131-4c28-a8d7-d28a0f87d389',
+--   'Room 102',
+--   'RM-102',
+--   'any',
+--   false,
+--   'General ward room',
+--   '102',
+--   'active',
+--   NULL,
+--   '2026-01-09 16:27:46',
+--   '2026-01-09 16:27:46'
+-- ),
+-- (
+--   '887f56eb-b6cf-4fd4-9361-2ce4f6b66e12',
+--   'Room 103',
+--   'RM-103',
+--   'any',
+--   false,
+--   'General ward room',
+--   '103',
+--   'active',
+--   NULL,
+--   '2026-01-09 16:27:46',
+--   '2026-01-09 16:27:46'
+-- ),
+-- (
+--   '54177208-b9f2-489c-b2b7-9b837a5dcf9e',
+--   'Room 201',
+--   'RM-201',
+--   'any',
+--   false,
+--   'Semi-private room',
+--   '201',
+--   'active',
+--   NULL,
+--   '2026-01-09 16:27:46',
+--   '2026-01-09 16:27:46'
+-- ),
+-- (
+--   '762daa08-558c-482f-b192-ed9a7e19e783',
+--   'Room 202',
+--   'RM-202',
+--   'any',
+--   false,
+--   'Semi-private room',
+--   '202',
+--   'active',
+--   NULL,
+--   '2026-01-09 16:27:46',
+--   '2026-01-09 16:27:46'
+-- ),
+-- (
+--   '6ccb563b-31bd-433d-8a84-2295ae2a172e',
+--   'Room G01',
+--   'RM-G01',
+--   'any',
+--   false,
+--   'Emergency consultation room',
+--   'G01',
+--   'reserved_for_emergency',
+--   NULL,
+--   '2026-01-09 16:27:46',
+--   '2026-01-09 16:27:46'
+-- ),
+-- (
+--   '99c5cb3a-ac99-4c73-96a5-f7c01cc0fb7a',
+--   'Room G02',
+--   'RM-G02',
+--   'any',
+--   false,
+--   'Triage room',
+--   'G02',
+--   'reserved_for_emergency',
+--   NULL,
+--   '2026-01-09 16:27:46',
+--   '2026-01-09 16:27:46'
+-- );
 
-INSERT INTO `amenity_categories` VALUES
-('0eb25884-dffd-42fa-9769-1972a669c8da','Patient Comfort','PATIENT_COMFORT','Amenities that enhance physical comfort and convenience for patients and attendants','active',NULL,NULL,NULL),
-('27f0dee5-15bf-4309-9977-97d001528840','Transport & Parking','TRANSPORT_PARKING','Amenities related to patient transport, vehicle access, and parking facilities','active',NULL,NULL,NULL),
-('3013c541-60d0-434d-a711-27b47a93684e','Wellness & Spiritual','WELLNESS_SPIRITUAL','Amenities that support mental, emotional, and spiritual well-being','active',NULL,NULL,NULL),
-('607a09e2-7813-4b10-bf9b-aa6903bb73c3','Housekeeping & Hygiene','HOUSEKEEPING_HYGIENE','Amenities supporting cleanliness, infection control, and waste management','active',NULL,NULL,NULL),
-('63c6978b-15a8-42d7-aacb-2160240254eb','Information & Support','INFORMATION_SUPPORT','Amenities related to guidance, communication, and patient assistance services','active',NULL,NULL,NULL),
-('6f4f8db0-1dcf-4113-8ff7-7b2c9f9cb8ad','Safety & Security','SAFETY_SECURITY','Amenities that ensure safety, protection, and emergency preparedness','active',NULL,NULL,NULL),
-('cfeede7f-48e5-4bee-82e5-96d19cfc6763','Accessibility','ACCESSIBILITY','Amenities ensuring barrier-free and inclusive access for all individuals','active',NULL,NULL,NULL),
-('d54fdae8-d3e4-4591-8071-0da784215bb3','Convenience','CONVENIENCE','Amenities that provide ease of access to essential services within the hospital','active',NULL,NULL,NULL),
-('e46bba3a-a752-4b4b-822d-86b53ccda679','Family & Visitor','FAMILY_VISITOR','Amenities designed to support attendants and visitors during hospital visits','active',NULL,NULL,NULL);
+-- INSERT INTO `amenity_categories` VALUES
+-- ('0eb25884-dffd-42fa-9769-1972a669c8da','Patient Comfort','PATIENT_COMFORT','Amenities that enhance physical comfort and convenience for patients and attendants','active',NULL,NULL,NULL),
+-- ('27f0dee5-15bf-4309-9977-97d001528840','Transport & Parking','TRANSPORT_PARKING','Amenities related to patient transport, vehicle access, and parking facilities','active',NULL,NULL,NULL),
+-- ('3013c541-60d0-434d-a711-27b47a93684e','Wellness & Spiritual','WELLNESS_SPIRITUAL','Amenities that support mental, emotional, and spiritual well-being','active',NULL,NULL,NULL),
+-- ('607a09e2-7813-4b10-bf9b-aa6903bb73c3','Housekeeping & Hygiene','HOUSEKEEPING_HYGIENE','Amenities supporting cleanliness, infection control, and waste management','active',NULL,NULL,NULL),
+-- ('63c6978b-15a8-42d7-aacb-2160240254eb','Information & Support','INFORMATION_SUPPORT','Amenities related to guidance, communication, and patient assistance services','active',NULL,NULL,NULL),
+-- ('6f4f8db0-1dcf-4113-8ff7-7b2c9f9cb8ad','Safety & Security','SAFETY_SECURITY','Amenities that ensure safety, protection, and emergency preparedness','active',NULL,NULL,NULL),
+-- ('cfeede7f-48e5-4bee-82e5-96d19cfc6763','Accessibility','ACCESSIBILITY','Amenities ensuring barrier-free and inclusive access for all individuals','active',NULL,NULL,NULL),
+-- ('d54fdae8-d3e4-4591-8071-0da784215bb3','Convenience','CONVENIENCE','Amenities that provide ease of access to essential services within the hospital','active',NULL,NULL,NULL),
+-- ('e46bba3a-a752-4b4b-822d-86b53ccda679','Family & Visitor','FAMILY_VISITOR','Amenities designed to support attendants and visitors during hospital visits','active',NULL,NULL,NULL);
 
 
-INSERT INTO `amenities` VALUES
-('1af7e29f-4e70-4e45-9b38-b1c48e6e5d99','Biomedical Waste Management','AMN_BMW','607a09e2-7813-4b10-bf9b-aa6903bb73c3','active'),
-('2492d694-435e-42af-8914-13c10c18c20a','Reception & Help Desk','AMN_HELP_DESK','63c6978b-15a8-42d7-aacb-2160240254eb','active'),
-('2f57d8a1-b25f-4780-9816-53d5acf08d1a','Fire Safety Systems','AMN_FIRE_SAFETY','6f4f8db0-1dcf-4113-8ff7-7b2c9f9cb8ad','active'),
-('3ae7de24-058f-449e-9aa3-c0708175d6a1','CCTV Surveillance','AMN_CCTV','6f4f8db0-1dcf-4113-8ff7-7b2c9f9cb8ad','active'),
-('575a8577-df07-49e4-9940-15253f78f318','Cafeteria / Food Court','AMN_CAFETERIA','d54fdae8-d3e4-4591-8071-0da784215bb3','active'),
-('5efc7fed-5146-46ac-9041-034bc4c6ccdd','Digital Signage','AMN_DIGITAL_SIGNAGE','63c6978b-15a8-42d7-aacb-2160240254eb','active'),
-('611a67d1-6f76-4482-a68b-dcfcd40044d0','Elevators / Lifts','AMN_ELEVATORS','cfeede7f-48e5-4bee-82e5-96d19cfc6763','active'),
-('931abbaa-2f71-47e4-89c5-abbf65896486','Comfortable Waiting Areas','AMN_WAITING_AREA','0eb25884-dffd-42fa-9769-1972a669c8da','active'),
-('955a30cd-746e-4dc4-b576-eb3d2822010e','Air Circulation / Climate Comfort','AMN_CLIMATE_COMFORT','0eb25884-dffd-42fa-9769-1972a669c8da','active'),
-('a049c654-b755-478e-a1fc-ebab281633d7','Housekeeping Services','AMN_HOUSEKEEPING','607a09e2-7813-4b10-bf9b-aa6903bb73c3','active'),
-('a520f046-dcb2-4896-a2a3-c98ac1e64294','Visitor Parking','AMN_VISITOR_PARKING','27f0dee5-15bf-4309-9977-97d001528840','active'),
-('ac6df309-362a-434c-a51e-082a6fe15860','Free Wi-Fi','AMN_WIFI','d54fdae8-d3e4-4591-8071-0da784215bb3','active'),
-('bdfb2b95-0339-4d64-ac71-f78db63ebd08','Ambulance Access Area','AMN_AMBULANCE_ACCESS','27f0dee5-15bf-4309-9977-97d001528840','active'),
-('c7732eca-b45b-4f0e-b190-6cd44eb856b6','Pharmacy Access','AMN_PHARMACY','d54fdae8-d3e4-4591-8071-0da784215bb3','active'),
-('cdff5255-c29c-4108-b4d7-a7ea1160dce7','Wheelchair Access','AMN_WHEELCHAIR_ACCESS','cfeede7f-48e5-4bee-82e5-96d19cfc6763','active'),
-('df93ea6e-35eb-4723-bb20-57b92813b493','Attendant Waiting Area','AMN_ATTENDANT_WAITING','e46bba3a-a752-4b4b-822d-86b53ccda679','active'),
-('e990d131-cb98-4999-adc5-62ac93d45ce9','Drinking Water Facility','AMN_DRINKING_WATER','0eb25884-dffd-42fa-9769-1972a669c8da','active'),
-('f24093e3-f206-4fbe-8010-d2bfc9427682','Prayer / Meditation Room','AMN_PRAYER_ROOM','3013c541-60d0-434d-a711-27b47a93684e','active'),
-('f6f5c3c7-72a3-4eba-949e-da9d6d866e68','Ramps & Handrails','AMN_RAMPS_HANDRAILS','cfeede7f-48e5-4bee-82e5-96d19cfc6763','active');
+-- INSERT INTO `amenities` VALUES
+-- ('1af7e29f-4e70-4e45-9b38-b1c48e6e5d99','Biomedical Waste Management','AMN_BMW','607a09e2-7813-4b10-bf9b-aa6903bb73c3','active'),
+-- ('2492d694-435e-42af-8914-13c10c18c20a','Reception & Help Desk','AMN_HELP_DESK','63c6978b-15a8-42d7-aacb-2160240254eb','active'),
+-- ('2f57d8a1-b25f-4780-9816-53d5acf08d1a','Fire Safety Systems','AMN_FIRE_SAFETY','6f4f8db0-1dcf-4113-8ff7-7b2c9f9cb8ad','active'),
+-- ('3ae7de24-058f-449e-9aa3-c0708175d6a1','CCTV Surveillance','AMN_CCTV','6f4f8db0-1dcf-4113-8ff7-7b2c9f9cb8ad','active'),
+-- ('575a8577-df07-49e4-9940-15253f78f318','Cafeteria / Food Court','AMN_CAFETERIA','d54fdae8-d3e4-4591-8071-0da784215bb3','active'),
+-- ('5efc7fed-5146-46ac-9041-034bc4c6ccdd','Digital Signage','AMN_DIGITAL_SIGNAGE','63c6978b-15a8-42d7-aacb-2160240254eb','active'),
+-- ('611a67d1-6f76-4482-a68b-dcfcd40044d0','Elevators / Lifts','AMN_ELEVATORS','cfeede7f-48e5-4bee-82e5-96d19cfc6763','active'),
+-- ('931abbaa-2f71-47e4-89c5-abbf65896486','Comfortable Waiting Areas','AMN_WAITING_AREA','0eb25884-dffd-42fa-9769-1972a669c8da','active'),
+-- ('955a30cd-746e-4dc4-b576-eb3d2822010e','Air Circulation / Climate Comfort','AMN_CLIMATE_COMFORT','0eb25884-dffd-42fa-9769-1972a669c8da','active'),
+-- ('a049c654-b755-478e-a1fc-ebab281633d7','Housekeeping Services','AMN_HOUSEKEEPING','607a09e2-7813-4b10-bf9b-aa6903bb73c3','active'),
+-- ('a520f046-dcb2-4896-a2a3-c98ac1e64294','Visitor Parking','AMN_VISITOR_PARKING','27f0dee5-15bf-4309-9977-97d001528840','active'),
+-- ('ac6df309-362a-434c-a51e-082a6fe15860','Free Wi-Fi','AMN_WIFI','d54fdae8-d3e4-4591-8071-0da784215bb3','active'),
+-- ('bdfb2b95-0339-4d64-ac71-f78db63ebd08','Ambulance Access Area','AMN_AMBULANCE_ACCESS','27f0dee5-15bf-4309-9977-97d001528840','active'),
+-- ('c7732eca-b45b-4f0e-b190-6cd44eb856b6','Pharmacy Access','AMN_PHARMACY','d54fdae8-d3e4-4591-8071-0da784215bb3','active'),
+-- ('cdff5255-c29c-4108-b4d7-a7ea1160dce7','Wheelchair Access','AMN_WHEELCHAIR_ACCESS','cfeede7f-48e5-4bee-82e5-96d19cfc6763','active'),
+-- ('df93ea6e-35eb-4723-bb20-57b92813b493','Attendant Waiting Area','AMN_ATTENDANT_WAITING','e46bba3a-a752-4b4b-822d-86b53ccda679','active'),
+-- ('e990d131-cb98-4999-adc5-62ac93d45ce9','Drinking Water Facility','AMN_DRINKING_WATER','0eb25884-dffd-42fa-9769-1972a669c8da','active'),
+-- ('f24093e3-f206-4fbe-8010-d2bfc9427682','Prayer / Meditation Room','AMN_PRAYER_ROOM','3013c541-60d0-434d-a711-27b47a93684e','active'),
+-- ('f6f5c3c7-72a3-4eba-949e-da9d6d866e68','Ramps & Handrails','AMN_RAMPS_HANDRAILS','cfeede7f-48e5-4bee-82e5-96d19cfc6763','active');

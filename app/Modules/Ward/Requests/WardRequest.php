@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Modules\Floor\Requests;
+namespace App\Modules\Ward\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class FloorRequest extends FormRequest
+class WardRequest extends FormRequest
 {
     public function authorize(): bool
     {
@@ -14,19 +14,18 @@ class FloorRequest extends FormRequest
     public function rules(): array
     {
         $rules = [
-            'name' => ['required', 'string', 'max:255'],
-            'code' => ['sometimes', 'required', 'string', 'max:255', 'unique:floors,code'],
-            'description' => ['nullable', 'string', 'max:255'],
-            'status' => ['sometimes', 'required', 'string', 'max:255'],
-            'floor_number' => ['required', 'numeric'],
-            'building_id' => ['required', 'string', 'exists:buildings,id']
+            'name' => ['required', 'string', 'max:255','unique:wards,name'],
+            'code' => ['sometimes','required', 'string', 'max:255','unique:wards,code'],
+            'description' => ['sometimes','required', 'string', 'max:255'],
+            'status' => ['sometimes','required', 'string', 'max:255'],
         ];
 
         // For update requests, make validation more flexible
         if ($this->isMethod('PUT') || $this->isMethod('PATCH')) {
-            $id = $this->route('floor');
-            $rules['name'] = ['sometimes', 'required', 'string', 'max:255', 'unique:floors,name,' . $id,];
-            $rules['code'] = ['sometimes', 'required', 'string', 'max:255', 'unique:floors,code,' . $id,];
+            $id=$this->route('ward');
+            $rules['name'] = ['sometimes', 'required', 'string', 'max:255', 'unique:wards,name,' . $id,];
+            $rules['code'] = ['sometimes', 'required', 'string', 'max:255', 'unique:wards,code,' . $id,];
+
         }
 
         return $rules;

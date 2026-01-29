@@ -20,7 +20,7 @@ class Bed extends Model
         'code',
         'description',
         'status',
-
+        'remark'
     ];
 
     protected $casts = [

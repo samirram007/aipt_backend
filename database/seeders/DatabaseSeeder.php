@@ -121,14 +121,14 @@ class DatabaseSeeder extends Seeder
             // VoucherDemoSeeder::class,
             // ReceiptNoteSeeder::class,
 
-            FacilitySeeder::class,
+            // FacilitySeeder::class,
             // AmenitySeeder::class,
             // RoomSeeder::class,
             // BedSeeder::class,
             // FloorSeeder::class,
             // BuildingSeeder::class,
             // AmenityCategorySeeder::class,
-            FacilityAmenitySeeder::class
+            // FacilityAmenitySeeder::class
 
 
         ]);

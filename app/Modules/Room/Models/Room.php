@@ -22,6 +22,9 @@ class Room extends Model
         'description',
         'room_number',
         'status',
+        'remark',
+        'isolation_supported',
+        'gender_allowed'
     ];
 
     protected $appends = ['bed_count'];
