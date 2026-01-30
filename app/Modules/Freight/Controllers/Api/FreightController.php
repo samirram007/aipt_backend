@@ -50,7 +50,7 @@ class FreightController extends Controller
     public function voucher_wise(): SuccessCollection
     {
         $data = $this->service->voucherWiseReport();
-        return new SuccessCollection($data);
+        return new VoucherCollection($data);
     }
     public function billing_preference(): SuccessCollection
     {

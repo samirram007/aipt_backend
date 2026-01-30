@@ -9,6 +9,7 @@ use App\Modules\DayBook\Resources\DayBookCollection;
 use App\Modules\DayBook\Requests\DayBookRequest;
 use App\Http\Resources\SuccessResource;
 use App\Http\Resources\SuccessCollection;
+use App\Modules\Voucher\Resources\VoucherCollection;
 use App\Traits\ApiResponseTrait;
 use Illuminate\Http\JsonResponse;
 
@@ -24,7 +25,7 @@ class DayBookController extends Controller
     {
         $data = $this->service->getAll();
 
-        return new DayBookCollection($data);
+        return new VoucherCollection($data);
     }
 
     public function show(int $id): SuccessResource

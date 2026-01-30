@@ -4,6 +4,8 @@ namespace App\Modules\UserFiscalYear\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Modules\UserFiscalYear\Contracts\UserFiscalYearServiceInterface;
+use App\Modules\UserFiscalYear\Requests\AccountingPeriodRequest;
+use App\Modules\UserFiscalYear\Requests\ReportingPeriodRequest;
 use App\Modules\UserFiscalYear\Resources\UserFiscalYearResource;
 use App\Modules\UserFiscalYear\Resources\UserFiscalYearCollection;
 use App\Modules\UserFiscalYear\Requests\UserFiscalYearRequest;
@@ -49,6 +51,11 @@ class UserFiscalYearController extends Controller
     {
         $data = $this->service->update($request->validated(), $id);
         return new UserFiscalYearResource($data, $messages = 'UserFiscalYear updated successfully');
+    }
+    public function saveReportingPeriod(ReportingPeriodRequest $request): SuccessResource
+    {
+        $data = $this->service->saveReportingPeriod($request->validated());
+        return new UserFiscalYearResource($data, $messages = 'Reporting period saved successfully');
     }
 
     public function destroy(int $id): JsonResponse

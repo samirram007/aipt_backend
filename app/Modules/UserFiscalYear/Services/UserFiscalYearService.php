@@ -33,6 +33,19 @@ class UserFiscalYearService implements UserFiscalYearServiceInterface
         return $record->fresh();
     }
 
+    public function saveReportingPeriod(array $data): UserFiscalYear
+    {
+        $userId = auth()->id();
+        $record = UserFiscalYear::where('user_id', $userId)->first();
+
+        if (!$record) {
+            throw new \Exception('Reporting period cannot be set. UserFiscalYear not found for the user.');
+        }
+
+        $record->update($data);
+        return $record->fresh();
+    }
+
     public function delete(int $id): bool
     {
         $record = UserFiscalYear::findOrFail($id);

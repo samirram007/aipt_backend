@@ -41,6 +41,10 @@ class User extends Authenticatable implements JWTSubject
     {
         return $this->hasOne(UserFiscalYear::class, 'user_id', 'id');
     }
+    public function current_fiscal_year(): ?UserFiscalYear
+    {
+        return $this->user_fiscal_year()->first();
+    }
     public function fiscal_years(): BelongsToMany
     {
         return $this->belongsToMany(

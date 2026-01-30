@@ -13,7 +13,18 @@ class DayBookService implements DayBookServiceInterface
 
     public function getAll(): Collection
     {
-        $vouchers = Voucher::with($this->resource)->get();
+        // $user = auth()->user();
+        $userFiscalYear = auth()->user()->user_fiscal_year()->first();
+        $startDate = $userFiscalYear->start_date;
+        $endDate = $userFiscalYear->end_date;
+        if (!$userFiscalYear) {
+            throw new \Exception('UserFiscalYear not set for the user.');
+        }
+        $vouchers = Voucher::with($this->resource)
+            ->where('fiscal_year_id', $userFiscalYear->id)
+            ->whereBetween('voucher_date', [$startDate, $endDate])
+            ->get();
+
         //dd($vouchers);
         // Optionally map each voucher to include party/transaction detection
         return $vouchers->map(fn($voucher) => $this->attachLedgerInfo($voucher));
