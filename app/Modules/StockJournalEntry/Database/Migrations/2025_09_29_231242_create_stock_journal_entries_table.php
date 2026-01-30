@@ -18,6 +18,7 @@ return new class extends Migration {
             $table->decimal('item_cost', 15, 4)->default(0);
             $table->decimal('snapshot_quantity', 15, 4)->nullable();
             $table->decimal('counted_quantity', 15, 4)->nullable();
+            $table->decimal('order_quantity', 15, 4)->nullable();
 
             $table->decimal('actual_quantity', 15, 4)->default(1);
             $table->decimal('billing_quantity', 15, 4)->default(1);
