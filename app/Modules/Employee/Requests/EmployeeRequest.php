@@ -19,7 +19,7 @@ class EmployeeRequest extends FormRequest
             'code' => ['sometimes', 'nullable', 'string', 'max:255', 'unique:employees,code'],
             'dob' => ['sometimes', 'nullable', 'date'],
             'doj' => ['sometimes', 'nullable', 'date'],
-            'email' => ['sometimes', 'nullable', 'string', 'max:255'],
+            'email' => ['sometimes', 'nullable', 'string', 'max:255', 'unique:employees,email'],
             'contact_no' => ['sometimes', 'nullable', 'string', 'max:255'],
             'education' => ['sometimes', 'nullable', 'string', 'max:255'],
             'pan' => ['sometimes', 'nullable', 'string', 'max:255'],
@@ -43,6 +43,8 @@ class EmployeeRequest extends FormRequest
         if ($this->isMethod('PUT') || $this->isMethod('PATCH')) {
             $id = $this->route('employee');
             $rules['code'] = ['sometimes', 'required', 'string', 'max:255', 'unique:employees,code,' . $id,];
+            $rules['email'] = ['sometimes', 'required', 'string', 'max:255', 'unique:employees,email,' . $id,];
+
 
         }
         // dd($rules, $addressRules);

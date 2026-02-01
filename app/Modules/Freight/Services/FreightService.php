@@ -54,13 +54,10 @@ class FreightService implements FreightServiceInterface
                 return $refVoucher && $refVoucher->module === 'freight'
                     && $refVoucher->voucher_type_id === $this->salesVoucherTypeID;
             });
-            //dump($freightReference);
 
             return is_null($freightReference);
         });
-        //$deliveryNotesWithFreight = $deliveryNotes->diff($deliveryNotesWithOutFreight);
-        //dd($deliveryNotesWithFreight->toArray());
-        //dd($deliveryNotesWithFreight->toArray());
+
         return $deliveryNotesWithOutFreight;
     }
 

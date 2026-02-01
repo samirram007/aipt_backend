@@ -75,6 +75,10 @@ class Employee extends Model
     {
         return $this->morphOne(User::class, 'userable');
     }
+    public function account_ledger(): MorphOne
+    {
+        return $this->morphOne(AccountLedger::class, 'ledgerable');
+    }
 
     public function address(): MorphOne
     {

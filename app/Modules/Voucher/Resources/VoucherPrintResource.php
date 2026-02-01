@@ -9,6 +9,7 @@ use App\Modules\StockJournal\Resources\StockJournalResource;
 use App\Modules\VoucherDispatchDetail\Resources\VoucherDispatchDetailResource;
 use App\Modules\VoucherEntry\Resources\VoucherEntryResource;
 use App\Modules\VoucherParty\Resources\VoucherPartyResource;
+use App\Modules\VoucherReference\Resources\VoucherReferenceResource;
 use App\Modules\VoucherType\Resources\VoucherTypeResource;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
@@ -42,6 +43,8 @@ class VoucherPrintResource extends SuccessResource
             'voucherEntries' => VoucherEntryResource::collection($this->whenLoaded('voucher_entries')),
             'party' => VoucherPartyResource::make($this->whenLoaded('voucher_party')),
             'voucherDispatchDetail' => VoucherDispatchDetailResource::make($this->whenLoaded('voucher_dispatch_detail')),
+            'voucherReferences' => VoucherReferenceResource::collection($this->whenLoaded('voucher_references')),
+            'referenceBy' => VoucherReferenceResource::make($this->whenLoaded('referenced_by')),
         ];
     }
 }

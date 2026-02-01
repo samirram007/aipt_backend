@@ -85,6 +85,8 @@ class VoucherService implements VoucherServiceInterface
     public function getById(int $id): ?Voucher
     {
         // return Voucher::with($this->resource)->findOrFail($id);
+        $extraResource = ['voucher_references.reference_voucher.voucher_dispatch_detail', 'referenced_by'];
+        $this->resource = array_merge($this->resource, $extraResource);
         $voucher = Voucher::with($this->resource)->findOrFail($id);
 
         return $this->attachLedgerInfo($voucher);
