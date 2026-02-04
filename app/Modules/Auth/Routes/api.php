@@ -32,6 +32,7 @@ Route::middleware(['jwt.cookies'])->group(function () {
         Route::get('/me', [AuthController::class, 'profile']);
         Route::get('/profile', [AuthController::class, 'profile']);
         Route::get('/user', [AuthController::class, 'profile']);
+        Route::post('/change-password', [AuthController::class, 'changePassword']);
 
     });
 });

@@ -12,6 +12,8 @@ class CompanyService implements CompanyServiceInterface
 
     public function getAll(): Collection
     {
+
+        // return Company::all();
         return Company::with($this->resource)->get();
 
     }
@@ -45,6 +47,18 @@ class CompanyService implements CompanyServiceInterface
     {
         $record = Company::findOrFail($id);
         $record->update($data);
+        if (!empty($data['address'])) {
+            $data['address']['is_primary'] = $data['address']['is_primary'] ?? false;
+            //  dd($data['address']);
+            if ($record->address) {
+                $record->address->update($data['address']);
+            } else {
+                $data['address']['address_type'] = 'company';
+                $data['address']['addressable_type'] = 'company';
+                $data['address']['addressable_id'] = $record->id;
+                $record->address()->create($data['address']);
+            }
+        }
         return $record->fresh();
     }
 

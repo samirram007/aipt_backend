@@ -101,5 +101,22 @@ class AuthService implements AuthServiceInterface
         // dd($user->load('roles.permissions')->toArray());
         return $user->load('roles.permissions.feature', 'user_fiscal_year.fiscal_year');
     }
+    public function changePassword(array $data): void
+    {
+        $user = Auth::user();
+        if (!$user) {
+            throw new AuthenticationException('Unauthenticated.');
+        }
+
+        $newPassword = $data['new_password'] ?? null;
+        if (!$newPassword) {
+            throw ValidationException::withMessages([
+                'new_password' => ['New password is required.'],
+            ]);
+        }
+
+        $user->password = Hash::make($newPassword);
+        $user->save();
+    }
 
 }

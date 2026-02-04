@@ -63,7 +63,7 @@ class VoucherService implements VoucherServiceInterface
         // dd("here");
         $vouchers = Voucher::with($this->resource)->orderBy('created_at', 'desc')->get();
         // dd($vouchers);
-        return $vouchers->map(fn($voucher) => $this->attachLedgerInfo($voucher));
+        return $vouchers->map(fn(Voucher $voucher) => $this->attachLedgerInfo($voucher));
     }
     public function getByModule(string $module): Collection
     {
@@ -71,7 +71,7 @@ class VoucherService implements VoucherServiceInterface
             ->where('module', $module)
             ->orderByDesc('created_at')
             ->get();
-        return $vouchers->map(fn($voucher) => $this->attachLedgerInfo($voucher));
+        return $vouchers->map(fn(Voucher $voucher) => $this->attachLedgerInfo($voucher));
     }
     public function getByVoucherType(int $voucherTypeId): Collection
     {
@@ -79,7 +79,7 @@ class VoucherService implements VoucherServiceInterface
             ->where('voucher_type_id', $voucherTypeId)
             ->orderByDesc('created_at')
             ->get();
-        return $vouchers->map(fn($voucher) => $this->attachLedgerInfo($voucher));
+        return $vouchers->map(fn(Voucher $voucher) => $this->attachLedgerInfo($voucher));
     }
 
     public function getById(int $id): ?Voucher

@@ -18,4 +18,5 @@ interface AuthServiceInterface
     public function refresh(): string;
 
     public function profile(): User; // or array
+    public function changePassword(array $data): void;
 }

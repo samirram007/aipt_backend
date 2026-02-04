@@ -9,8 +9,21 @@ use Illuminate\Database\Eloquent\Collection;
 
 class DayBookService implements DayBookServiceInterface
 {
-    protected $resource = ['voucher_entries.account_ledger', 'voucher_type', 'company'];
-
+    //protected $resource = ['voucher_entries.account_ledger', 'voucher_type', 'company'];
+    protected $resource = [
+        'voucher_type',
+        'voucher_entries.account_ledger',
+        'stock_journal.stock_journal_entries.rate_unit',
+        'stock_journal.stock_journal_entries.stock_item.stock_unit',
+        'stock_journal.stock_journal_entries.stock_item.alternate_stock_unit',
+        'stock_journal.stock_journal_entries.alternate_unit',
+        'stock_journal.stock_journal_entries.stock_journal_godown_entries.godown',
+        'voucher_party.state',
+        'voucher_party.country',
+        'voucher_dispatch_detail',
+        'company',
+        'fiscal_year',
+    ];
     public function getAll(): Collection
     {
         // $user = auth()->user();
@@ -25,9 +38,9 @@ class DayBookService implements DayBookServiceInterface
             ->whereBetween('voucher_date', [$startDate, $endDate])
             ->get();
 
-        //dd($vouchers);
+        //dd($vouchers->toArray());
         // Optionally map each voucher to include party/transaction detection
-        return $vouchers->map(fn($voucher) => $this->attachLedgerInfo($voucher));
+        return $vouchers->map(fn(Voucher $voucher) => $this->attachLedgerInfo($voucher));
     }
 
     public function getById(int $id): ?DayBook
@@ -54,20 +67,22 @@ class DayBookService implements DayBookServiceInterface
     }
 
 
+
     protected function attachLedgerInfo(Voucher $voucher): Voucher
     {
         // dd($voucher);
         // Detect party ledger (Customer / Supplier)
         // dd($voucher->voucher_entries->first());
         $partyEntry = $voucher->voucher_entries
-            ->first(fn($entry) => in_array($entry->account_ledger->ledgerable_type, ['customer', 'supplier']));
+            ->first(fn($entry) => in_array($entry->account_ledger->ledgerable_type, ['customer', 'supplier', 'distributor']));
         //dd($partyEntry);
         // Detect transaction ledger using account_group_id
         $purchaseGroupId = 40001; // Purchase group ID
         $salesGroupId = 50001;    // Sales group ID
+        $stockGroupId = 10009;    // Stock group ID
 
         $transactionEntry = $voucher->voucher_entries
-            ->first(fn($entry) => in_array($entry->account_ledger->account_group_id, [$purchaseGroupId, $salesGroupId]));
+            ->first(fn($entry) => in_array($entry->account_ledger->account_group_id, [$purchaseGroupId, $salesGroupId, $stockGroupId]));
 
         // Calculate current balance for party ledger
         $partyCurrentBalance = $partyEntry?->account_ledger
@@ -97,7 +112,7 @@ class DayBookService implements DayBookServiceInterface
             'transaction_ledger',
             $transactionEntry?->account_ledger
             ? array_merge(
-                $transactionEntry->account_ledger->only(['id', 'name', 'code', 'ledger_type', 'account_group_id']),
+                $transactionEntry->account_ledger->only(['id', 'name', 'code', 'account_group_id']),
                 ['current_balance' => $transactionCurrentBalance]
             )
             : null
