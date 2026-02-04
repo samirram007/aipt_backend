@@ -38,6 +38,7 @@ class VoucherResource extends SuccessResource
             'partyLedger' => PartyLedgerResource::make($this->whenLoaded('party_ledger')),
             'transactionLedger' => TransactionLedgerResource::make($this->whenLoaded('transaction_ledger')),
             'amount' => $this->amount,
+            'paymentStatus' => $this->payment_status,
             'company' => CompanyResource::make($this->whenLoaded('company')),
             'voucherType' => VoucherTypeResource::make($this->whenLoaded('voucher_type')),
             'fiscalYear' => FiscalYearResource::make($this->whenLoaded('fiscal_year')),

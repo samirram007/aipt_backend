@@ -29,13 +29,10 @@ class FreightRequest extends FormRequest
             'other_charges' => ['sometimes', 'nullable', 'numeric'],
             'freight_charges' => ['sometimes', 'nullable', 'numeric'],
             'total_fare' => ['sometimes', 'nullable', 'numeric'],
-
-
         ];
 
         // For update requests, make validation more flexible
         if ($this->isMethod('PUT') || $this->isMethod('PATCH')) {
-
         }
 
         return $rules;
@@ -43,8 +40,6 @@ class FreightRequest extends FormRequest
 
     public function messages(): array
     {
-        return [
-
-        ];
+        return [];
     }
 }

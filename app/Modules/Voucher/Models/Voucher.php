@@ -100,7 +100,7 @@ class Voucher extends Model
 
 
 
-    protected $appends = ['party_ledger', 'transaction_ledger', 'amount'];
+    protected $appends = ['party_ledger', 'transaction_ledger', 'amount', 'payment_status',];
 
 
     public function voucher_references(): HasMany
@@ -136,4 +136,40 @@ class Voucher extends Model
         return $this->relations['amount'];
     }
 
+    public function getPaidAmountAttribute(): float
+    {
+        if ($this->voucher_type_id != 1006) {
+            return 0;
+        }
+
+        return $this->referenced_by
+            ->filter(
+                fn($ref) =>
+                optional($ref->voucher)->voucher_type_id == 1003
+            )
+            ->sum(
+                fn($ref) =>
+                $ref->voucher?->amount ?? 0
+            );
+    }
+
+    public function getPaymentStatusAttribute(): string
+    {
+        if ($this->voucher_type_id != 1006) {
+            return '';
+        }
+
+        $total = $this->amount;
+        $paid  = $this->paid_amount;
+
+        if ($paid <= 0) {
+            return 'UnPaid';
+        }
+
+        if ($paid < $total) {
+            return 'PartialPaid';
+        }
+
+        return 'FullyPaid';
+    }
 }

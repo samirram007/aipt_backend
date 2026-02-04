@@ -19,6 +19,7 @@ use App\Modules\VoucherReference\Requests\VoucherReferenceRequest;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\DB;
+
 class VoucherService implements VoucherServiceInterface
 {
     protected $resource = [
@@ -173,7 +174,6 @@ class VoucherService implements VoucherServiceInterface
                 $validatedVoucherReference = Validator::make($data['voucher_reference'], $rules)->validate();
                 $data['voucher_reference'] = app(VoucherReferenceServiceInterface::class)
                     ->store($validatedVoucherReference);
-
             }
 
 
@@ -182,6 +182,17 @@ class VoucherService implements VoucherServiceInterface
             return $voucher;
         } catch (\Exception $e) {
             DB::rollBack();
+            throw $e;
+        }
+    }
+
+    public function process_payment_voucher(array $data): Voucher
+    {
+        DB::beginTransaction();
+        try {
+
+            DB::commit();
+        } catch (\Exception $e) {
             throw $e;
         }
     }
@@ -211,13 +222,11 @@ class VoucherService implements VoucherServiceInterface
                     if (isset($data['stock_journal']['id']) && $data['stock_journal']['id'] == $voucher->stock_journal_id) {
 
                         $this->stockJournalService->update($data['stock_journal'], $data['stock_journal']['id']);
-
                     } else {
                         throw new \Exception(
                             'Stock Journal is already assigned to this voucher. Cannot assign a different stock journal.'
                         );
                     }
-
                 } else {
                     $stock_journal = $data['stock_journal'];
                     $rules = (new StockJournalRequest)->rules();
@@ -322,7 +331,6 @@ class VoucherService implements VoucherServiceInterface
                 $validatedVoucherReference = Validator::make($data['voucher_reference'], $rules)->validate();
                 $data['voucher_reference'] = app(VoucherReferenceServiceInterface::class)
                     ->store($validatedVoucherReference);
-
             }
 
             // dd($voucher);
@@ -332,7 +340,6 @@ class VoucherService implements VoucherServiceInterface
             DB::rollBack();
             throw $e;
         }
-
     }
 
     public function delete(int $id): bool
@@ -375,21 +382,21 @@ class VoucherService implements VoucherServiceInterface
         $voucher->setRelation(
             'party_ledger',
             $partyEntry?->account_ledger
-            ? array_merge(
-                $partyEntry->account_ledger->only(['id', 'name', 'code', 'ledgerable_type', 'ledgerable_id']),
-                ['current_balance' => $partyCurrentBalance]
-            )
-            : null
+                ? array_merge(
+                    $partyEntry->account_ledger->only(['id', 'name', 'code', 'ledgerable_type', 'ledgerable_id']),
+                    ['current_balance' => $partyCurrentBalance]
+                )
+                : null
         );
 
         $voucher->setRelation(
             'transaction_ledger',
             $transactionEntry?->account_ledger
-            ? array_merge(
-                $transactionEntry->account_ledger->only(['id', 'name', 'code', 'account_group_id']),
-                ['current_balance' => $transactionCurrentBalance]
-            )
-            : null
+                ? array_merge(
+                    $transactionEntry->account_ledger->only(['id', 'name', 'code', 'account_group_id']),
+                    ['current_balance' => $transactionCurrentBalance]
+                )
+                : null
         );
         // $voucher->transaction_ledger['current_balance'] = $transactionCurrentBalance;
         // dd($voucher);
@@ -398,5 +405,4 @@ class VoucherService implements VoucherServiceInterface
 
         return $voucher;
     }
-
 }

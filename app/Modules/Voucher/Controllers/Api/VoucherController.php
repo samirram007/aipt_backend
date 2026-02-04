@@ -12,14 +12,13 @@ use App\Http\Resources\SuccessResource;
 use App\Http\Resources\SuccessCollection;
 use App\Traits\ApiResponseTrait;
 use Illuminate\Http\JsonResponse;
+use PaymentVoucherRequest;
 
 class VoucherController extends Controller
 {
     use ApiResponseTrait;
 
-    public function __construct(protected VoucherServiceInterface $service)
-    {
-    }
+    public function __construct(protected VoucherServiceInterface $service) {}
 
     public function index(): SuccessCollection
     {
@@ -40,6 +39,12 @@ class VoucherController extends Controller
 
         $data = $this->service->store($request->validated());
         return new VoucherResource($data, $messages = 'Voucher created successfully');
+    }
+
+    public function process_payment_voucher(PaymentVoucherRequest $request): SuccessResource
+    {
+        $data = $this->service->process_payment_voucher($request->validate());
+        return new VoucherResource($data, $messages = "Voucher Payment process");
     }
 
     public function update(VoucherRequest $request, int $id): SuccessResource
