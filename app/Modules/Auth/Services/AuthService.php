@@ -91,6 +91,16 @@ class AuthService implements AuthServiceInterface
         return $token;
     }
 
+    public function changePassword(array $data): bool
+    {
+        $user = Auth::user();
+        if (!$user) {
+            throw new AuthenticationException('Unauthenticated.');
+        }
+        $user->password = Hash::make($data['password']);
+        return $user->save();
+    }
+
     public function profile(): User
     {
 

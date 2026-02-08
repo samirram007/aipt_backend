@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use App\Modules\Auth\Contracts\AuthServiceInterface;
 use App\Modules\Auth\Requests\LoginRequest;
 use App\Modules\Auth\Requests\RegisterRequest;
+use App\Modules\Auth\Requests\ChangePasswordRequest;
+
 use App\Modules\Auth\Resources\AuthResource;
 use App\Modules\Auth\Resources\AuthCollection;
 use App\Modules\Auth\Requests\AuthRequest;
@@ -156,6 +158,22 @@ class AuthController extends Controller
         $token = $this->authService->refresh();
         return $this->respondWithToken($token, 'Token refreshed successfully!');
 
+    }
+
+    public function changePassword(ChangePasswordRequest $request): JsonResponse
+    {
+        $changed = $this->authService->changePassword($request->validated());
+        if ($changed) {
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Password changed successfully.',
+            ]);
+        } else {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Failed to change password.',
+            ], 400);
+        }
     }
 
     protected function respondWithToken(string $token, string $message = 'Authenticated successfully!')
