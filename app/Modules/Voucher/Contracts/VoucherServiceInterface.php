@@ -14,4 +14,5 @@ interface VoucherServiceInterface
     public function store(array $data): Voucher;
     public function update(array $data, int $id): Voucher;
     public function delete(int $id): bool;
+
 }

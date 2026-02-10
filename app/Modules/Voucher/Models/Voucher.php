@@ -54,6 +54,7 @@ class Voucher extends Model
         'effects_stock' => 'boolean',
     ];
 
+
     protected static function boot()
     {
         parent::boot();
@@ -100,7 +101,7 @@ class Voucher extends Model
 
 
 
-    protected $appends = ['party_ledger', 'transaction_ledger', 'amount'];
+    protected $appends = ['party_ledger', 'transaction_ledger', 'amount', 'payment_status'];
 
 
     public function voucher_references(): HasMany
@@ -134,6 +135,25 @@ class Voucher extends Model
             return $this->voucher_entries->sum(fn($entry) => $entry->debit ?: $entry->credit ?: 0);
         }
         return $this->relations['amount'];
+    }
+
+    public function getPaymentStatusAttribute()
+    {
+        $paymentReference = $this->referenced_by()->whereIn('type', ['payment', 'freight_payment'])->get();
+        $paymentVouchersIds = $paymentReference->pluck('voucher_id')->toArray();
+        // \Log::info($paymentVouchersIds);
+        $paymentVouchers = Voucher::whereIn('id', $paymentVouchersIds)->get();
+
+        $totalPaidAmount = $paymentVouchers->sum(fn($voucher) => $voucher->amount);
+        // \Log::info([$this->id, $totalPaidAmount]);
+        // return $totalPaidAmount;
+        if ($totalPaidAmount >= $this->amount) {
+            return 'paid';
+        } elseif ($totalPaidAmount > 0) {
+            return 'partially_paid';
+        } else {
+            return 'unpaid';
+        }
     }
 
 }

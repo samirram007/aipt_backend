@@ -74,7 +74,7 @@ class DayBookService implements DayBookServiceInterface
         // Detect party ledger (Customer / Supplier)
         // dd($voucher->voucher_entries->first());
         $partyEntry = $voucher->voucher_entries
-            ->first(fn($entry) => in_array($entry->account_ledger->ledgerable_type, ['customer', 'supplier', 'distributor']));
+            ->first(fn($entry) => in_array($entry->account_ledger->ledgerable_type, ['customer', 'supplier', 'distributor', 'transporter']));
         //dd($partyEntry);
         // Detect transaction ledger using account_group_id
         $purchaseGroupId = 40001; // Purchase group ID

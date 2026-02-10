@@ -4,7 +4,8 @@ namespace App\Modules\Voucher\Services;
 
 use App\Modules\StockJournal\Contracts\StockJournalServiceInterface;
 use App\Modules\StockJournal\Requests\StockJournalRequest;
-use App\Modules\StockJournal\Services\StockJournalService;
+
+use App\Modules\UserFiscalYear\Contracts\UserFiscalYearServiceInterface;
 use App\Modules\Voucher\Contracts\VoucherServiceInterface;
 use App\Modules\Voucher\Models\Voucher;
 use App\Modules\VoucherDispatchDetail\Contracts\VoucherDispatchDetailServiceInterface;
@@ -35,6 +36,7 @@ class VoucherService implements VoucherServiceInterface
         'company',
         'fiscal_year',
     ];
+    protected $userFiscalYearService;
     protected $voucherNoService;
     protected $stockJournalRequest;
     protected $stockJournalService;
@@ -44,12 +46,14 @@ class VoucherService implements VoucherServiceInterface
 
 
     public function __construct(
+        UserFiscalYearServiceInterface $userFiscalYearService,
         VoucherNoServiceInterface $voucherNoService,
         StockJournalServiceInterface $stockJournalService,
         VoucherEntryServiceInterface $voucherEntryService,
         VoucherDispatchDetailServiceInterface $voucherDispatchDetailService,
         VoucherPartyServiceInterface $voucherPartyService
     ) {
+        $this->userFiscalYearService = $userFiscalYearService;
         $this->voucherNoService = $voucherNoService;
         $this->stockJournalService = $stockJournalService;
         $this->voucherEntryService = $voucherEntryService;
@@ -111,16 +115,18 @@ class VoucherService implements VoucherServiceInterface
 
             if (!isset($data['voucher_no']) || empty($data['voucher_no']) || $data['voucher_no'] === 'new') {
                 // $voucher_type = Voucher::where('voucher_type_id', $data['voucher_type_id'])->first();
-
+                $userFiscalYear = $this->userFiscalYearService->getByUserId(auth()->user()->id);
                 $voucher_type_id = $data['voucher_type_id'];
-                $company_id = $data['company_id'] ?? 1;
-                $fiscal_year_id = $data['fiscal_year_id'] ?? 1;
+                // dd($data);
+                $company_id = $data['company_id'] ?? $userFiscalYear->fiscal_year->company_id;
+                $fiscal_year_id = $data['fiscal_year_id'] ?? $userFiscalYear->fiscal_year->id;
                 $branch_id = $data['branch_id'] ?? null;
 
                 $voucher_no = $this->voucherNoService->getVoucherNo($voucher_type_id, $company_id, $fiscal_year_id, $branch_id);
                 $data['voucher_no'] = $voucher_no;
             }
 
+            //dd($data);
 
             $SANITIZED_DATA = [];
             // foreach ($data as $key => $value) {
@@ -187,6 +193,7 @@ class VoucherService implements VoucherServiceInterface
             throw $e;
         }
     }
+
 
     protected function generateJournalNo(): string
     {
@@ -350,7 +357,7 @@ class VoucherService implements VoucherServiceInterface
         // Detect party ledger (Customer / Supplier)
         // dd($voucher->voucher_entries->first());
         $partyEntry = $voucher->voucher_entries
-            ->first(fn($entry) => in_array($entry->account_ledger->ledgerable_type, ['customer', 'supplier', 'distributor']));
+            ->first(fn($entry) => in_array($entry->account_ledger->ledgerable_type, ['customer', 'supplier', 'distributor', 'transporter']));
         //dd($partyEntry);
         // Detect transaction ledger using account_group_id
         $purchaseGroupId = 40001; // Purchase group ID

@@ -51,7 +51,7 @@ class VoucherNoService implements VoucherNoServiceInterface
         } else {
             $prefix = VoucherType::find($voucher_type_id)->code;
             $voucherNoRecord = new VoucherNo([
-                'prefix' => substr($prefix, 0, 3) . '-',
+                'prefix' => substr($prefix, 0, 4) . '-',
                 'voucher_type_id' => $voucher_type_id,
                 'company_id' => $company_id,
                 'branch_id' => $branch_id ?? null,

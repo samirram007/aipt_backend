@@ -12,6 +12,7 @@ use App\Http\Resources\SuccessResource;
 use App\Http\Resources\SuccessCollection;
 use App\Traits\ApiResponseTrait;
 use Illuminate\Http\JsonResponse;
+use PaymentVoucherRequest;
 
 class VoucherController extends Controller
 {
@@ -41,6 +42,8 @@ class VoucherController extends Controller
         $data = $this->service->store($request->validated());
         return new VoucherResource($data, $messages = 'Voucher created successfully');
     }
+
+
 
     public function update(VoucherRequest $request, int $id): SuccessResource
     {

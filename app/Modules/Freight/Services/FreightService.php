@@ -22,6 +22,7 @@ class FreightService implements FreightServiceInterface
     protected $resource = [];
     protected $deliverNoteVoucherTypeID = 2001; //delivery note
     protected $salesVoucherTypeID = 1006; //sales voucher
+    protected $receiptVoucherTypeID = 1003;
     protected $salesAccountLedgerID = 3000001; //sales account ledger id
     function __construct(
         protected AccountLedgerServiceInterface $accountLedgerService,
@@ -54,10 +55,13 @@ class FreightService implements FreightServiceInterface
                 return $refVoucher && $refVoucher->module === 'freight'
                     && $refVoucher->voucher_type_id === $this->salesVoucherTypeID;
             });
+            //dump($freightReference);
 
             return is_null($freightReference);
         });
-
+        //$deliveryNotesWithFreight = $deliveryNotes->diff($deliveryNotesWithOutFreight);
+        //dd($deliveryNotesWithFreight->toArray());
+        //dd($deliveryNotesWithFreight->toArray());
         return $deliveryNotesWithOutFreight;
     }
 
@@ -91,13 +95,23 @@ class FreightService implements FreightServiceInterface
     public function voucherWiseReport(): Collection
     {
         $vouchers = Voucher::with($this->resource)
-            ->where('module', 'freight')
+            ->where('vouchers.module', 'freight')
+
+            ->leftJoin('voucher_references', 'voucher_references.voucher_id', '=', 'vouchers.id')
+            ->leftJoin('vouchers as ref_voucher', 'ref_voucher.id', '=', 'voucher_references.ref_voucher_id')
+
             ->join('user_fiscal_years', 'vouchers.fiscal_year_id', '=', 'user_fiscal_years.fiscal_year_id')
             ->whereColumn('vouchers.voucher_date', '>=', 'user_fiscal_years.start_date')
             ->whereColumn('vouchers.voucher_date', '<=', 'user_fiscal_years.end_date')
-            ->orderBy('created_at', 'desc')
-            ->select('vouchers.*')
+
+            ->orderBy('vouchers.created_at', 'desc')
+            ->select(
+                'vouchers.*',
+                'ref_voucher.voucher_no as referenced_voucher_no',
+                'voucher_references.type as reference_type'
+            )
             ->get();
+
         return $vouchers->map(fn($voucher) => $this->attachLedgerInfo($voucher));
     }
 
@@ -175,25 +189,25 @@ class FreightService implements FreightServiceInterface
             }
 
 
-            $dispatchDetailData = [
-                'voucher_id' => $deliverNoteId,
-                'distance' => $data['distance'] ?? null,
-                'rate' => $data['rate'] ?? null,
-                'distance_unit_id' => $data['distance_unit_id'] ?? null,
-                'rate_unit_id' => $data['rate_unit_id'] ?? null,
-                'quantity' => $data['quantity'] ?? null,
-                'weight' => $data['weight'] ?? null,
-                'weight_unit_id' => $data['weight_unit_id'] ?? null,
-                'volume' => $data['volume'] ?? null,
-                'volume_unit_id' => $data['volume_unit_id'] ?? null,
-                'loading_charges' => $data['loading_charges'] ?? null,
-                'unloading_charges' => $data['unloading_charges'] ?? null,
-                'packing_charges' => $data['packing_charges'] ?? null,
-                'insurance_charges' => $data['insurance_charges'] ?? null,
-                'other_charges' => $data['other_charges'] ?? null,
-                'freight_charges' => $data['freight_charges'] ?? null,
-                'total_fare' => $data['total_fare'] ?? null,
-            ];
+            // $dispatchDetailData = [
+            //     'voucher_id' => $deliverNoteId,
+            //     'distance' => $data['distance'] ?? null,
+            //     'rate' => $data['rate'] ?? null,
+            //     'distance_unit_id' => $data['distance_unit_id'] ?? null,
+            //     'rate_unit_id' => $data['rate_unit_id'] ?? null,
+            //     'quantity' => $data['quantity'] ?? null,
+            //     'weight' => $data['weight'] ?? null,
+            //     'weight_unit_id' => $data['weight_unit_id'] ?? null,
+            //     'volume' => $data['volume'] ?? null,
+            //     'volume_unit_id' => $data['volume_unit_id'] ?? null,
+            //     'loading_charges' => $data['loading_charges'] ?? null,
+            //     'unloading_charges' => $data['unloading_charges'] ?? null,
+            //     'packing_charges' => $data['packing_charges'] ?? null,
+            //     'insurance_charges' => $data['insurance_charges'] ?? null,
+            //     'other_charges' => $data['other_charges'] ?? null,
+            //     'freight_charges' => $data['freight_charges'] ?? null,
+            //     'total_fare' => $data['total_fare'] ?? null,
+            // ];
             $dispatchDetail = $deliveryNote->voucher_dispatch_detail;
             // $rules = (new VoucherDispatchDetailRequest())->rules();
             // // dump($rules);
@@ -295,11 +309,23 @@ class FreightService implements FreightServiceInterface
             $salesVoucherStored = $this->voucherService->store($validatedVoucherData);
             $salesVoucher = $this->voucherService->getById($salesVoucherStored->id);
             return $salesVoucher->load('company');
-
-
-
         }
         throw new \Exception("Delivery Note ID is required to create Freight record.");
+    }
+
+    public function payment_voucher(array $data): Collection
+    {
+        $deliverNoteId = $data['delivery_note_id'] ?? null;
+        if ($deliverNoteId) {
+            $deliveryNote = $this->voucherService->getById($deliverNoteId);
+            if (!$deliveryNote) {
+                throw new \Exception("Delivery Note not found with ID: " . $deliverNoteId);
+            }
+        }
+
+        $receiptVoucherData = [
+            'voucher_type_id' => $this->receiptVoucherTypeID,
+        ];
     }
 
     public function update(array $data, int $id): Freight
