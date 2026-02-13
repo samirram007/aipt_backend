@@ -36,18 +36,21 @@ class BedService implements BedServiceInterface
     {
         try {
             DB::beginTransaction();
-            $bed = Bed::create($data);
-            $facility_request = [
-                'status' => 'active',
-                'parent_id' => $data['room_id'],
-                'facilityable_type' => 'bed',
-                'facilityable_id' => $bed->id,
-            ];
-            $rules = (new FacilityRequest())->rules();
-            $validateFacility = Validator::make($facility_request, $rules)->validate();
-            $this->facilityService->store($validateFacility);
+            foreach ($data['beds'] as $bed) {
+                $create = Bed::create($bed);
+                $facility_request = [
+                    'status' => 'active',
+                    'parent_id' => $bed['room_id'],
+                    'facilityable_type' => 'bed',
+                    'facilityable_id' => $create->id,
+                ];
+                $rules = (new FacilityRequest())->rules();
+                $validatedFacility = Validator::make($facility_request, $rules)->validate();
+                $this->facilityService->store($validatedFacility);
+            }
             DB::commit();
-            return $bed;
+            $createdBed = Bed::first();
+            return $createdBed;
         } catch (\Exception $e) {
             throw $e;
         }

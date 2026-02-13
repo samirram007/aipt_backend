@@ -1,0 +1,6 @@
+aipt-api.test {
+    root * public
+    php_server
+    file_server
+    tls internal
+}

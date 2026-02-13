@@ -13,22 +13,36 @@ class BedRequest extends FormRequest
 
     public function rules(): array
     {
-        $rules = [
-            'name' => ['required', 'string', 'max:255', 'unique:beds,name'],
-            'code' => ['sometimes', 'required', 'string', 'max:255', 'unique:beds,code'],
-            'description' => ['sometimes', 'required', 'string', 'max:255'],
-            'status' => ['sometimes', 'required', 'string', 'max:255'],
-            'room_id' => ['required', 'string', 'exists:rooms,id']
+        return [
+            'beds' => ['required', 'array', 'min:1'],
+
+            'beds.*.name' => ['required', 'string', 'max:255'],
+            'beds.*.code' => ['required', 'string', 'max:255', 'distinct', 'unique:beds,code'],
+            'beds.*.description' => ['nullable', 'string', 'max:255'],
+
+            'beds.*.status' => [
+                'required',
+                'in:available,occupied,booked,maintenance,blocked,under_cleaning'
+            ],
+
+            'beds.*.room_id' => ['required', 'string', 'exists:facilities,id'],
         ];
+        // $rules = [
+        //     'name' => ['required', 'string', 'max:255', 'unique:beds,name'],
+        //     'code' => ['sometimes', 'required', 'string', 'max:255', 'unique:beds,code'],
+        //     'description' => ['sometimes', 'required', 'string', 'max:255'],
+        //     'status' => ['sometimes', 'required', 'string', 'max:255'],
+        //     'room_id' => ['required', 'string', 'exists:facilities,id']
+        // ];
 
-        // For update requests, make validation more flexible
-        if ($this->isMethod('PUT') || $this->isMethod('PATCH')) {
-            $id = $this->route('bed');
-            $rules['name'] = ['sometimes', 'required', 'string', 'max:255', 'unique:beds,name,' . $id,];
-            $rules['code'] = ['sometimes', 'required', 'string', 'max:255', 'unique:beds,code,' . $id,];
-        }
+        // // For update requests, make validation more flexible
+        // if ($this->isMethod('PUT') || $this->isMethod('PATCH')) {
+        //     $id = $this->route('bed');
+        //     $rules['name'] = ['sometimes', 'required', 'string', 'max:255', 'unique:beds,name,' . $id,];
+        //     $rules['code'] = ['sometimes', 'required', 'string', 'max:255', 'unique:beds,code,' . $id,];
+        // }
 
-        return $rules;
+        // return $rules;
     }
 
     public function messages(): array

@@ -13,7 +13,7 @@ class FacilityService implements FacilityServiceInterface
     public function getAll(): Collection
     {
         $facilities = Facility::whereNull('parent_id')
-            ->with(['facilityable', 'children.facilityable', 'children.children.facilityable', 'children.children', 'amenities', 'amenities.amenity_categories'])
+            ->with(['facilityable', 'children.facilityable', 'children.children.facilityable', 'children.children', 'children.children.children.facilityable', 'amenities', 'amenities.amenity_categories'])
             ->get();
         return $facilities;
         // return Facility::with($this->resource)->get();
