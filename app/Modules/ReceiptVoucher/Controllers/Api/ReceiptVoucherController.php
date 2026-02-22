@@ -6,11 +6,11 @@ use App\Http\Controllers\Controller;
 use App\Modules\ReceiptVoucher\Contracts\ReceiptVoucherServiceInterface;
 use App\Modules\ReceiptVoucher\Requests\FreightReceiptVoucherRequest;
 use App\Modules\ReceiptVoucher\Resources\ReceiptVoucherResource;
-use App\Modules\ReceiptVoucher\Resources\ReceiptVoucherCollection;
+
 use App\Modules\ReceiptVoucher\Requests\ReceiptVoucherRequest;
 use App\Http\Resources\SuccessResource;
 use App\Http\Resources\SuccessCollection;
-use App\Modules\Voucher\Models\Voucher;
+
 use App\Modules\Voucher\Resources\VoucherCollection;
 use App\Modules\Voucher\Resources\VoucherResource;
 use App\Traits\ApiResponseTrait;
@@ -27,13 +27,13 @@ class ReceiptVoucherController extends Controller
     public function index(): SuccessCollection
     {
         $data = $this->service->getAll();
-        return new ReceiptVoucherCollection($data);
+        return new VoucherCollection($data);
     }
 
     public function show(int $id): SuccessResource
     {
         $data = $this->service->getById($id);
-        return new ReceiptVoucherResource($data);
+        return new VoucherResource($data);
     }
 
     public function store(ReceiptVoucherRequest $request): SuccessResource

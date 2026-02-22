@@ -94,23 +94,26 @@ class FreightService implements FreightServiceInterface
 
     public function voucherWiseReport(): Collection
     {
-        $vouchers = Voucher::with($this->resource)
+        $queryBuilder = Voucher::with($this->resource)
             ->where('vouchers.module', 'freight')
 
             ->leftJoin('voucher_references', 'voucher_references.voucher_id', '=', 'vouchers.id')
             ->leftJoin('vouchers as ref_voucher', 'ref_voucher.id', '=', 'voucher_references.ref_voucher_id')
-
             ->join('user_fiscal_years', 'vouchers.fiscal_year_id', '=', 'user_fiscal_years.fiscal_year_id')
             ->whereColumn('vouchers.voucher_date', '>=', 'user_fiscal_years.start_date')
             ->whereColumn('vouchers.voucher_date', '<=', 'user_fiscal_years.end_date')
-
             ->orderBy('vouchers.created_at', 'desc')
             ->select(
                 'vouchers.*',
                 'ref_voucher.voucher_no as referenced_voucher_no',
                 'voucher_references.type as reference_type'
-            )
-            ->get();
+            );
+        // $query = $queryBuilder->toSql();
+        //dump($query);
+        // $bindings = $queryBuilder->getBindings();
+        //dd($query, $bindings);
+        $vouchers = $queryBuilder->get();
+        // dd($vouchers->toArray());
 
         return $vouchers->map(fn($voucher) => $this->attachLedgerInfo($voucher));
     }

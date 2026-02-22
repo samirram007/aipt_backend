@@ -6,7 +6,7 @@ use App\Modules\Voucher\Models\Voucher;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
-class ReceiptVoucher extends Voucher
+class ReceiptVoucher extends Model
 {
     use HasFactory;
     protected static function booted()

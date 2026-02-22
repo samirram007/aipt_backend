@@ -1,6 +1,6 @@
 <?php
 
-use App\Modules\Voucher\Controllers\Api\VoucherController;
+
 use Illuminate\Support\Facades\Route;
 use App\Modules\DayBook\Controllers\Api\DayBookController;
 
@@ -9,3 +9,5 @@ use App\Modules\DayBook\Controllers\Api\DayBookController;
 // Route::apiResource('day_books', VoucherController::class)->middleware(['jwt.cookies']);
 // Route::apiResource('day_books', VoucherController::class)->middleware(['jwt.cookies']);
 Route::get('day_books', [DayBookController::class, 'index'])->middleware(['jwt.cookies']);
+Route::get('day_books_self', [DayBookController::class, 'dayBooksSelf'])->middleware(['jwt.cookies']);
+

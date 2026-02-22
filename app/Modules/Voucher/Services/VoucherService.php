@@ -351,7 +351,7 @@ class VoucherService implements VoucherServiceInterface
     }
 
 
-    protected function attachLedgerInfo(Voucher $voucher): Voucher
+    public function attachLedgerInfo(Voucher $voucher): Voucher
     {
         // dd($voucher);
         // Detect party ledger (Customer / Supplier)
