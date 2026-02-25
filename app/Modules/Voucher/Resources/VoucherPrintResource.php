@@ -1,0 +1,47 @@
+<?php
+
+namespace App\Modules\Voucher\Resources;
+
+use App\Http\Resources\SuccessResource;
+use App\Modules\Company\Resources\CompanyResource;
+use App\Modules\FiscalYear\Resources\FiscalYearResource;
+use App\Modules\StockJournal\Resources\StockJournalResource;
+use App\Modules\VoucherDispatchDetail\Resources\VoucherDispatchDetailResource;
+use App\Modules\VoucherEntry\Resources\VoucherEntryResource;
+use App\Modules\VoucherParty\Resources\VoucherPartyResource;
+use App\Modules\VoucherType\Resources\VoucherTypeResource;
+use Illuminate\Http\Request;
+use Illuminate\Http\Resources\Json\JsonResource;
+
+class VoucherPrintResource extends SuccessResource
+{
+    public function toArray(Request $request): array
+    {
+        return [
+            'id' => $this->id,
+            'voucherNo' => $this->voucher_no,
+            'voucherDate' => $this->voucher_date,
+            'referenceNo' => $this->reference_no,
+            'referenceDate' => $this->reference_date,
+            'voucherTypeId' => $this->voucher_type_id,
+            'remarks' => $this->remarks,
+            'status' => $this->status,
+            'fiscalYearId' => $this->fiscal_year_id,
+            'companyId' => $this->company_id,
+            'stockJournalId' => $this->stock_journal_id,
+            'createdAt' => $this->created_at?->toISOString(),
+            'updatedAt' => $this->updated_at?->toISOString(),
+            // 'partyLedger' => $this->whenLoaded('party_ledger'),
+            'partyLedger' => PartyLedgerResource::make($this->whenLoaded('party_ledger')),
+            'transactionLedger' => TransactionLedgerResource::make($this->whenLoaded('transaction_ledger')),
+            'amount' => $this->amount,
+            'company' => CompanyResource::make($this->whenLoaded('company')),
+            'voucherType' => VoucherTypeResource::make($this->whenLoaded('voucher_type')),
+            'fiscalYear' => FiscalYearResource::make($this->whenLoaded('fiscal_year')),
+            'stockJournal' => StockJournalResource::make($this->whenLoaded('stock_journal')),
+            'voucherEntries' => VoucherEntryResource::collection($this->whenLoaded('voucher_entries')),
+            'party' => VoucherPartyResource::make($this->whenLoaded('voucher_party')),
+            'voucherDispatchDetail' => VoucherDispatchDetailResource::make($this->whenLoaded('voucher_dispatch_detail')),
+        ];
+    }
+}

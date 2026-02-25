@@ -1,0 +1,20 @@
+#import user.graphql
+scalar DateTime
+    @scalar(class: "Nuwave\\Lighthouse\\Schema\\Types\\Scalars\\DateTime")
+extend type Query {
+    greetings: [User!]@all
+
+    user(
+        id: ID @eq @rules(apply: ["prohibits:email", "required_without:email"])
+        email: String
+            @eq
+            @rules(apply: ["prohibits:id", "required_without:id", "email"])
+    ): User @find
+
+    users(
+
+        name: String @where(operator: "like")
+    ): [User!]! @paginate(defaultCount: 10)
+}
+
+

@@ -1,0 +1,34 @@
+<?php
+
+namespace App\Modules\FiscalYear\Resources;
+
+use App\Modules\Company\Resources\CompanyResource;
+use Illuminate\Http\Request;
+
+use App\Http\Resources\SuccessResource;
+/**
+ * @OA\Schema(
+ *     schema="FiscalYearResource",
+ *     title="FiscalYear Resource",
+ *     @OA\Property(property="id", type="integer", example=1),
+ *     @OA\Property(property="name", type="string", example="Fiscal Year 2025-26"),
+ *     @OA\Property(property="start_date", type="string", example="2025-04-01"),
+ *     @OA\Property(property="end_date", type="string", example="2026-03-31"),
+ * )
+ */
+class FiscalYearResource extends SuccessResource
+{
+    public function toArray(Request $request): array
+    {
+        return [
+            'id' => $this->id,
+            'name' => $this->name,
+            'startDate' => $this->start_date?->format('Y-m-d'),
+            'endDate' => $this->end_date?->format('Y-m-d'),
+            'companyId' => $this->company_id,
+            'company' => new CompanyResource($this->whenLoaded('company')),
+            'status' => $this->status
+
+        ];
+    }
+}
