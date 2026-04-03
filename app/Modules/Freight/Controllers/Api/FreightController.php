@@ -40,12 +40,12 @@ class FreightController extends Controller
     public function transporter_wise(): SuccessCollection
     {
         $data = $this->service->transporterWiseReport();
-        return new SuccessCollection($data);
+        return new VoucherCollection($data);
     }
     public function vehicle_wise(): SuccessCollection
     {
         $data = $this->service->vehicleWiseReport();
-        return new SuccessCollection($data);
+        return new VoucherCollection($data);
     }
     public function voucher_wise(): SuccessCollection
     {

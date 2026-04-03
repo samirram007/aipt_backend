@@ -285,6 +285,104 @@ class StockSummaryService implements StockSummaryServiceInterface
 
         return $result;
     }
+    public function stock_in_hand_zone_wise(): array
+    {
+        $fiscalYearId = $this->userFiscalYear->fiscal_year_id;
+
+        $zones = Godown::where('storage_unit_type', 'zone')->get();
+
+        $result = [];
+
+        foreach ($zones as $zone) {
+
+            // Get godowns under this zone
+            $godowns = Godown::withWhereHas(
+                'stock_journal_godown_entries.stock_journal_entry.stock_journal.voucher',
+                function ($q) use ($fiscalYearId) {
+                    $q->where('fiscal_year_id', $fiscalYearId)
+                        ->whereHas('stock_journal');
+                }
+            )
+                ->with([
+                    'stock_journal_godown_entries' => function ($q) use ($fiscalYearId) {
+                        $q->whereHas(
+                            'stock_journal_entry.stock_journal.voucher',
+                            fn($v) => $v->where('fiscal_year_id', $fiscalYearId)
+                                ->whereHas('stock_journal')
+                        )->with([
+                                    'stock_journal_entry.stock_item.stock_unit',
+                                    'stock_journal_entry.stock_journal.voucher',
+                                ]);
+                    },
+                ])
+                ->where('parent_id', $zone->id)
+                ->get();
+
+            $zoneGodowns = [];
+            $zoneTotals = [
+                'in' => 0,
+                'out' => 0,
+                'balance' => 0,
+            ];
+
+            foreach ($godowns as $godown) {
+
+                $itemEntries = $godown->stock_journal_godown_entries
+                    ->groupBy(fn($e) => $e->stock_journal_entry->stock_item_id);
+
+                $itemsCollection = [];
+
+                foreach ($itemEntries as $entries) {
+
+                    $item = $entries->first()->stock_journal_entry->stock_item;
+
+                    $itemTotal = $this->calculateGodownTotal($entries);
+
+                    $itemsCollection[] = [
+                        'item_id' => $item->id,
+                        'item_name' => $item->name,
+                        'unit_code' => $item->stock_unit?->code,
+                        'unit_name' => $item->stock_unit?->name,
+
+                        'inward_quantity' => $itemTotal['in'],
+                        'outward_quantity' => $itemTotal['out'],
+                        'closing_quantity' => $itemTotal['balance'],
+                    ];
+
+                    // accumulate zone totals
+                    $zoneTotals['in'] += $itemTotal['in'];
+                    $zoneTotals['out'] += $itemTotal['out'];
+                    $zoneTotals['balance'] += $itemTotal['balance'];
+                }
+
+                $zoneGodowns[] = [
+                    'godown_id' => $godown->id,
+                    'godown_name' => $godown->name,
+                    'godown_code' => $godown->code,
+
+                    'inward_quantity' => array_sum(array_column($itemsCollection, 'inward_quantity')),
+                    'outward_quantity' => array_sum(array_column($itemsCollection, 'outward_quantity')),
+                    'closing_quantity' => array_sum(array_column($itemsCollection, 'closing_quantity')),
+
+                    'item_details' => $itemsCollection,
+                ];
+            }
+
+            $result[] = [
+                'zone_id' => $zone->id,
+                'zone_name' => $zone->name,
+                'zone_code' => $zone->code,
+
+                'inward_quantity' => $zoneTotals['in'],
+                'outward_quantity' => $zoneTotals['out'],
+                'closing_quantity' => $zoneTotals['balance'],
+
+                'godowns' => $zoneGodowns,
+            ];
+        }
+
+        return $result;
+    }
     public function stock_in_hand_godown_wise(): array
     {
         $fiscalYearId = $this->userFiscalYear->fiscal_year_id;

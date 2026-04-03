@@ -19,6 +19,7 @@ class GodownResource extends SuccessResource
             'description' => $this->description,
             'status' => $this->status,
 
+            'storageUnitType' => $this->storage_unit_type,
             'ourStockWithThirdParty' => $this->our_stock_with_third_party,
             'thirdPartyStockWithUs' => $this->third_party_stock_with_us,
             'parentId' => $this->parent_id,

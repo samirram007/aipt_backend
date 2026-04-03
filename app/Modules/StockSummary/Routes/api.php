@@ -9,6 +9,7 @@ Route::group(['middleware' => ['jwt.cookies']], function () {
     //
     Route::get('/stock_summaries/stock_in_hand', [StockSummaryController::class, 'stock_in_hand']);
     Route::get('/stock_summaries/stock_in_hand_item_wise', [StockSummaryController::class, 'stock_in_hand_item_wise']);
+    Route::get('/stock_summaries/stock_in_hand_zone_wise', [StockSummaryController::class, 'stock_in_hand_zone_wise']);
     Route::get('/stock_summaries/stock_in_hand_godown_wise', [StockSummaryController::class, 'stock_in_hand_godown_wise']);
     Route::get('/stock_summaries/stock_in_hand_voucher_wise', [StockSummaryController::class, 'stock_in_hand_voucher_wise']);
     Route::get('/stock_summaries/net_stock', [StockSummaryController::class, 'net_stock']);

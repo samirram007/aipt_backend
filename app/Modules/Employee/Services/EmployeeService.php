@@ -10,7 +10,7 @@ use Illuminate\Database\Eloquent\Collection;
 
 class EmployeeService implements EmployeeServiceInterface
 {
-    protected $resource = ['department', 'designation', 'address', 'user'];
+    protected $resource = ['department', 'designation', 'address', 'user', 'account_ledger', 'employee_group', 'shift', 'grade'];
 
     public function getAll(): Collection
     {

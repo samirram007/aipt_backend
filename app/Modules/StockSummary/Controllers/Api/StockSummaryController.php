@@ -11,6 +11,7 @@ use App\Modules\StockSummary\Resources\StockInHandItemDetailsResource;
 use App\Modules\StockSummary\Resources\StockInHandItemWiseResource;
 use App\Modules\StockSummary\Resources\StockInHandResource;
 use App\Modules\StockSummary\Resources\StockInHandVoucherWiseResource;
+use App\Modules\StockSummary\Resources\StockInHandZoneWiseResource;
 use App\Modules\StockSummary\Resources\StockSummaryResource;
 use App\Modules\StockSummary\Resources\StockSummaryCollection;
 use App\Modules\StockSummary\Requests\StockSummaryRequest;
@@ -38,6 +39,12 @@ class StockSummaryController extends Controller
     {
         $data = $this->service->stock_in_hand_item_wise();
         return StockInHandItemWiseResource::collection($data);
+    }
+    public function stock_in_hand_zone_wise(): \Illuminate\Http\Resources\Json\AnonymousResourceCollection|array
+    {
+        $data = $this->service->stock_in_hand_zone_wise();
+        // dd($data);
+        return StockInHandZoneWiseResource::collection($data);
     }
     public function stock_in_hand_godown_wise(): \Illuminate\Http\Resources\Json\AnonymousResourceCollection|array
     {

@@ -3,6 +3,7 @@
 namespace App\Modules\DeliveryVehicle\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class DeliveryVehicleRequest extends FormRequest
 {
@@ -15,7 +16,17 @@ class DeliveryVehicleRequest extends FormRequest
     {
         $rules = [
             'transporter_id' => ['required', 'numeric', 'exists:transporters,id'],
-            'vehicle_number' => ['sometimes', 'required', 'string', 'max:255', 'unique:delivery_vehicles,vehicle_number'],
+            // 'vehicle_number' => ['sometimes', 'required', 'string', 'max:255', 'unique:delivery_vehicles,vehicle_number'],
+            'vehicle_number' => [
+                'required',
+                'string',
+                'max:255',
+                Rule::unique('delivery_vehicles')
+                    ->where(
+                        fn($query) =>
+                        $query->where('transporter_id', $this->transporter_id)
+                    ),
+            ],
             'vehicle_type' => ['sometimes', 'required', 'string', 'max:255'],
             'capacity' => ['sometimes', 'nullable', 'string', 'max:255'],
             'driver_name' => ['sometimes', 'nullable', 'string', 'max:255'],
@@ -26,7 +37,14 @@ class DeliveryVehicleRequest extends FormRequest
         // For update requests, make validation more flexible
         if ($this->isMethod('PUT') || $this->isMethod('PATCH')) {
             $id = $this->route('delivery_vehicle');
-            $rules['vehicle_number'] = ['sometimes', 'required', 'string', 'max:255', 'unique:delivery_vehicles,vehicle_number,' . $id,];
+            $rules['vehicle_number'] = [
+                'sometimes',
+                'required',
+                'string',
+                'max:255',
+                Rule::unique('delivery_vehicles')->ignore($id)
+                    ->where(fn($query) => $query->where('transporter_id', $this->transporter_id)),
+            ];
 
         }
 

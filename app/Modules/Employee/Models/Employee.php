@@ -100,5 +100,9 @@ class Employee extends Model
     {
         return $this->belongsTo(Grade::class, 'grade_id', 'id');
     }
+    public function employee_group(): BelongsTo
+    {
+        return $this->belongsTo(EmployeeGroup::class, 'employee_group_id', 'id');
+    }
 
 }

@@ -31,6 +31,8 @@ class FreightService implements FreightServiceInterface
         protected VoucherDispatchDetailServiceInterface $voucherDispatchDetailService
     ) {
         $this->resource = [
+            'voucher_references.reference_voucher.voucher_dispatch_detail',
+            'voucher_type',
             // Define any relationships to load with Freight model if needed
         ];
     }
@@ -74,9 +76,26 @@ class FreightService implements FreightServiceInterface
     }
     public function transporterWiseReport(): Collection
     {
-        // Implement the logic for transporter wise report
-        // Return a collection of results
-        return collect(); // Placeholder
+        $queryBuilder = Voucher::with($this->resource)
+            ->where('vouchers.module', 'freight')
+
+            ->leftJoin('voucher_references', 'voucher_references.voucher_id', '=', 'vouchers.id')
+            ->leftJoin('vouchers as ref_voucher', 'ref_voucher.id', '=', 'voucher_references.ref_voucher_id')
+            ->join('user_fiscal_years', 'vouchers.fiscal_year_id', '=', 'user_fiscal_years.fiscal_year_id')
+            ->whereColumn('vouchers.voucher_date', '>=', 'user_fiscal_years.start_date')
+            ->whereColumn('vouchers.voucher_date', '<=', 'user_fiscal_years.end_date')
+            ->orderBy('vouchers.created_at', 'desc')
+            ->select(
+                'vouchers.*',
+                'ref_voucher.voucher_no as referenced_voucher_no',
+                'voucher_references.type as reference_type'
+            );
+
+        $vouchers = $queryBuilder->get();
+
+
+        return $vouchers->map(fn($voucher) => $this->voucherService->attachLedgerInfo($voucher));
+
     }
     public function vehicleWiseReport(): Collection
     {
@@ -108,72 +127,13 @@ class FreightService implements FreightServiceInterface
                 'ref_voucher.voucher_no as referenced_voucher_no',
                 'voucher_references.type as reference_type'
             );
-        // $query = $queryBuilder->toSql();
-        //dump($query);
-        // $bindings = $queryBuilder->getBindings();
-        //dd($query, $bindings);
+
         $vouchers = $queryBuilder->get();
-        // dd($vouchers->toArray());
 
-        return $vouchers->map(fn($voucher) => $this->attachLedgerInfo($voucher));
+
+        return $vouchers->map(fn($voucher) => $this->voucherService->attachLedgerInfo($voucher));
     }
 
-    protected function attachLedgerInfo(Voucher $voucher): Voucher
-    {
-        // dd($voucher);
-        // Detect party ledger (Customer / Supplier)
-        // dd($voucher->voucher_entries->first());
-        $partyEntry = $voucher->voucher_entries
-            ->first(fn($entry) => in_array($entry->account_ledger->ledgerable_type, ['customer', 'supplier', 'distributor']));
-        //dd($partyEntry);
-        // Detect transaction ledger using account_group_id
-        $purchaseGroupId = 40001; // Purchase group ID
-        $salesGroupId = 50001;    // Sales group ID
-        $stockGroupId = 10009;    // Stock group ID
-
-        $transactionEntry = $voucher->voucher_entries
-            ->first(fn($entry) => in_array($entry->account_ledger->account_group_id, [$purchaseGroupId, $salesGroupId, $stockGroupId]));
-
-        // Calculate current balance for party ledger
-        $partyCurrentBalance = $partyEntry?->account_ledger
-            ? $partyEntry->account_ledger->voucher_entries()->sum('debit') - $partyEntry->account_ledger->voucher_entries()->sum('credit')
-            : 0;
-        // dd($partyCurrentBalance);
-        // Calculate current balance for transaction ledger
-        $transactionCurrentBalance = $transactionEntry?->account_ledger
-            ? $transactionEntry->account_ledger->voucher_entries()->sum('debit') -
-            $transactionEntry->account_ledger->voucher_entries()->sum('credit')
-            : 0;
-        // dd($transactionEntry->account_ledger->voucher_entries()->sum('credit'));
-        // Attach full ledger objects with current balance
-
-
-        $voucher->setRelation(
-            'party_ledger',
-            $partyEntry?->account_ledger
-            ? array_merge(
-                $partyEntry->account_ledger->only(['id', 'name', 'code', 'ledgerable_type', 'ledgerable_id']),
-                ['current_balance' => $partyCurrentBalance]
-            )
-            : null
-        );
-
-        $voucher->setRelation(
-            'transaction_ledger',
-            $transactionEntry?->account_ledger
-            ? array_merge(
-                $transactionEntry->account_ledger->only(['id', 'name', 'code', 'account_group_id']),
-                ['current_balance' => $transactionCurrentBalance]
-            )
-            : null
-        );
-        // $voucher->transaction_ledger['current_balance'] = $transactionCurrentBalance;
-        // dd($voucher);
-        // Attach voucher amount (total debit or credit)
-        $voucher->amount = $voucher->voucher_entries->sum(fn($entry) => $entry->debit ?: $entry->credit ?: 0);
-
-        return $voucher;
-    }
 
 
     public function getById(int $id): ?Freight

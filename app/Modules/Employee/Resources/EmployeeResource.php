@@ -2,6 +2,7 @@
 
 namespace App\Modules\Employee\Resources;
 
+use App\Modules\AccountLedger\Resources\AccountLedgerResource;
 use App\Modules\Address\Resources\AddressResource;
 use App\Modules\Department\Resources\DepartmentResource;
 use App\Modules\Designation\Resources\DesignationResource;
@@ -40,6 +41,7 @@ class EmployeeResource extends SuccessResource
             'grade' => GradeResource::make($this->whenLoaded('grade')),
             'address' => AddressResource::make($this->whenLoaded('address')),
             'user' => UserResource::make($this->whenLoaded('user')),
+            'accountLedger' => AccountLedgerResource::make($this->whenLoaded('account_ledger')),
 
         ];
     }

@@ -19,6 +19,12 @@ return new class extends Migration {
             $table->boolean('our_stock_with_third_party')->default(false);
             $table->boolean('third_party_stock_with_us')->default(false);
 
+            /* ===============================
+             * Classification
+             * =============================== */
+            $table->string('storage_unit_type')->default('godown');        // StorageUnitType enum
+
+
             $table->timestamps();
         });
     }

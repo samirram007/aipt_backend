@@ -12,7 +12,7 @@ return new class extends Migration {
             $table->id();
             $table->unsignedBigInteger('transporter_id');
             $table->string('vehicle_type')->nullable();
-            $table->string('vehicle_number')->unique();
+            $table->string('vehicle_number');
             $table->string('capacity')->nullable();
             $table->string('driver_name')->nullable();
             $table->string('driver_contact')->nullable();

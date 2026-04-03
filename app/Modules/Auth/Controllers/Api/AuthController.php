@@ -7,14 +7,12 @@ use App\Modules\Auth\Contracts\AuthServiceInterface;
 use App\Modules\Auth\Requests\ChangePasswordRequest;
 use App\Modules\Auth\Requests\LoginRequest;
 use App\Modules\Auth\Requests\RegisterRequest;
-use App\Modules\Auth\Resources\AuthResource;
-use App\Modules\Auth\Resources\AuthCollection;
-use App\Modules\Auth\Requests\AuthRequest;
-use App\Http\Resources\SuccessResource;
+
 use App\Modules\User\Contracts\UserServiceInterface;
 use App\Modules\User\Resources\UserResource;
-use App\Traits\ApiResponseTrait;
+
 use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\Log;
 use Laravel\Socialite\Facades\Socialite;
 
 class AuthController extends Controller
@@ -26,8 +24,9 @@ class AuthController extends Controller
         protected AuthServiceInterface $authService,
         protected UserServiceInterface $userService
     ) {
-        $this->domain = env('SESSION_DOMAIN');
-        $this->token_expire_duration = env('TOKEN_EXPIRE_DURATION', 30000);
+        $this->domain = config('session.domain');
+        // $this->token_expire_duration = env('TOKEN_EXPIRE_DURATION', 30000);
+        $this->token_expire_duration = config('session.lifetime') * 60;
     }
     /**
      * @OA\Post(
@@ -170,6 +169,7 @@ class AuthController extends Controller
 
     protected function respondWithToken(string $token, string $message = 'Authenticated successfully!')
     {
+
         $cookie = cookie(
             'token',
             $token,
@@ -181,6 +181,7 @@ class AuthController extends Controller
             true,
             'None'
         );
+        Log::info(' cookie', ['cookie' => $cookie]);
 
         return response()->json([
             // 'token' => $token,
