@@ -1,0 +1,68 @@
+# Run with: docker compose --env-file .env.production -f docker-compose.prod.yml up -d --build
+# The --env-file flag is required so ${DB_PASSWORD} etc. below resolve from
+# .env.production instead of Compose's implicit ./.env lookup.
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: aipt-api:latest
+    restart: unless-stopped
+    env_file: .env.production
+    environment:
+      RUN_MIGRATIONS: 'true'
+    ports:
+      - '127.0.0.1:9000:9000'
+    volumes:
+      - storage-data:/var/www/html/patho/backend/storage/app
+      - ./public-shared:/var/www/html/patho/backend/public-shared
+    depends_on:
+      mysql:
+        condition: service_healthy
+    networks:
+      - aipt
+
+  scheduler:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: aipt-api:latest
+    restart: unless-stopped
+    env_file: .env.production
+    command: [ 'sh', '-c', 'while true; do php artisan schedule:run --no-interaction; sleep 60; done' ]
+    volumes:
+      - storage-data:/var/www/html/patho/backend/storage/app
+    depends_on:
+      mysql:
+        condition: service_healthy
+    networks:
+      - aipt
+
+  mysql:
+    image: mysql:8.0
+    restart: unless-stopped
+    # Assumes DB_USERNAME=root in .env.production (root auth via MYSQL_ROOT_PASSWORD).
+    # If you switch DB_USERNAME to a non-root user, add MYSQL_USER/MYSQL_PASSWORD back.
+    environment:
+      MYSQL_ROOT_PASSWORD: '${DB_PASSWORD}'
+      MYSQL_ROOT_HOST: '%'
+      MYSQL_DATABASE: '${DB_DATABASE}'
+    volumes:
+      - mysql-data:/var/lib/mysql
+    healthcheck:
+      test: [ 'CMD', 'mysqladmin', 'ping', '-h', 'localhost', '-p${DB_PASSWORD}' ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - aipt
+
+networks:
+  aipt:
+    driver: bridge
+
+volumes:
+  mysql-data:
+    driver: local
+  storage-data:
+    driver: local
